@@ -7,6 +7,7 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import ru.resolutionpoint.edu.animals.model.Animal;
 import ru.resolutionpoint.edu.animals.model.Entity;
 
 /**
@@ -44,6 +45,7 @@ public class EntityView {
      * @param g Graphics object
      */
     protected void paint(Graphics g) {
+        if(!entity.isCanPaint()) return;
 		int x = entity.getX() * WIDTH + 1;
 		int y = entity.getY() * HEIGHT + 1;
         g.drawImage(image, x, y, null);

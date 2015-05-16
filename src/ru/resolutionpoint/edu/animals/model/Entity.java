@@ -7,11 +7,33 @@ package ru.resolutionpoint.edu.animals.model;
  */
 public abstract class Entity implements Runnable {
 
-	private static final int TIME_DELAY = 200;
-	
+	private static int TIME_DELAY = Constants.getTimeDelay();
+
+    private int movingAlgorithm = 0;
+
+    /*
+    Directions enumeration with such mapping:
+                NORTH
+        NORTHWEST   NORTHEAST
+    WEST                    EAST
+        SOUTHWEST   SOUTHEAST
+                SOUTH
+     */
+    public enum Direction {NORTH, NORTHWEST, WEST, SOUTHWEST, SOUTH, SOUTHEAST, EAST, NORTHEAST, NONE}
+
+    public boolean isCanPaint() {
+        return canPaint;
+    }
+
+    public void setCanPaint(boolean canPaint) {
+        this.canPaint = canPaint;
+    }
+
+    private boolean canPaint = true;
 	private Environment environment;
 	private Thread thread = new Thread(this);
 	private boolean moveFlag = false;
+
 
     /**
      * Initializes entity. Starts entity's thread
@@ -20,6 +42,7 @@ public abstract class Entity implements Runnable {
      */
     protected Entity(Environment environment) {
 		this.environment = environment;
+        System.out.println("Thread "+thread.getName()+" created and ready to start");
 		thread.start();
 	}
 
@@ -32,6 +55,16 @@ public abstract class Entity implements Runnable {
      * @return y-coordinate
      */
     public abstract int getY();
+
+    public int getMovingAlgorithm() {
+        return movingAlgorithm;
+    }
+
+    public void setMovingAlgorithm(int movingAlgorithm) {
+        this.movingAlgorithm = movingAlgorithm;
+    }
+
+    public Environment getEnvironment(){return environment;}
 
     /**
      * @return path to image file
@@ -52,7 +85,7 @@ public abstract class Entity implements Runnable {
             	// Nothing to do
             }
             if (moveFlag) {
-                move();
+                move(Algorithms.getRandomDirection());
                 environment.change();
             }
         }     
@@ -63,6 +96,7 @@ public abstract class Entity implements Runnable {
      */
     public synchronized void start() {
         moveFlag = true;
+        System.out.println("Thread "+thread.getName()+" started");
         notify();     
     }
     
@@ -70,16 +104,17 @@ public abstract class Entity implements Runnable {
      * Stop moving
      */
     public void stop() {
-        moveFlag = false;     
+        moveFlag = false;
+        //System.out.println("Thread "+thread.getName()+" stopped");
     }
 
     protected boolean checkHorizontal(int x) {
-    	return x >= 0 && x < Environment.WIDTH;
+        return x >= 0 && x < Environment.WIDTH;
     }
     
     protected boolean checkVertical(int y) {
 		return y >= 0 && y < Environment.HEIGHT;
 	}
     
-    protected abstract void move();
+    protected abstract void move(Direction direction);
 }

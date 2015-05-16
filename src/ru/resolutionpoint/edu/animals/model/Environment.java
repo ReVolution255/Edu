@@ -1,5 +1,7 @@
 package ru.resolutionpoint.edu.animals.model;
 
+import ru.resolutionpoint.edu.animals.view.EntitiesPanel;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -14,7 +16,7 @@ public class Environment extends Observable {
 	public static final int WIDTH = 30;
 	public static final int HEIGHT = 20;
 
-	private List<Entity> entities = new ArrayList<Entity>();
+	private List<Entity> entities = new ArrayList<>();
 
     /**
      * @return list of entities
@@ -30,6 +32,19 @@ public class Environment extends Observable {
      */
     public void addEntity(Entity entity) {
 		entities.add(entity);
+		System.out.println("Entity " + entity.toString() + " added");
+	}
+
+	public void addEntity(RedEntity entity) {
+		RedEntity.redEntities.add(entity);
+		entities.add(entity);
+		System.out.println("RedEntity " + entity.toString() + " added"+" |||||||| Now entities: "+entities.size());
+	}
+
+	public void addEntity(GrayEntity entity) {
+		GrayEntity.grayEntities.add(entity);
+		entities.add(entity);
+		System.out.println("GrayEntity " + entity.toString() + " added");
 	}
 
     /**
@@ -38,7 +53,20 @@ public class Environment extends Observable {
      * @param entity entity to be deleted
      */
     public void deleteEntity(Entity entity) {
+		System.out.println("Entity "+ entity.toString()+" removed");
+		System.out.println("Entity list before " + entities.toString());
 		entities.remove(entity);
+		System.out.println("Entity list after " + entities.toString());
+	}
+
+	public void deleteEntity(RedEntity entity) {
+		deleteEntity((Entity) entity);
+		RedEntity.redEntities.remove(entity);
+	}
+
+	public void deleteEntity(GrayEntity entity) {
+		deleteEntity((Entity) entity);
+		GrayEntity.grayEntities.remove(entity);
 	}
 
     /**
@@ -55,6 +83,7 @@ public class Environment extends Observable {
      */
     public void start() {
 		for (Entity entity : entities) {
+			System.out.println("Entity " + entity.toString() + " movement started");
 			entity.start();
 		}
 	}
@@ -64,6 +93,7 @@ public class Environment extends Observable {
      */
 	public void stop() {
 		for (Entity entity : entities) {
+			//System.out.println("Entity " + entity.toString() + " movement stopped");
 			entity.stop();
 		}
 	}

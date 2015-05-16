@@ -20,7 +20,7 @@ public class EntitiesPanel extends JPanel implements Observer {
 
 	private int width;
 	private int height;
-	private List<EntityView> entities = new ArrayList<EntityView>();
+	private static List<EntityView> entities = new ArrayList<EntityView>();
 
     /**
      * Constructs new panel
@@ -38,6 +38,14 @@ public class EntitiesPanel extends JPanel implements Observer {
 		setPreferredSize(new Dimension(width, height));
 	}
 
+	public List<EntityView> getEntitiesList(){return entities;}
+
+	public static void updateEntityView(Environment environment){
+		for (Entity entity : environment.getEntities()) {
+		EntityView view = new EntityView(entity);
+		entities.add(view);
+	}}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		g.setColor(Color.BLACK);
@@ -52,6 +60,7 @@ public class EntitiesPanel extends JPanel implements Observer {
 			g.drawLine(0, y, width, y);
 		}
 		for (EntityView view : entities) {
+			System.out.println("Painted " + view.toString());
 			view.paint(g);
 		}
 	}
