@@ -36,7 +36,8 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			int y = entity.getY();
 			if (Math.abs(x-getX()) <= 1 || Math.abs(y-getY()) <= 1) neighborCounter++;
 		}
-		if(animalLifeTime < 0 || neighborCounter >= Constants.getNeighboringAnimalsLimit()) {
+		if (animalLifeTime < 0 || neighborCounter >= Constants.getNeighboringAnimalsLimit()) {
+			System.out.println("Entity " +this.toString() +" life is ended with lifetime " + animalLifeTime);
 			super.getEnvironment().deleteEntity(this);
 			EntitiesPanel.updateEntityView(super.getEnvironment());
 			super.stop();}

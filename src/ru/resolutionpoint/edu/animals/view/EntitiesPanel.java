@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JPanel;
 
@@ -40,12 +42,15 @@ public class EntitiesPanel extends JPanel implements Observer {
 
 	public List<EntityView> getEntitiesList(){return entities;}
 
-	public static void updateEntityView(Environment environment){
-		entities.clear();
-		for (Entity entity : environment.getEntities()) {
-		EntityView view = new EntityView(entity);
-		entities.add(view);
-	}}
+	public static void updateEntityView(Environment environment) {
+		synchronized (environment.monitor) {
+			entities.clear();
+			for (Entity entity : environment.getEntities()) {
+				EntityView view = new EntityView(entity);
+				entities.add(view);
+			}
+		}
+	}
 
 	@Override
 	protected void paintComponent(Graphics g) {

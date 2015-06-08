@@ -10,10 +10,6 @@ import java.util.*;
 public class Algorithms {
 
     private Algorithms(){}
-    
-    //public static int getDistanceBetweenAnimals(RedEntity entityFirst, RedEntity entitySecond){
-    //    return distance;
-    //}
 
     public static Random random = new Random();
 
@@ -47,6 +43,7 @@ public class Algorithms {
                 return getNoDirection();
         }
     }
+
     public static Direction getDirectionFromInt(int x, int y, int currX, int currY) {
         Direction d;
         if(x == currX && y < currY) d = Direction.NORTH;
