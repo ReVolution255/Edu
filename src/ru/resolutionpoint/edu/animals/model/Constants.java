@@ -10,7 +10,7 @@ public class Constants {
     private static int predatorLifeTime = 10000;
     private static int noBreedingAnimalSteps = 20;
     private static int noBreedingPredatorSteps = 3000;
-    private static int neighboringAnimalsLimit = 5;
+    private static int neighboringAnimalsLimit = 3;
     private static int predatorSatiationTime = 1000;
     private static int predatorTime = 500;
     private static int TIME_DELAY = 50;
