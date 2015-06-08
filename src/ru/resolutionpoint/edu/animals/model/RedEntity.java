@@ -69,16 +69,32 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			}
 		}
 		else if (algorithm == 1){
-			direction = Algorithms.getRandomDirection();
+			int x;
+			int y;
+			int currX = currentEntity.getX();
+			int currY = currentEntity.getY();
+			double minimalDistance = Environment.WIDTH*Environment.HEIGHT;
+			double temp;
+			Entity minimalDistanceEntity = currentEntity;
+			for(Entity entity : getEnvironment().getEntities()){
+				if(!entity.equals(currentEntity)){
+					x = entity.getX();
+					y = entity.getY();
+					temp = Math.sqrt(Math.pow(x-currX,2)+Math.pow(y-currY,2));
+					if (temp < minimalDistance) {minimalDistance = temp; minimalDistanceEntity = entity;}
+				}
+			}
+			x = minimalDistanceEntity.getX();
+			y = minimalDistanceEntity.getY();
+			direction = Algorithms.getDirectionFromInt(x, y, currX, currY);
 		}
 		else direction = Algorithms.getRandomDirection();
 		return direction;
 	}
 
 	private void updateValues(){
-		if(!canBreeding)breedingCounter--;{
-		//do nothing
-		}
+		//if(!canBreeding)
+			breedingCounter--;
 		animalLifeTime--;
 	}
 
@@ -98,7 +114,15 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 	protected void move() {
 		updateValues();
 		checkValues();
-		Direction direction = getEntityDirection(this, 0);
+
+		int algorithm;
+
+		Direction direction;
+
+		if (!canBreeding) direction = getEntityDirection(this, 0);
+		else direction = getEntityDirection(this, 1);
+		if (breedingCounter < 0) {canBreeding = !canBreeding; breedingCounter = Constants.getNoBreedingAnimalSteps();}
+
 		if(direction == Direction.NORTH) {
 			y -= checkVertical(y -= dy) ? dy : 0;
 		}
