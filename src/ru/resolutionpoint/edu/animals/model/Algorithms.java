@@ -47,31 +47,24 @@ public class Algorithms {
                 return getNoDirection();
         }
     }
+    public static Direction getDirectionFromInt(int x, int y, int currX, int currY) {
+        Direction d;
+        if(x == currX && y < currY) d = Direction.NORTH;
+        else if (x < currX && y == currY) d = Direction.EAST;
+        else if (x > currX && y == currY) d = Direction.WEST;
+        else if (x < currX && y < currY) d = Direction.NORTHEAST;
+        else if (x < currX && y > currY) d = Direction.SOUTHEAST;
+        else if (x == currX && y > currY) d = Direction.SOUTH;
+        else if (x > currX && y > currY) d = Direction.SOUTHWEST;
+        else if (x > currX && y < currY) d = Direction.NORTHWEST;
+        else d = Direction.NONE;
+        return d;
+    }
 
     public static Direction getRandomDirection(){
         return getDirectionFromInt(random.nextInt(8));}
 
     public static Direction getNoDirection(){return Direction.NONE;}
-
-    /*public static Map<Direction, RedEntity> getAroundEntityMap(Environment environment, RedEntity currentEntity){
-        //Directions here as NORTH, EAST, WEST, SOUTH, NORTHWEST, NORTHEAST, SOUTHWEST, SOUTHEAST
-        boolean[] Directions = {true, true, true, true, true, true, true, true};
-        int x = currentEntity.getX();
-        int y = currentEntity.getY();
-        Map<Direction, RedEntity> map = new TreeMap<>();
-        List<RedEntity> list = (RedEntity)environment.getEntities();
-            for (Entity entity : environment.getEntities()){
-            if (y-1 == entity.getX() && x == entity.getX()) {map.put(Direction.NORTH, entity);}
-            else if (x-1 == entity.getX() && y == entity.getY()) {map.put(Direction.EAST, entity);}
-            else if (x+1 == entity.getX() && y == entity.getY()) {map.put(Direction.WEST, entity);}
-            else if (y+1 == entity.getX() && x == entity.getX()) {map.put(Direction.SOUTH, entity);}
-            else if (x+1 == entity.getX() && y-1 == entity.getY()) {map.put(Direction.NORTHWEST, entity);}
-            else if (x-1 == entity.getX() && y-1 == entity.getY()) {map.put(Direction.NORTHEAST, entity);}
-            else if (x+1 == entity.getX() && y+1 == entity.getY()) {map.put(Direction.SOUTHWEST, entity);}
-            else if (x-1 == entity.getX() && y+1 == entity.getY()) {map.put(Direction.SOUTHEAST, entity);}
-            }
-        return map;
-    }*/
 
     public static Direction getRandomFreeDirection(ArrayList<RedEntity> animals, RedEntity currentEntity){
         //Directions here as NORTH, EAST, WEST, SOUTH, NORTHWEST, NORTHEAST, SOUTHWEST, SOUTHEAST

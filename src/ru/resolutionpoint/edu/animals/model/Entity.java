@@ -7,6 +7,8 @@ package ru.resolutionpoint.edu.animals.model;
  */
 public abstract class Entity implements Runnable {
 
+    protected abstract Direction getEntityDirection(Entity entity, int alogirthm);
+
 	private static int TIME_DELAY = Constants.getTimeDelay();
 
     private int movingAlgorithm = 0;
@@ -21,15 +23,6 @@ public abstract class Entity implements Runnable {
      */
     public enum Direction {NORTH, NORTHWEST, WEST, SOUTHWEST, SOUTH, SOUTHEAST, EAST, NORTHEAST, NONE}
 
-    public boolean isCanPaint() {
-        return canPaint;
-    }
-
-    public void setCanPaint(boolean canPaint) {
-        this.canPaint = canPaint;
-    }
-
-    private boolean canPaint = true;
 	private Environment environment;
 	private Thread thread = new Thread(this);
 	private boolean moveFlag = false;
@@ -85,7 +78,7 @@ public abstract class Entity implements Runnable {
             	// Nothing to do
             }
             if (moveFlag) {
-                move(Algorithms.getRandomDirection());
+                move();
                 environment.change();
             }
         }     
@@ -108,13 +101,15 @@ public abstract class Entity implements Runnable {
         //System.out.println("Thread "+thread.getName()+" stopped");
     }
 
+    //normal
     protected boolean checkHorizontal(int x) {
         return x >= 0 && x < Environment.WIDTH;
     }
-    
+
+    //normal
     protected boolean checkVertical(int y) {
 		return y >= 0 && y < Environment.HEIGHT;
 	}
     
-    protected abstract void move(Direction direction);
+    protected abstract void move();
 }

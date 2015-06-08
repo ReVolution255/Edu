@@ -13,6 +13,8 @@ import java.util.Observable;
  */
 public class Environment extends Observable {
 
+	public static final Object monitor = new Object();
+
 	public static final int WIDTH = 30;
 	public static final int HEIGHT = 20;
 
@@ -32,19 +34,6 @@ public class Environment extends Observable {
      */
     public void addEntity(Entity entity) {
 		entities.add(entity);
-		System.out.println("Entity " + entity.toString() + " added");
-	}
-
-	public void addEntity(RedEntity entity) {
-		RedEntity.redEntities.add(entity);
-		entities.add(entity);
-		System.out.println("RedEntity " + entity.toString() + " added"+" |||||||| Now entities: "+entities.size());
-	}
-
-	public void addEntity(GrayEntity entity) {
-		GrayEntity.grayEntities.add(entity);
-		entities.add(entity);
-		System.out.println("GrayEntity " + entity.toString() + " added");
 	}
 
     /**
@@ -53,41 +42,20 @@ public class Environment extends Observable {
      * @param entity entity to be deleted
      */
     public void deleteEntity(Entity entity) {
-		System.out.println("Entity "+ entity.toString()+" removed");
-		System.out.println("Entity list before " + entities.toString());
 		entities.remove(entity);
-		System.out.println("Entity list after " + entities.toString());
 	}
 
-	public void deleteEntity(RedEntity entity) {
-		deleteEntity((Entity) entity);
-		RedEntity.redEntities.remove(entity);
-	}
-
-	public void deleteEntity(GrayEntity entity) {
-		deleteEntity((Entity) entity);
-		GrayEntity.grayEntities.remove(entity);
-	}
-
-    /**
-     * Sets list of entities
-     *
-     * @param entities new list of entities
-     */
-    public void setEntities(List<Entity> entities) {
-		this.entities = entities;
-	}
-
+	//normal
     /**
      * Starts entities movement
      */
     public void start() {
 		for (Entity entity : entities) {
-			System.out.println("Entity " + entity.toString() + " movement started");
 			entity.start();
 		}
 	}
-	
+
+	//normal
     /**
      * Stops entities movement
      */
@@ -98,6 +66,7 @@ public class Environment extends Observable {
 		}
 	}
 
+	//normal
     /**
      * Called when environment status changed
      */

@@ -7,7 +7,6 @@ public abstract class Animal extends Entity implements Runnable {
 
     protected int animalLifeTime;
     protected int overCrowdingCounter;
-    protected boolean isDead;
     protected int breedingCounter;
     protected boolean canBreeding;
     protected int x;
@@ -23,25 +22,7 @@ public abstract class Animal extends Entity implements Runnable {
         super(environment);
     }
 
-    @Override
-    public boolean isCanPaint() {
-        return super.isCanPaint();
-    }
-
-    @Override
-    public void setCanPaint(boolean canPaint) {
-        super.setCanPaint(canPaint);
-    }
-
     public Environment getEnvironment(){return super.getEnvironment();}
-
-    public boolean isDead(){
-        return isDead;
-    }
-
-    public void isDead(boolean status){
-        this.isDead = status;
-    }
 
     @Override
     public void run() {
@@ -59,6 +40,6 @@ public abstract class Animal extends Entity implements Runnable {
     }
 
     @Override
-    protected void move(Direction direction){
+    protected void move(){
     }
 }

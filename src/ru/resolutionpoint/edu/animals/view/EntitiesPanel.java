@@ -41,6 +41,7 @@ public class EntitiesPanel extends JPanel implements Observer {
 	public List<EntityView> getEntitiesList(){return entities;}
 
 	public static void updateEntityView(Environment environment){
+		entities.clear();
 		for (Entity entity : environment.getEntities()) {
 		EntityView view = new EntityView(entity);
 		entities.add(view);
@@ -60,7 +61,6 @@ public class EntitiesPanel extends JPanel implements Observer {
 			g.drawLine(0, y, width, y);
 		}
 		for (EntityView view : entities) {
-			System.out.println("Painted " + view.toString());
 			view.paint(g);
 		}
 	}

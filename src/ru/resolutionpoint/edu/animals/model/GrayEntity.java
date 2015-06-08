@@ -1,5 +1,7 @@
 package ru.resolutionpoint.edu.animals.model;
 
+import ru.resolutionpoint.edu.animals.view.EntitiesPanel;
+
 import java.util.ArrayList;
 
 /**
@@ -7,10 +9,33 @@ import java.util.ArrayList;
  */
 public class GrayEntity extends Predator implements Runnable {
 
-    public static ArrayList<GrayEntity> grayEntities = new ArrayList<>();
-
     private int x;
     private int y;
+
+    @Override
+    protected Direction getEntityDirection(Entity currentEntity, int algorithm) {
+        //Direction, that must be returned
+        Direction direction;
+        Environment environment = getEnvironment();
+        int currentX = currentEntity.getX();
+        int currentY = currentEntity.getY();
+        if (algorithm == 0) {
+            direction = Algorithms.getRandomDirection();
+            for (Entity entity : environment.getEntities()) {
+                int x = entity.getX();
+                int y = entity.getY();
+                if (Math.abs(x - currentX) <= 1 & Math.abs(y - currentY) <= 1){
+                    Direction dir = Algorithms.getDirectionFromInt(x ,y, currentX, currentY);
+                    if (dir != direction) break;
+                }
+            }
+        }
+        else if (algorithm == 1){
+            direction = Algorithms.getRandomDirection();
+        }
+        else direction = Algorithms.getRandomDirection();
+        return direction;
+    }
 
     /**
      * Constructs new entity
@@ -45,10 +70,16 @@ public class GrayEntity extends Predator implements Runnable {
     }
 
     private void checkValues(){
-        if(predatorLifeTime < 0 || predatorTime < 0) {
+        int neighborCounter = 0;
+        for (Entity entity : getEnvironment().getEntities()){
+            int x = entity.getX();
+            int y = entity.getY();
+            if (Math.abs(x-getX()) <= 1 || Math.abs(y-getY()) <= 1) neighborCounter++;
+        }
+        if(predatorLifeTime < 0 || predatorTime < 0 || neighborCounter >= Constants.getNeighboringAnimalsLimit()) {
             System.out.println("Entity " +this.toString() +" life is ended");
-            super.setCanPaint(false);
             super.getEnvironment().deleteEntity(this);
+            EntitiesPanel.updateEntityView(super.getEnvironment());
             super.stop();
         }
     }
@@ -72,9 +103,10 @@ public class GrayEntity extends Predator implements Runnable {
     public int getY(){return y;}
 
     @Override
-    protected void move(Direction direction) {
+    protected void move() {
         checkValues();
         updateValues();
+        Direction direction = getEntityDirection(this, 0);
         if(direction == Direction.NORTH) {
             y -= checkVertical(y -= dy) ? dy : 0;
         }
@@ -102,6 +134,8 @@ public class GrayEntity extends Predator implements Runnable {
         else if (direction == Direction.SOUTHEAST){
             y += checkVertical(y += dy) ? dy : 0;
             x -= checkHorizontal(x -= dx) ? dx : 0;
+        }
+        else if (direction == Direction.NONE){
         }
     }
 

@@ -19,20 +19,10 @@ public abstract class Predator extends Animal implements Runnable {
         super(environment, x, y);
     }
 
-    @Override
-    public boolean isCanPaint() {
-        return super.isCanPaint();
-    }
-
-    @Override
-    public void setCanPaint(boolean canPaint) {
-        super.setCanPaint(canPaint);
-    }
-
     public Environment getEnvironment(){return super.getEnvironment();}
 
     @Override
-    protected void move(Direction direction) {super.move(direction);
+    protected void move() {super.move();
     }
 
     @Override

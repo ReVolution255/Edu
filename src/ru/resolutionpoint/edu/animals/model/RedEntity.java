@@ -8,122 +8,94 @@ import java.util.TreeSet;
 
 public class RedEntity extends Animal implements Runnable, Comparable<RedEntity> {
 
-	public static ArrayList<RedEntity> redEntities = new ArrayList<>();
-	public TreeSet<RedEntity> neighbors = new TreeSet<>();
-	public static final Object monitor = new Object();
-
-    public RedEntity(Environment environment) {super(environment);
+    public RedEntity(Environment environment) {
+		super(environment);
 	}
-
+	//normal
     public RedEntity(Environment environment, int x, int y) {
         super(environment, x, y);
 		animalLifeTime = Constants.getAnimalLifeTime();
 		overCrowdingCounter = Constants.getNeighboringAnimalsLimit();
 		breedingCounter = Constants.getNoBreedingAnimalSteps();
 		canBreeding = true;
-		isDead = false;
 		this.x = x;
 		this.y = y;
     }
 
+	//normal
     @Override
 	public String getImagePath() {
         return "/images/red.gif";
     }
 
-	private synchronized RedEntity bornRedEntity(RedEntity entity){
-		int newX;
-		int newY;
-		int x = entity.getX();
-		int y = entity.getY();
-		RedEntity newEntity;
-		Direction d = Algorithms.getRandomFreeDirection(redEntities, entity);
-		switch (d){
-			case NORTH:newX=x;newY=y-1;break;
-			case NORTHEAST:newX=x-1;newY=y-1;break;
-			case EAST:newX=x-1;newY=y;break;
-			case SOUTHEAST:newX=x-1;newY=y+1;break;
-			case SOUTH:newX=x;newY=y+1;break;
-			case SOUTHWEST:newX=x+1;newY=y+1;break;
-			case WEST:newX=x+1;newY=y;break;
-			case NORTHWEST:newX=x+1;newY=y-1;break;
-			//TODO: Fix to avoid errors
-			case NONE:newX=x;newY=y;break;
-			default:newX=x;newY=y;break;
+	//normal
+	private void checkValues(){
+		int neighborCounter = 0;
+		for (Entity entity : getEnvironment().getEntities()){
+			int x = entity.getX();
+			int y = entity.getY();
+			if (Math.abs(x-getX()) <= 1 || Math.abs(y-getY()) <= 1) neighborCounter++;
 		}
-		newEntity = new RedEntity(getEnvironment(),newX,newY);
-		newEntity.canBreeding = false;
-		this.canBreeding = false;
-		entity.canBreeding = false;
-		newEntity.breedingCounter = Constants.getNoBreedingAnimalSteps();
-		this.breedingCounter = Constants.getNoBreedingAnimalSteps();
-		entity.breedingCounter = Constants.getNoBreedingAnimalSteps();
-		EntitiesPanel.updateEntityView(getEnvironment());
-		newEntity.start();
-		return newEntity;
+		if(animalLifeTime < 0 || neighborCounter >= Constants.getNeighboringAnimalsLimit()) {
+			super.getEnvironment().deleteEntity(this);
+			EntitiesPanel.updateEntityView(super.getEnvironment());
+			super.stop();}
 	}
 
-	private void checkValues(){
-		if(animalLifeTime < 0) {
-			System.out.println("Entity " +this.toString() +" life is ended");
-			super.setCanPaint(false);
-			super.getEnvironment().deleteEntity(this);
-			super.stop();
+	/**
+	 * @param currentEntity current entity
+	 * @param algorithm 0 for random, 1 for breeding
+	 * @return
+	 */
+	@Override
+	protected Direction getEntityDirection(Entity currentEntity, int algorithm) {
+		//Direction, that must be returned
+		Direction direction;
+		Environment environment = getEnvironment();
+		int currentX = currentEntity.getX();
+		int currentY = currentEntity.getY();
+		if (algorithm == 0) {
+			direction = Algorithms.getRandomDirection();
+			for (Entity entity : environment.getEntities()) {
+				int x = entity.getX();
+				int y = entity.getY();
+				if (Math.abs(x - currentX) <= 1 & Math.abs(y - currentY) <= 1){
+					Direction dir = Algorithms.getDirectionFromInt(x ,y, currentX, currentY);
+					if (dir != direction) break;
+				}
+			}
 		}
+		else if (algorithm == 1){
+			direction = Algorithms.getRandomDirection();
+		}
+		else direction = Algorithms.getRandomDirection();
+		return direction;
 	}
 
 	private void updateValues(){
-		if(!canBreeding)breedingCounter--;
-		else if (!neighbors.isEmpty()) {
-			for(RedEntity entity : neighbors){
-				if(entity.neighbors.contains(this))
-					if(this.neighbors.contains(entity))
-						getEnvironment().addEntity(bornRedEntity(entity));
-			}
+		if(!canBreeding)breedingCounter--;{
+		//do nothing
 		}
 		animalLifeTime--;
 	}
 
+	//normal
 	/**
 	 * @return x-coordinate
 	 */
 	public int getX(){return x;}
 
+	//normal
 	/**
 	 * @return y-coordinate
 	 */
 	public int getY(){return y;}
 
-	private void checkNeighbors(ArrayList<RedEntity> animals, RedEntity currentEntity){
-		int x;
-		int y;
-		int currX = currentEntity.getX();
-		int currY = currentEntity.getY();
-		double temp;
-		for(RedEntity entity : animals){
-			if(!entity.equals(currentEntity)){
-				x = entity.getX();
-				y = entity.getY();
-				temp = Math.sqrt(Math.pow(x - currX, 2) + Math.pow(y - currY, 2));
-				System.out.println("Distance between is "+temp);
-				if(temp < 1.5) currentEntity.neighbors.add(entity);
-				else if (currentEntity.neighbors.contains(entity)){currentEntity.neighbors.remove(entity);
-					if(entity.neighbors.contains(currentEntity))entity.neighbors.remove(currentEntity);}
-			}
-		}
-	}
-
     @Override
-	protected void move(Direction direction) {
-		synchronized (monitor){checkNeighbors(redEntities, this);
+	protected void move() {
+		updateValues();
 		checkValues();
-		updateValues();}
-		if(canBreeding) direction=Algorithms.getDirectionToRedEntity(redEntities, this);
-		System.out.println("Info about entity: " + this.toString() + " X: " + this.getX() + " Y: " + this.getY()+"\n"
-		+"Lifetime: "+ animalLifeTime+" Can breeding? " + canBreeding +" Breeding counter: "+breedingCounter+"\n"
-		+"Neighbors: "+neighbors.toString()+"\n"
-		+"Direction: "+direction+"\n"
-		+"Entities: "+redEntities.toString()+"\n\n");
+		Direction direction = getEntityDirection(this, 0);
 		if(direction == Direction.NORTH) {
 			y -= checkVertical(y -= dy) ? dy : 0;
 		}
@@ -156,18 +128,22 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		}
 	}
 
+	//normal
 	@Override
 	public void run() {super.run();
 	}
 
+	//normal
 	@Override
 	public synchronized void start() {super.start();
 	}
 
+	//normal
 	@Override
 	public synchronized void stop() {super.stop();
 	}
 
+	//normal
 	@Override
 	public int compareTo(RedEntity o) {
 		if(this.equals(o))
