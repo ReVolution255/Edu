@@ -1,5 +1,7 @@
 package ru.resolutionpoint.edu.animals.model;
 
+import ru.resolutionpoint.edu.animals.view.EntitiesPanel;
+
 /**
  * Class <code>Entity</code> represents abstract entity
  *

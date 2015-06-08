@@ -43,12 +43,10 @@ public class EntitiesPanel extends JPanel implements Observer {
 	public List<EntityView> getEntitiesList(){return entities;}
 
 	public static void updateEntityView(Environment environment) {
-		synchronized (environment.monitor) {
 			entities.clear();
 			for (Entity entity : environment.getEntities()) {
 				EntityView view = new EntityView(entity);
 				entities.add(view);
-			}
 		}
 	}
 

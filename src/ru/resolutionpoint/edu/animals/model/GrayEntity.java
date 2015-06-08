@@ -24,7 +24,7 @@ public class GrayEntity extends Predator implements Runnable {
             for (Entity entity : environment.getEntities()) {
                 int x = entity.getX();
                 int y = entity.getY();
-                if (Math.abs(x - currentX) <= 1 & Math.abs(y - currentY) <= 1){
+                if (Math.abs(x - currentX) <= 1 && Math.abs(y - currentY) <= 1){
                     Direction dir = Algorithms.getDirectionFromInt(x ,y, currentX, currentY);
                     if (dir != direction) break;
                 }
@@ -74,9 +74,9 @@ public class GrayEntity extends Predator implements Runnable {
         for (Entity entity : getEnvironment().getEntities()){
             int x = entity.getX();
             int y = entity.getY();
-            if (Math.abs(x-getX()) <= 1 || Math.abs(y-getY()) <= 1) neighborCounter++;
+            if (Math.abs(Math.abs(x)-Math.abs(getX())) <= 1 && Math.abs(Math.abs(y)-Math.abs(getY())) <= 1) neighborCounter++;
         }
-        if(predatorLifeTime < 0 || predatorTime < 0 || neighborCounter >= Constants.getNeighboringAnimalsLimit()) {
+        if (predatorLifeTime < 0 || predatorTime < 0 || neighborCounter >= Constants.getNeighboringAnimalsLimit()+1) {
             System.out.println("Entity " +this.toString() +" life is ended");
             super.getEnvironment().deleteEntity(this);
             EntitiesPanel.updateEntityView(super.getEnvironment());
