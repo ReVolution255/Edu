@@ -31,7 +31,24 @@ public class GrayEntity extends Predator implements Runnable {
             }
         }
         else if (algorithm == 1){
-            direction = Algorithms.getRandomDirection();
+            int x;
+            int y;
+            int currX = currentEntity.getX();
+            int currY = currentEntity.getY();
+            double minimalDistance = Environment.WIDTH * Environment.HEIGHT;
+            double temp;
+            Entity minimalDistanceEntity = currentEntity;
+            for(Entity entity : getEnvironment().getEntities()){
+                if(!entity.equals(currentEntity)){
+                    x = entity.getX();
+                    y = entity.getY();
+                    temp = Math.sqrt(Math.pow(x-currX,2)+Math.pow(y-currY,2));
+                    if (temp < minimalDistance) {minimalDistance = temp; minimalDistanceEntity = entity;}
+                }
+            }
+            x = minimalDistanceEntity.getX();
+            y = minimalDistanceEntity.getY();
+            direction = Algorithms.getDirectionFromInt(x, y, currX, currY);
         }
         else direction = Algorithms.getRandomDirection();
         return direction;
@@ -106,7 +123,12 @@ public class GrayEntity extends Predator implements Runnable {
     protected void move() {
         checkValues();
         updateValues();
-        Direction direction = getEntityDirection(this, 0);
+
+        Direction direction;
+
+        if (isHungry) direction = getEntityDirection(this, 1);
+        else direction = getEntityDirection(this, 0);
+
         if(direction == Direction.NORTH) {
             y -= checkVertical(y -= dy) ? dy : 0;
         }
