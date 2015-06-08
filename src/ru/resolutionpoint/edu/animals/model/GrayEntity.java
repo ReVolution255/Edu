@@ -2,8 +2,6 @@ package ru.resolutionpoint.edu.animals.model;
 
 import ru.resolutionpoint.edu.animals.view.EntitiesPanel;
 
-import java.util.ArrayList;
-
 /**
  * Created by 1 on 08.05.2015.
  */

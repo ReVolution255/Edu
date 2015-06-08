@@ -17,7 +17,7 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		animalLifeTime = Constants.getAnimalLifeTime();
 		overCrowdingCounter = Constants.getNeighboringAnimalsLimit();
 		breedingCounter = Constants.getNoBreedingAnimalSteps();
-		canBreeding = true;
+		canBreeding = false;
 		this.x = x;
 		this.y = y;
     }
@@ -35,6 +35,11 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			int x = entity.getX();
 			int y = entity.getY();
 			if (Math.abs(Math.abs(x)-Math.abs(getX())) <= 1 && Math.abs(Math.abs(y)-Math.abs(getY())) <= 1) neighborCounter++;
+		}
+		if (neighborCounter > 1 && canBreeding)
+		{
+			canBreeding = false;
+			super.getEnvironment().addEntity(new RedEntity(super.getEnvironment(),getX()+1,getY()+1));
 		}
 		System.out.println("Entity: " + this.toString() + " Neighbors: " + neighborCounter);
 		if (animalLifeTime < 0 || neighborCounter >= Constants.getNeighboringAnimalsLimit()+1) {
@@ -93,7 +98,7 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 	}
 
 	private void updateValues(){
-		//if(!canBreeding)
+		if(!canBreeding)
 			breedingCounter--;
 		animalLifeTime--;
 	}
@@ -121,7 +126,11 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 
 		if (!canBreeding) direction = getEntityDirection(this, 0);
 		else direction = getEntityDirection(this, 1);
-		if (breedingCounter < 0) {canBreeding = !canBreeding; breedingCounter = Constants.getNoBreedingAnimalSteps();}
+
+		if (breedingCounter < 0) {
+			canBreeding = true;
+			breedingCounter = Constants.getNoBreedingAnimalSteps();
+		}
 
 		if(direction == Direction.NORTH) {
 			y -= checkVertical(y -= dy) ? dy : 0;

@@ -40,7 +40,7 @@ public class EntitiesPanel extends JPanel implements Observer {
 		setPreferredSize(new Dimension(width, height));
 	}
 
-	public List<EntityView> getEntitiesList(){return entities;}
+	//public List<EntityView> getEntitiesList(){return entities;}
 
 	public static void updateEntityView(Environment environment) {
 			entities.clear();
