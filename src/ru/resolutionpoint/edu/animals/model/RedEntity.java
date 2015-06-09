@@ -84,7 +84,6 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 
 		int neighborCounter = 0;
 
-		//int[] busyDirections = {0,0,0,0,0,0,0,0,0};
 
 		double minimalDistance = Environment.WIDTH * Environment.HEIGHT;
 		double temp;
@@ -114,7 +113,6 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			if (canBreeding) {
 				if (entityType == getEntityType() && entityState[1]) {
 					if (isNeighbor){
-							//TODO create entity here
 							multiplyDirection = Algorithms.getDirectionFromInt(entity.getX(), entity.getY(), getX(), getY());
 							minimalDistanceEntity = entity;
 							state[1] = true;
@@ -124,7 +122,6 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 					}
 				}
 			}
-
 		}
 
 		System.out.println("Neighbor Counter: " + neighborCounter);
@@ -162,10 +159,10 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			System.out.println();
 			move(direction);
 		}
-
 	}
 
-	/*protected Direction getEntityDirection(Entity currentEntity, int algorithm) {
+	//Deprecated
+	/**protected Direction getEntityDirection(Entity currentEntity, int algorithm) {
 		//Direction, that must be returned
 		Direction direction;
 		Environment environment = getEnvironment();
