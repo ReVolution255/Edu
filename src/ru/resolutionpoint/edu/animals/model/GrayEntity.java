@@ -90,10 +90,10 @@ public class GrayEntity extends Predator implements Runnable {
         boolean first = true;
 
         for (Entity entity : getEnvironment().getEntities()){
-            if (first && !this.equals(entity)) {minimalDistanceEntity = entity; first = false;}
+            int entityType = entity.getEntityType();
+            if (first && !this.equals(entity) && entityType == getEntityType()) {minimalDistanceEntity = entity; first = false;}
             int x = entity.getX();
             int y = entity.getY();
-            int entityType = entity.getEntityType();
             boolean[] entityState = getState();
 
 
@@ -154,7 +154,7 @@ public class GrayEntity extends Predator implements Runnable {
 
         } else if (state[2]){
             //move
-            System.out.println("And must move to ");
+            System.out.println("And must move to " + minimalDistanceEntity.toString() + ", to direction ");
             int x = minimalDistanceEntity.getX();
             int y = minimalDistanceEntity.getY();
             direction = Algorithms.getDirectionFromInt(x, y, getX(), getY());

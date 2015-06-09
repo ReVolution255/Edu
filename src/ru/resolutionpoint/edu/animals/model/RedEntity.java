@@ -91,14 +91,14 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		boolean first = true;
 
 		for (Entity entity : getEnvironment().getEntities()){
-			if (first && !this.equals(entity)) {minimalDistanceEntity = entity; first = false;}
+			int entityType = entity.getEntityType();
+			if (first && !this.equals(entity) && entityType == getEntityType()) {minimalDistanceEntity = entity; first = false;}
 			int x = entity.getX();
 			int y = entity.getY();
-			int entityType = entity.getEntityType();
 			boolean[] entityState = getState();
 
-
 			boolean isNeighbor = false;
+			if (entityType == getEntityType() && entityState[1]) {
 			if (Math.abs(Math.abs(x) - Math.abs(getX())) <= 1 && Math.abs(Math.abs(y) - Math.abs(getY())) <= 1) {
 				isNeighbor = true;
 				neighborCounter++;
@@ -108,6 +108,7 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			}
 			if (neighborCounter >= Constants.getNeighboringAnimalsLimit() + 1) {
 				state[0] = true;
+			}
 			}
 
 			if (canBreeding) {
@@ -151,7 +152,7 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 
 		} else if (state[2]){
 			//move
-			System.out.println("And must move to ");
+			System.out.println("And must move to " + minimalDistanceEntity.toString() + ", to direction ");
 			int x = minimalDistanceEntity.getX();
 			int y = minimalDistanceEntity.getY();
 			direction = Algorithms.getDirectionFromInt(x, y, getX(), getY());
