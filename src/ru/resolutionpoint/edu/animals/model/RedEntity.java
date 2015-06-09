@@ -239,10 +239,9 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 	protected void move(Direction direction) {
 
 
-		/*System.out.println("X current: " + (getX() + Algorithms.getDeltaXfromDirection(direction)));
-		System.out.println("Y current: " + (getY() + Algorithms.getDeltaYfromDirection(direction)));
-		for (Entity entity : getEnvironment().getEntities()){
-
+		System.out.println("\nX current: " + (getX() + Algorithms.getDeltaXfromDirection(direction)));
+		System.out.println("\nY current: " + (getY() + Algorithms.getDeltaYfromDirection(direction)));
+		/*for (Entity entity : getEnvironment().getEntities()){
 			System.out.println("X: " + (entity.getNextX() + entity.getX()));
 			System.out.println("Y: " + (entity.getNextY() + entity.getY()));
 			if (getX() + Algorithms.getDeltaXfromDirection(direction) == entity.getNextX() + entity.getX() &&
