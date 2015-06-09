@@ -10,8 +10,7 @@ public class GrayEntity extends Predator implements Runnable {
     private int x;
     private int y;
 
-    @Override
-    protected Direction getEntityDirection(Entity currentEntity, int algorithm) {
+    /*protected Direction getEntityDirection(Entity currentEntity, int algorithm) {
         //Direction, that must be returned
         Direction direction;
         Environment environment = getEnvironment();
@@ -50,7 +49,7 @@ public class GrayEntity extends Predator implements Runnable {
         }
         else direction = Algorithms.getRandomDirection();
         return direction;
-    }
+    }*/
 
     @Override
     protected int getEntityType() {
@@ -94,29 +93,6 @@ public class GrayEntity extends Predator implements Runnable {
         return "/images/gray.gif";
     }
 
-    private void checkValues(){
-        int neighborCounter = 0;
-        for (Entity entity : getEnvironment().getEntities()){
-            int x = entity.getX();
-            int y = entity.getY();
-            if (Math.abs(Math.abs(x)-Math.abs(getX())) <= 1 && Math.abs(Math.abs(y)-Math.abs(getY())) <= 1) neighborCounter++;
-        }
-        if (predatorLifeTime < 0 || predatorTime < 0 || neighborCounter >= Constants.getNeighboringAnimalsLimit()+1) {
-            System.out.println("Entity " +this.toString() +" life is ended");
-            super.getEnvironment().deleteEntity(this);
-            EntitiesPanel.updateEntityView(this);
-            super.stop();
-        }
-    }
-
-    private void updateValues(){
-        if(isHungry) predatorTime--;
-        if(!isHungry && hungryCounter < 0) {isHungry = true;super.hungryCounter = Constants.getPredatorSatiationTime();}
-        else hungryCounter--;
-        breedingCounter--;
-        predatorLifeTime--;
-    }
-
     /**
      * @return x-coordinate
      */
@@ -129,11 +105,6 @@ public class GrayEntity extends Predator implements Runnable {
 
     @Override
     protected void move(Direction direction) {
-        checkValues();
-        updateValues();
-
-        if (isHungry) direction = getEntityDirection(this, 1);
-        else direction = getEntityDirection(this, 0);
 
         if(direction == Direction.NORTH) {
             y -= checkVertical(y -= dy) ? dy : 0;
