@@ -13,8 +13,6 @@ import java.util.Observable;
  */
 public class Environment extends Observable {
 
-	public final Object monitor = new Object();
-
 	public static final int WIDTH = 30;
 	public static final int HEIGHT = 20;
 

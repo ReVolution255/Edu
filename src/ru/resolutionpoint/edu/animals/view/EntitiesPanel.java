@@ -24,6 +24,13 @@ public class EntitiesPanel extends JPanel implements Observer {
 	private int height;
 	private static List<EntityView> entities = new ArrayList<EntityView>();
 
+	public static EntityView getEntityViewByEntity(Entity entity){
+		for (EntityView entityView : entities){
+			if (entityView.getEntity().equals(entity)) return entityView;
+		}
+		return null;
+	}
+
     /**
      * Constructs new panel
      *
@@ -40,14 +47,10 @@ public class EntitiesPanel extends JPanel implements Observer {
 		setPreferredSize(new Dimension(width, height));
 	}
 
-	//public List<EntityView> getEntitiesList(){return entities;}
+	public List<EntityView> getEntitiesList(){return entities;}
 
-	public static void updateEntityView(Environment environment) {
-			entities.clear();
-			for (Entity entity : environment.getEntities()) {
-				EntityView view = new EntityView(entity);
-				entities.add(view);
-		}
+	public static void updateEntityView(Entity entity) {
+		entities.remove(getEntityViewByEntity(entity));
 	}
 
 	@Override

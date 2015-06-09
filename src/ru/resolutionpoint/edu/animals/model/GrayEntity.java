@@ -37,7 +37,7 @@ public class GrayEntity extends Predator implements Runnable {
             double temp;
             Entity minimalDistanceEntity = currentEntity;
             for(Entity entity : getEnvironment().getEntities()){
-                if(!entity.equals(currentEntity)){
+                if(!entity.equals(currentEntity) && entity.getEntityType() == 1){
                     x = entity.getX();
                     y = entity.getY();
                     temp = Math.sqrt(Math.pow(x-currX,2)+Math.pow(y-currY,2));
@@ -50,6 +50,16 @@ public class GrayEntity extends Predator implements Runnable {
         }
         else direction = Algorithms.getRandomDirection();
         return direction;
+    }
+
+    @Override
+    protected int getEntityType() {
+        return 1;
+    }
+
+    @Override
+    protected void visit() {
+
     }
 
     /**
@@ -118,11 +128,9 @@ public class GrayEntity extends Predator implements Runnable {
     public int getY(){return y;}
 
     @Override
-    protected void move() {
+    protected void move(Direction direction) {
         checkValues();
         updateValues();
-
-        Direction direction;
 
         if (isHungry) direction = getEntityDirection(this, 1);
         else direction = getEntityDirection(this, 0);

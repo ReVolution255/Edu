@@ -25,9 +25,6 @@ public class Application {
 		environment.addEntity(new RedEntity(environment, 19, 1));
 		environment.addEntity(new RedEntity(environment, 22, 7));
 		environment.addEntity(new RedEntity(environment, 25, 14));
-        environment.addEntity(new GrayEntity(environment, 28, 1));
-        environment.addEntity(new GrayEntity(environment, 1, 7));
-        environment.addEntity(new GrayEntity(environment, 4, 14));
 		new MainFrame(environment);
 	}
 }
