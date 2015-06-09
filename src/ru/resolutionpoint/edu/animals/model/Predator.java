@@ -22,7 +22,7 @@ public abstract class Predator extends Animal implements Runnable {
     public Environment getEnvironment(){return super.getEnvironment();}
 
     @Override
-    protected void move() {super.move();
+    protected void move(Direction direction) {super.move(direction);
     }
 
     @Override

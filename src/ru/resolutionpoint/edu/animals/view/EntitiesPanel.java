@@ -49,8 +49,11 @@ public class EntitiesPanel extends JPanel implements Observer {
 
 	public List<EntityView> getEntitiesList(){return entities;}
 
-	public static void updateEntityView(Entity entity) {
-		entities.remove(getEntityViewByEntity(entity));
+	public synchronized static void updateEntityView(Entity entity) {
+		if (entities.contains(entity))
+			entities.remove(getEntityViewByEntity(entity));
+		else
+			entities.add(new EntityView(entity));
 	}
 
 	@Override

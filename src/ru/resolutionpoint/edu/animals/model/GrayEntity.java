@@ -104,7 +104,7 @@ public class GrayEntity extends Predator implements Runnable {
         if (predatorLifeTime < 0 || predatorTime < 0 || neighborCounter >= Constants.getNeighboringAnimalsLimit()+1) {
             System.out.println("Entity " +this.toString() +" life is ended");
             super.getEnvironment().deleteEntity(this);
-            EntitiesPanel.updateEntityView(super.getEnvironment());
+            EntitiesPanel.updateEntityView(this);
             super.stop();
         }
     }

@@ -20,8 +20,9 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		canBreeding = false;
 		this.x = x;
 		this.y = y;
+		state = new boolean[4];
 		state[0] = false; //mustDie
-		state[1] = true; //shouldMultiply
+		state[1] = false; //shouldMultiply
 		state[2] = true; //mustMove
 		state[3] = false; //mustHunt
     }
@@ -66,6 +67,8 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 
 	public void visit(){
 
+		Direction multiplyDirection = Direction.NONE;
+
 		animalLifeTime--;
 
 		if (!canBreeding) breedingCounter--;
@@ -77,9 +80,9 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 
 		if (animalLifeTime < 0) state[0] = true;
 
-		if (canBreeding) state[1] = true;
-
 		int neighborCounter = 0;
+
+		int[] busyDirections = {0,0,0,0,0,0,0,0,0};
 
 		double minimalDistance = Environment.WIDTH * Environment.HEIGHT;
 		double temp;
@@ -90,6 +93,7 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			int y = entity.getY();
 			int entityType = entity.getEntityType();
 			boolean[] entityState = getState();
+
 
 			boolean isNeighbor = false;
 			if (Math.abs(Math.abs(x)-Math.abs(getX())) <= 1 && Math.abs(Math.abs(y)-Math.abs(getY())) <= 1) {
@@ -108,7 +112,9 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 				if (entityType == getEntityType() && entityState[1]) {
 					if (isNeighbor){
 							//TODO create entity here
-							state[1] = false;
+							multiplyDirection = Algorithms.getDirectionFromInt(entity.getX(), entity.getY(), getX(), getY());
+							minimalDistanceEntity = entity;
+							state[1] = true;
 					}
 					else {
 						state[2] = true;
@@ -116,7 +122,7 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 				}
 			}
 
-			}
+		}
 
 
 		if (state[0]) {
@@ -126,36 +132,28 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			super.stop();
 		} else if (state[1]){
 			//multiply
-			direction = Algorithms.getRandomDirection();
+			int x = getX();
+			int y = getY();
+			if(multiplyDirection == Direction.NORTH) y += 1;
+			else if (multiplyDirection == Direction.EAST) x += 1;
+			else if (multiplyDirection == Direction.WEST) x -= 1;
+			else if (multiplyDirection == Direction.SOUTH) y -= 1;
+			else if (multiplyDirection == Direction.NORTHEAST) {x += 1; y += 1;}
+			else if (multiplyDirection == Direction.SOUTHEAST) {x += 1; y -= 1;}
+			else if (multiplyDirection == Direction.SOUTHWEST) {x -= 1; y -= 1;}
+			else if (multiplyDirection == Direction.NORTHWEST) {x -= 1; y += 1;}
+			else { x += 1; y += 1; }
+			EntitiesPanel.updateEntityView(new RedEntity(getEnvironment(),x, y));
+
 		} else if (state[2]){
 			//move
 			x = minimalDistanceEntity.getX();
 			y = minimalDistanceEntity.getY();
 			direction = Algorithms.getDirectionFromInt(x, y, getX(), getY());
+			move(direction);
 		}
 
 
-	}
-
-	private void checkValues(){
-		int neighborCounter = 0;
-		for (Entity entity : getEnvironment().getEntities()){
-			int x = entity.getX();
-			int y = entity.getY();
-			if (Math.abs(Math.abs(x)-Math.abs(getX())) <= 1 && Math.abs(Math.abs(y)-Math.abs(getY())) <= 1) neighborCounter++;
-		}
-		if (neighborCounter > 1 && canBreeding)
-		{
-			canBreeding = false;
-			//super.getEnvironment().addEntity(new RedEntity(super.getEnvironment(),getX()+1,getY()+1));
-		}
-		System.out.println("Entity: " + this.toString() + " Neighbors: " + neighborCounter);
-		if (animalLifeTime < 0 || neighborCounter >= Constants.getNeighboringAnimalsLimit()+1) {
-			System.out.println("Entity " +this.toString() +" life is ended with lifetime " + animalLifeTime +
-					" and neighbor counter " + neighborCounter);
-			super.getEnvironment().deleteEntity(this);
-			EntitiesPanel.updateEntityView(this);
-			super.stop();}
 	}
 
 	@Override
@@ -205,16 +203,8 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		return 0;
 	}
 
-	private void updateValues(){
-		if(!canBreeding)
-			breedingCounter--;
-		animalLifeTime--;
-	}
-
     @Override
 	protected void move(Direction direction) {
-		updateValues();
-		checkValues();
 
 		if (!canBreeding) direction = getEntityDirection(this, 0);
 		else direction = getEntityDirection(this, 1);
