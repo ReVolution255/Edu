@@ -38,6 +38,10 @@ public class Algorithms {
 
     public static Direction getDirectionFromInt(int x, int y, int currX, int currY) {
         Direction d;
+        if (Math.abs(Math.abs(x) - Math.abs(currX)) <= 0 & Math.abs(Math.abs(y) - Math.abs(currY)) <= 0)
+        {d = getRandomDirection(); return d;}
+        if (Math.abs(Math.abs(x) - Math.abs(currX)) <= 1 & Math.abs(Math.abs(y) - Math.abs(currY)) <= 1)
+        {System.out.println(" Bad Point");d = Direction.NONE; return d;}
         if(x == currX && y < currY) d = Direction.NORTH;
         else if (x < currX && y == currY) d = Direction.EAST;
         else if (x > currX && y == currY) d = Direction.WEST;
@@ -46,7 +50,7 @@ public class Algorithms {
         else if (x == currX && y > currY) d = Direction.SOUTH;
         else if (x > currX && y > currY) d = Direction.SOUTHWEST;
         else if (x > currX && y < currY) d = Direction.NORTHWEST;
-        else d = Direction.NONE;
+        else {d = Direction.NONE;}
         return d;
     }
 

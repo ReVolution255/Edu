@@ -64,23 +64,22 @@ public class GrayEntity extends Predator implements Runnable {
 
     Direction direction;
 
-    @Override
-    protected void visit() {
+    public void visit() {
         System.out.println();
         System.out.println("Visited Entity: " + this.toString() + " x = " + getX() + " y = " + getY());
 
         Direction multiplyDirection = Direction.NORTH;
 
-        animalLifeTime--;
-        System.out.println("Lifetime: " + animalLifeTime);
+        predatorLifeTime--;
+        System.out.println("Lifetime: " + predatorLifeTime);
         if (!canBreeding) breedingCounter--;
 
         if (breedingCounter < 0) {
             canBreeding = true;
             breedingCounter = Constants.getNoBreedingAnimalSteps();
         }
-        System.out.println("Breeding counter: " +breedingCounter);
-        if (animalLifeTime < 0) state[0] = true;
+        System.out.println("Breeding counter: " + breedingCounter);
+        if (predatorLifeTime < 0) state[0] = true;
 
         int neighborCounter = 0;
 
@@ -99,17 +98,21 @@ public class GrayEntity extends Predator implements Runnable {
 
 
             boolean isNeighbor = false;
-            if (Math.abs(Math.abs(x) - Math.abs(getX())) <= 1 && Math.abs(Math.abs(y) - Math.abs(getY())) <= 1) {
-                isNeighbor = true;
-                neighborCounter++;
-            } else {
-                temp = Math.sqrt(Math.pow(x - getX(), 2) + Math.pow(y - getY(), 2));
-                if (temp < minimalDistance) {minimalDistance = temp; minimalDistanceEntity = entity;}
+            if (entityType == getEntityType() && entityState[1]) {
+                if (Math.abs(Math.abs(x) - Math.abs(getX())) <= 1 && Math.abs(Math.abs(y) - Math.abs(getY())) <= 1) {
+                    isNeighbor = true;
+                    neighborCounter++;
+                } else {
+                    temp = Math.sqrt(Math.pow(x - getX(), 2) + Math.pow(y - getY(), 2));
+                    if (temp < minimalDistance) {
+                        minimalDistance = temp;
+                        minimalDistanceEntity = entity;
+                    }
+                }
+                if (neighborCounter >= Constants.getNeighboringAnimalsLimit() + 1) {
+                    state[0] = true;
+                }
             }
-            if (neighborCounter >= Constants.getNeighboringAnimalsLimit() + 1) {
-                state[0] = true;
-            }
-
             if (canBreeding) {
                 if (entityType == getEntityType() && entityState[1]) {
                     if (isNeighbor){
@@ -147,7 +150,7 @@ public class GrayEntity extends Predator implements Runnable {
             else if (multiplyDirection == Direction.NORTHWEST) {x -= 1; y += 1;}
             else { x += 1; y += 1; }
             System.out.println("Multiply direction: " + multiplyDirection);
-            EntitiesPanel.updateEntityView(new RedEntity(getEnvironment(),x, y));
+            EntitiesPanel.updateEntityView(new GrayEntity(getEnvironment(),x, y));
 
         } else if (state[2]){
             //move

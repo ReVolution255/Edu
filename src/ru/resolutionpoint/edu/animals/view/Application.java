@@ -17,13 +17,13 @@ public class Application {
 	public static void main(String[] args) {
 		Environment environment = new Environment();
 		environment.addEntity(new RedEntity(environment, 1, 1));
-        environment.addEntity(new RedEntity(environment, 4, 7));
-        environment.addEntity(new RedEntity(environment, 7, 14));
-        environment.addEntity(new RedEntity(environment, 10, 1));
+        environment.addEntity(new GrayEntity(environment, 4, 7));
+        //environment.addEntity(new RedEntity(environment, 7, 14));
+        //environment.addEntity(new RedEntity(environment, 10, 1));
 		environment.addEntity(new RedEntity(environment, 13, 7));
-		environment.addEntity(new RedEntity(environment, 16, 14));
-		environment.addEntity(new RedEntity(environment, 19, 1));
-		environment.addEntity(new RedEntity(environment, 22, 7));
+		//environment.addEntity(new RedEntity(environment, 16, 14));
+		//environment.addEntity(new RedEntity(environment, 19, 1));
+		environment.addEntity(new GrayEntity(environment, 22, 7));
 		environment.addEntity(new RedEntity(environment, 25, 14));
 		new MainFrame(environment);
 	}

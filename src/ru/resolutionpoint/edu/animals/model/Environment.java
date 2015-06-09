@@ -21,7 +21,7 @@ public class Environment extends Observable {
     /**
      * @return list of entities
      */
-    public List<Entity> getEntities() {
+    public synchronized List<Entity> getEntities() {
 		return entities;
 	}
 

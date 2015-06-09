@@ -79,7 +79,7 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			canBreeding = true;
 			breedingCounter = Constants.getNoBreedingAnimalSteps();
 		}
-		System.out.println("Breeding counter: " +breedingCounter);
+		System.out.println("Breeding counter: " + breedingCounter);
 		if (animalLifeTime < 0) state[0] = true;
 
 		int neighborCounter = 0;
@@ -113,9 +113,9 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			if (canBreeding) {
 				if (entityType == getEntityType() && entityState[1]) {
 					if (isNeighbor){
-							multiplyDirection = Algorithms.getDirectionFromInt(entity.getX(), entity.getY(), getX(), getY());
-							minimalDistanceEntity = entity;
-							state[1] = true;
+						multiplyDirection = Algorithms.getDirectionFromInt(entity.getX(), entity.getY(), getX(), getY());
+						minimalDistanceEntity = entity;
+						state[1] = true;
 					}
 					else {
 						state[2] = true;
