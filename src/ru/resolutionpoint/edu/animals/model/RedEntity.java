@@ -3,6 +3,7 @@ package ru.resolutionpoint.edu.animals.model;
 import ru.resolutionpoint.edu.animals.view.EntitiesPanel;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
 
 
@@ -26,6 +27,26 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		state[2] = true; //mustMove
 		state[3] = false; //mustHunt
     }
+
+	public int getNextX() {
+		return nextX;
+	}
+
+	public int getNextY() {
+		return nextY;
+	}
+
+	public void setNextX(int nextX) {
+		this.nextX = nextX;
+	}
+
+	public void setNextY(int nextY) {
+		this.nextY = nextY;
+	}
+
+	private int nextX;
+
+	private int nextY;
 
 	private boolean[] state;
 
@@ -54,6 +75,9 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 	public synchronized void stop() {super.stop();
 	}
 
+	private int x;
+	private int y;
+
 	@Override
 	public int compareTo(RedEntity o) {
 		if(this.equals(o))
@@ -61,11 +85,11 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		else return 1;
 	}
 
-
+	List<Direction> busyDirections = new ArrayList<>();
 
 	Direction direction;
 
-	public synchronized void visit(){
+	public void visit() {
 		System.out.println();
 		System.out.println("Visited Entity: " + this.toString() + " x = " + getX() + " y = " + getY());
 
@@ -99,12 +123,14 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 
 			boolean isNeighbor = false;
 			if (entityType == getEntityType() && entityState[1] || (Math.abs(Math.abs(x) - Math.abs(getX())) <= 1 && Math.abs(Math.abs(y) - Math.abs(getY())) <= 1)) {
-
 				isNeighbor = true;
 				neighborCounter++;
 			} else {
 				temp = Math.sqrt(Math.pow(x - getX(), 2) + Math.pow(y - getY(), 2));
-				if (temp < minimalDistance) {minimalDistance = temp; minimalDistanceEntity = entity;}
+				if (temp < minimalDistance) {
+					minimalDistance = temp;
+					minimalDistanceEntity = entity;
+				}
 			}
 			if (neighborCounter >= Constants.getNeighboringAnimalsLimit() + 1) {
 				state[0] = true;
@@ -156,7 +182,8 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			int y = minimalDistanceEntity.getY();
 			direction = Algorithms.getDirectionFromInt(x, y, getX(), getY());
 			System.out.print(direction.toString() + " direction and x = " + x + " y = " + y);
-			System.out.println();
+			setNextX(Algorithms.getDeltaXfromDirection(direction));
+			setNextY(Algorithms.getDeltaYfromDirection(direction));
 			move(direction);
 		}
 	}
@@ -210,6 +237,21 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 
     @Override
 	protected void move(Direction direction) {
+
+
+		/*System.out.println("X current: " + (getX() + Algorithms.getDeltaXfromDirection(direction)));
+		System.out.println("Y current: " + (getY() + Algorithms.getDeltaYfromDirection(direction)));
+		for (Entity entity : getEnvironment().getEntities()){
+
+			System.out.println("X: " + (entity.getNextX() + entity.getX()));
+			System.out.println("Y: " + (entity.getNextY() + entity.getY()));
+			if (getX() + Algorithms.getDeltaXfromDirection(direction) == entity.getNextX() + entity.getX() &&
+					getY() + Algorithms.getDeltaYfromDirection(direction) == entity.getNextY() + entity.getY()){
+				direction = Direction.NONE;
+			}
+		}*/
+
+		//System.out.println();
 
 		if(direction == Direction.NORTH) {
 			y -= checkVertical(y -= dy) ? dy : 0;

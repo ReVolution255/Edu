@@ -36,6 +36,29 @@ public class Algorithms {
         }
     }
 
+    public static int getDeltaYfromDirection(Direction direction){
+        int y = 0;
+        if (direction == Direction.NORTH) y = 1;
+        else if (direction == Direction.SOUTH) y = -1;
+        else if (direction == Direction.NORTHEAST) {y = 1;}
+        else if (direction == Direction.SOUTHEAST) {y = -1;}
+        else if (direction == Direction.SOUTHWEST) {y = -1;}
+        else if (direction == Direction.NORTHWEST) {y = 1;}
+        return y;
+    }
+
+    public static int getDeltaXfromDirection(Direction direction){
+        int x;
+        if (direction == Direction.EAST) x = 1;
+        else if (direction == Direction.WEST) x = -1;
+        else if (direction == Direction.NORTHEAST) {x = 1;}
+        else if (direction == Direction.SOUTHEAST) {x = 1;}
+        else if (direction == Direction.SOUTHWEST) {x = -1;}
+        else if (direction == Direction.NORTHWEST) {x = -1;}
+        else x = 0;
+        return x;
+    }
+
     public static Direction getDirectionFromInt(int x, int y, int currX, int currY) {
         Direction d;
         if (Math.abs(Math.abs(x) - Math.abs(currX)) <= 0 & Math.abs(Math.abs(y) - Math.abs(currY)) <= 0)

@@ -7,14 +7,82 @@ import ru.resolutionpoint.edu.animals.view.EntitiesPanel;
  */
 public class GrayEntity extends Predator implements Runnable {
 
-    private int x;
-    private int y;
+    public GrayEntity(Environment environment) {
+        super(environment);
+    }
+
+    public GrayEntity(Environment environment, int x, int y) {
+        super(environment, x, y);
+        predatorLifeTime = Constants.getPredatorLifeTime();
+        breedingCounter = Constants.getNoBreedingPredatorSteps();
+        isHungry = false;
+        hungryCounter = Constants.getPredatorSatiationTime();
+        predatorTime = Constants.getPredatorTime();
+        this.x = x;
+        this.y = y;
+        state = new boolean[4];
+        state[0] = false; //mustDie
+        state[1] = false; //shouldMultiply
+        state[2] = true; //mustMove
+        state[3] = false; //mustHunt
+    }
+
+    @Override
+    public int getNextX() {
+        return 0;
+    }
+
+    @Override
+    public int getNextY() {
+        return 0;
+    }
+
+    @Override
+    public void setNextX(int nextX) {
+
+    }
+
+    @Override
+    public void setNextY(int nextY) {
+
+    }
+
+    private int nextX;
+
+    private int nextY;
 
     private boolean[] state;
 
     public boolean[] getState(){
         return state;
     }
+
+    @Override
+    public String getImagePath() {
+        return "/images/gray.gif";
+    }
+
+    public int getX(){return x;}
+
+    public int getY(){return y;}
+
+    @Override
+    public void run() {
+        super.run();
+    }
+
+    @Override
+    public synchronized void start() {
+        super.start();
+    }
+
+    @Override
+    public synchronized void stop() {
+        super.stop();
+    }
+
+    private int x;
+    private int y;
 
     /**protected Direction getEntityDirection(Entity currentEntity, int algorithm) {
         //Direction, that must be returned
@@ -96,21 +164,21 @@ public class GrayEntity extends Predator implements Runnable {
             int y = entity.getY();
             boolean[] entityState = getState();
 
-
             boolean isNeighbor = false;
             if (entityType == getEntityType() && entityState[1] || (Math.abs(Math.abs(x) - Math.abs(getX())) <= 1 && Math.abs(Math.abs(y) - Math.abs(getY())) <= 1)) {
-                    isNeighbor = true;
-                    neighborCounter++;
-                } else {
-                    temp = Math.sqrt(Math.pow(x - getX(), 2) + Math.pow(y - getY(), 2));
-                    if (temp < minimalDistance) {
-                        minimalDistance = temp;
-                        minimalDistanceEntity = entity;
-                    }
+                isNeighbor = true;
+                neighborCounter++;
+            } else {
+                temp = Math.sqrt(Math.pow(x - getX(), 2) + Math.pow(y - getY(), 2));
+                if (temp < minimalDistance) {
+                    minimalDistance = temp;
+                    minimalDistanceEntity = entity;
                 }
-                if (neighborCounter >= Constants.getNeighboringAnimalsLimit() + 1) {
-                    state[0] = true;
-                }
+            }
+            if (neighborCounter >= Constants.getNeighboringAnimalsLimit() + 1) {
+                state[0] = true;
+            }
+
             if (canBreeding) {
                 if (entityType == getEntityType() && entityState[1]) {
                     if (isNeighbor){
@@ -138,7 +206,7 @@ public class GrayEntity extends Predator implements Runnable {
             System.out.println("And must multiply");
             int x = getX();
             int y = getY();
-            if(multiplyDirection == Direction.NORTH) y += 1;
+            if (multiplyDirection == Direction.NORTH) y += 1;
             else if (multiplyDirection == Direction.EAST) x += 1;
             else if (multiplyDirection == Direction.WEST) x -= 1;
             else if (multiplyDirection == Direction.SOUTH) y -= 1;
@@ -161,53 +229,6 @@ public class GrayEntity extends Predator implements Runnable {
             move(direction);
         }
     }
-
-    /**
-     * Constructs new entity
-     *
-     * @param environment environment
-     */
-    public GrayEntity(Environment environment) {
-        super(environment);
-    }
-
-    /**
-     * Constructs new entity
-     *
-     * @param environment environment
-     * @param x           initial x-coordinate
-     * @param y           initial y-coordinate
-     */
-    public GrayEntity(Environment environment, int x, int y) {
-        super(environment, x, y);
-        predatorLifeTime = Constants.getPredatorLifeTime();
-        breedingCounter = Constants.getNoBreedingPredatorSteps();
-        isHungry = false;
-        hungryCounter = Constants.getPredatorSatiationTime();
-        predatorTime = Constants.getPredatorTime();
-        this.x = x;
-        this.y = y;
-        state = new boolean[4];
-        state[0] = false; //mustDie
-        state[1] = false; //shouldMultiply
-        state[2] = true; //mustMove
-        state[3] = false; //mustHunt
-    }
-
-    @Override
-    public String getImagePath() {
-        return "/images/gray.gif";
-    }
-
-    /**
-     * @return x-coordinate
-     */
-    public int getX(){return x;}
-
-    /**
-     * @return y-coordinate
-     */
-    public int getY(){return y;}
 
     @Override
     protected void move(Direction direction) {
@@ -242,21 +263,6 @@ public class GrayEntity extends Predator implements Runnable {
         }
         else if (direction == Direction.NONE){
         }
-    }
-
-    @Override
-    public void run() {
-        super.run();
-    }
-
-    @Override
-    public synchronized void start() {
-        super.start();
-    }
-
-    @Override
-    public synchronized void stop() {
-        super.stop();
     }
 
 }

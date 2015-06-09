@@ -45,6 +45,14 @@ public abstract class Entity implements Runnable {
 
     public abstract String getImagePath();
 
+    public abstract int getNextX();
+
+    public abstract int getNextY();
+
+    public abstract void setNextX(int nextX);
+
+    public abstract void setNextY(int nextY);
+
     @Override
 	public void run() {
         while (true) {
