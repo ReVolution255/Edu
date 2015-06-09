@@ -98,8 +98,7 @@ public class GrayEntity extends Predator implements Runnable {
 
 
             boolean isNeighbor = false;
-            if (entityType == getEntityType() && entityState[1]) {
-                if (Math.abs(Math.abs(x) - Math.abs(getX())) <= 1 && Math.abs(Math.abs(y) - Math.abs(getY())) <= 1) {
+            if (entityType == getEntityType() && entityState[1] || (Math.abs(Math.abs(x) - Math.abs(getX())) <= 1 && Math.abs(Math.abs(y) - Math.abs(getY())) <= 1)) {
                     isNeighbor = true;
                     neighborCounter++;
                 } else {
@@ -112,7 +111,6 @@ public class GrayEntity extends Predator implements Runnable {
                 if (neighborCounter >= Constants.getNeighboringAnimalsLimit() + 1) {
                     state[0] = true;
                 }
-            }
             if (canBreeding) {
                 if (entityType == getEntityType() && entityState[1]) {
                     if (isNeighbor){

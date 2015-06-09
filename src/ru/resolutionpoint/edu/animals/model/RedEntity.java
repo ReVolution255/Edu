@@ -98,8 +98,8 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			boolean[] entityState = getState();
 
 			boolean isNeighbor = false;
-			if (entityType == getEntityType() && entityState[1]) {
-			if (Math.abs(Math.abs(x) - Math.abs(getX())) <= 1 && Math.abs(Math.abs(y) - Math.abs(getY())) <= 1) {
+			if (entityType == getEntityType() && entityState[1] || (Math.abs(Math.abs(x) - Math.abs(getX())) <= 1 && Math.abs(Math.abs(y) - Math.abs(getY())) <= 1)) {
+
 				isNeighbor = true;
 				neighborCounter++;
 			} else {
@@ -108,7 +108,6 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			}
 			if (neighborCounter >= Constants.getNeighboringAnimalsLimit() + 1) {
 				state[0] = true;
-			}
 			}
 
 			if (canBreeding) {
@@ -138,7 +137,7 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			System.out.println("And must multiply");
 			int x = getX();
 			int y = getY();
-			if(multiplyDirection == Direction.NORTH) y += 1;
+			if (multiplyDirection == Direction.NORTH) y += 1;
 			else if (multiplyDirection == Direction.EAST) x += 1;
 			else if (multiplyDirection == Direction.WEST) x -= 1;
 			else if (multiplyDirection == Direction.SOUTH) y -= 1;
