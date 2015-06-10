@@ -14,24 +14,10 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 	}
     public RedEntity(Environment environment, int x, int y) {
         super(environment, x, y);
-		animalLifeTime = Constants.getAnimalLifeTime();
-		overCrowdingCounter = Constants.getNeighboringAnimalsLimit();
-		breedingCounter = Constants.getNoBreedingAnimalSteps();
-		canBreeding = false;
-		position = new Point(x, y);
+		super.setBreeding(false);
     }
 
-	private Point position;
-
 	private boolean mustDie = false;
-
-	public void setPosition(Point position) {
-		this.position = position;
-	}
-
-	public Point getPosition(){
-		return position;
-	}
 
     @Override
 	public String getImagePath() {
@@ -51,7 +37,7 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 	}
 
 	public void setBreedingStatus(boolean status){
-		this.canBreeding = status;
+		setBreeding(status);
 	}
 
 	@Override
@@ -70,24 +56,19 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 	}
 
 	public void visit() {
-		System.out.println();
-		System.out.println("Visited Entity: " + this.toString() + " x = " + getX() + " y = " + getY());
 		//Update current entity
-		animalLifeTime--;
+		super.setLifeTime(super.getLifeTime()-1);
 
 		boolean mustDie = false;
 
 		if (this.mustDie) mustDie = true;
-		System.out.println("Lifetime: " + animalLifeTime);
 
-		if (!canBreeding) breedingCounter--;
+		if (!getBreeding()) setBreedingTime(getBreedingTime()-1);
 
-		if (breedingCounter < 0) {
-			canBreeding = true;
-			breedingCounter = Constants.getNoBreedingAnimalSteps();
+		if (getBreedingTime() < 0) {
+			setBreeding(true);
+			setBreedingTime(Constants.getNoBreedingAnimalSteps());
 		}
-
-		System.out.println("Breeding counter: " + breedingCounter);
 
 		//List of neighbor entities
 		List<Entity> entities = new ArrayList<>();
@@ -98,19 +79,18 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 
 		//Set minimal distance (initially max)
 		double minimalDistance = Environment.WIDTH * Environment.HEIGHT;
-
 		int neighborCounter = 0;
 		int sameTypeEntityNeighborCounter = 0;
-
-		Entity minimalDistanceEntity = this;
-		Entity neighborEntity = null;
-
 		int dx;
 		int dy;
+		Entity minimalDistanceEntity = this;
+		Entity neighborEntity = null;
 		Point nextPoint;
+
+
 		//Find closest entity with same type
 		do {
-			if (canBreeding){
+			if (getBreeding()){
 				for (Entity entity : entities){
 					if (entity.getEntityType() == this.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
 						minimalDistanceEntity = entity;
@@ -144,19 +124,15 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		} while (nextPoint.getY() >= Environment.HEIGHT || nextPoint.getY() <= 0
 				|| nextPoint.getX() >= Environment.WIDTH || nextPoint.getX() <= 0);
 
-		if (animalLifeTime < 0) mustDie = true;
-
-		System.out.println("Neighbor Counter: " + neighborCounter);
+		if (super.getLifeTime() < 0) mustDie = true;
 
 		if (mustDie) {
 			//die
-			System.out.println("And must die");
 			super.getEnvironment().deleteEntity(this);
 			EntitiesPanel.updateEntityView(this);
 			super.stop();
-		} else if (canBreeding && sameTypeEntityNeighborCounter >= 1) {
+		} else if (getBreeding() && sameTypeEntityNeighborCounter >= 1) {
 			//multiply
-			System.out.println("And must multiply");
 			Point multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
 			for (Entity entity : entities){
 				if (getEntityType() == entity.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2){
@@ -166,9 +142,8 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 				}
 			}
 			Entity newRedEntity = new RedEntity(getEnvironment(), multiplyPoint.getX(), multiplyPoint.getY());
-			System.out.println("\n\n\nCREATING NEW ENTITY AT POINT: " + newRedEntity.getX() + " " + newRedEntity.getY());
 			if (neighborEntity != null) {
-				neighborEntity.setBreedingStatus(false);
+				neighborEntity.setBreeding(false);
 			}
 			setBreedingStatus(false);
 			super.getEnvironment().addEntity(newRedEntity);
@@ -183,12 +158,12 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 	}
 
 	@Override
-	protected int getEntityType() {
+	public int getEntityType() {
 		return 0;
 	}
 
     @Override
 	protected void move(Point point) {
-		setPosition(point);
+		super.setPosition(point);
 	}
 }

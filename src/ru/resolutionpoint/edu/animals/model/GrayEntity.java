@@ -15,8 +15,8 @@ public class GrayEntity extends Predator implements Runnable {
     }
     public GrayEntity(Environment environment, int x, int y) {
         super(environment, x, y);
-        predatorLifeTime = Constants.getPredatorLifeTime();
-        breedingCounter = Constants.getNoBreedingPredatorSteps();
+        super.setLifeTime(Constants.getPredatorLifeTime());
+        super.setBreedingTime(Constants.getNoBreedingPredatorSteps());
         isHungry = false;
         hungryCounter = Constants.getPredatorSatiationTime();
         predatorTime = Constants.getPredatorTime();
@@ -33,7 +33,7 @@ public class GrayEntity extends Predator implements Runnable {
     }
 
     public void setBreedingStatus(boolean status){
-        this.canBreeding = status;
+        setBreeding(status);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class GrayEntity extends Predator implements Runnable {
     }
 
     @Override
-    protected int getEntityType() {
+    public int getEntityType() {
         return 1;
     }
 
@@ -79,10 +79,8 @@ public class GrayEntity extends Predator implements Runnable {
 
         if (this.mustDie) mustDie = true;
 
-        System.out.println();
-        System.out.println("Visited Entity: " + this.toString() + " x = " + getX() + " y = " + getY());
         //Update current entity
-        predatorLifeTime--;
+        super.setLifeTime(super.getLifeTime()-1);
         boolean eatingTime = false;
 
 
@@ -93,22 +91,18 @@ public class GrayEntity extends Predator implements Runnable {
             eatingTime = true;
         }
 
-        if (isHungry) predatorTime--;
+        if (isHungry) setLifeTime(getLifeTime()-1);
 
-        if(predatorTime < 0) {
+        if(getLifeTime() < 0) {
             mustDie = true;
         }
 
-        System.out.println("Lifetime: " + predatorLifeTime);
+        if (!getBreeding()) setBreedingTime(getBreedingTime()-1);
 
-        if (!canBreeding) breedingCounter--;
-
-        if (breedingCounter < 0) {
-            canBreeding = true;
-            breedingCounter = Constants.getNoBreedingPredatorSteps();
+        if (getBreedingTime() < 0) {
+            setBreeding(true);
+            setBreedingTime(Constants.getNoBreedingPredatorSteps());
         }
-
-        System.out.println("Breeding counter: " + breedingCounter);
 
         //List of neighbor entities
         List<Entity> entities = new ArrayList<>();
@@ -131,7 +125,7 @@ public class GrayEntity extends Predator implements Runnable {
         Point nextPoint;
         //Find closest entity with same type
         do {
-            if (canBreeding) {
+            if (getBreeding()) {
                 for (Entity entity : entities) {
                     if (entity.getEntityType() == this.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
                         minimalDistanceEntity = entity;
@@ -160,24 +154,15 @@ public class GrayEntity extends Predator implements Runnable {
         if(neighborCounter >= Constants.getNeighboringAnimalsLimit()) mustDie = true;
 
 
-        if (predatorLifeTime < 0) mustDie = true;
-
-        System.out.println("Neighbor Counter: " + neighborCounter);
-        System.out.println("Same type neighbor counter: " + sameTypeEntityNeighborCounter);
-        System.out.println("Can breeding? " + canBreeding);
-        System.out.println("Eating time? " + eatingTime);
-        System.out.println("Hungry Counter? " + hungryCounter);
-        System.out.println("Predator Counter? " + predatorTime);
+        if (super.getLifeTime() < 0) mustDie = true;
 
         if (mustDie) {
             //die
-            System.out.println("And must die");
             super.getEnvironment().deleteEntity(this);
             EntitiesPanel.updateEntityView(this);
             super.stop();
-        } else if (canBreeding && sameTypeEntityNeighborCounter >= 1) {
+        } else if (getBreeding() && sameTypeEntityNeighborCounter >= 1) {
             //multiply
-            System.out.println("And must multiply");
             Point multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
             for (Entity entity : entities){
                 if (getEntityType() == entity.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2){
@@ -187,9 +172,8 @@ public class GrayEntity extends Predator implements Runnable {
                 }
             }
             Entity newGrayEntity = new GrayEntity(getEnvironment(), multiplyPoint.getX(), multiplyPoint.getY());
-            System.out.println("\n\n\nCREATING NEW ENTITY AT POINT: " + newGrayEntity.getX() + " " + newGrayEntity.getY());
             if (neighborEntity != null) {
-                neighborEntity.setBreedingStatus(false);
+                neighborEntity.setBreeding(false);
             }
             setBreedingStatus(false);
             super.getEnvironment().addEntity(newGrayEntity);

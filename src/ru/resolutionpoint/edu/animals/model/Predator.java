@@ -5,7 +5,6 @@ package ru.resolutionpoint.edu.animals.model;
  */
 public abstract class Predator extends Animal implements Runnable {
 
-    protected int predatorLifeTime;
     protected int breedingCounter;
     protected boolean isHungry;
     protected int hungryCounter;
@@ -17,10 +16,35 @@ public abstract class Predator extends Animal implements Runnable {
 
     protected Predator(Environment environment, int x, int y) {
         super(environment, x, y);
+        super.setLifeTime(Constants.getPredatorLifeTime());
+        super.setBreedingTime(Constants.getNoBreedingPredatorSteps());
+        super.setBreeding(false);
     }
 
     public Environment getEnvironment(){return super.getEnvironment();}
+    //Common lifetime
+    public int getLifeTime() {
+        return super.getLifeTime();
+    }
+    public void setLifeTime(int lifeTime) {
+        super.setLifeTime(lifeTime);
+    }
 
+    //Common breeding counter
+    public int getBreedingTime() {
+        return super.getBreedingTime();
+    }
+    public void setBreedingTime(int breedingTime) {
+        super.setBreedingTime(breedingTime);
+    }
+
+    //Common position
+    public void setPosition(Point position) {
+        super.setPosition(position);
+    }
+    public Point getPosition(){
+        return super.getPosition();
+    }
     @Override
     protected abstract void move(Point point);
 
