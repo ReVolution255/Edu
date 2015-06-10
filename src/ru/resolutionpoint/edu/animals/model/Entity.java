@@ -1,7 +1,5 @@
 package ru.resolutionpoint.edu.animals.model;
 
-import ru.resolutionpoint.edu.animals.view.EntitiesPanel;
-
 /**
  * Class <code>Entity</code> represents abstract entity
  *
@@ -10,6 +8,7 @@ import ru.resolutionpoint.edu.animals.view.EntitiesPanel;
 public abstract class Entity implements Runnable {
 
     private static int TIME_DELAY = Constants.getTimeDelay();
+    public static double minimalDistance = Environment.WIDTH * Environment.HEIGHT;
 
     public Entity(Environment environment, int x, int y){
         this.environment = environment;
@@ -62,9 +61,13 @@ public abstract class Entity implements Runnable {
         setPosition(point);
     }
 
-    //Common getters
-    public abstract int getX();
-    public abstract int getY();
+    //Common x,y getters
+    public int getX(){
+        return getPosition().getX();
+    }
+    public int getY(){
+        return getPosition().getY();
+    }
 
 	private Environment environment;
 

@@ -5,11 +5,6 @@ package ru.resolutionpoint.edu.animals.model;
  */
 public abstract class Predator extends Animal implements Runnable {
 
-    protected int breedingCounter;
-    protected boolean isHungry;
-    protected int hungryCounter;
-    protected int predatorTime;
-
     protected Predator(Environment environment) {
         super(environment);
     }
@@ -19,47 +14,56 @@ public abstract class Predator extends Animal implements Runnable {
         super.setLifeTime(Constants.getPredatorLifeTime());
         super.setBreedingTime(Constants.getNoBreedingPredatorSteps());
         super.setBreeding(false);
+        setHungryCounter(Constants.getPredatorSatiationTime());
+        setPredatorTime(Constants.getPredatorTime());
+        setIsHungry(false);
     }
 
     public Environment getEnvironment(){return super.getEnvironment();}
-    //Common lifetime
-    public int getLifeTime() {
-        return super.getLifeTime();
-    }
-    public void setLifeTime(int lifeTime) {
-        super.setLifeTime(lifeTime);
+
+    //Common moving method
+    protected void move(Point point){
+        super.move(point);
     }
 
-    //Common breeding counter
-    public int getBreedingTime() {
-        return super.getBreedingTime();
-    }
-    public void setBreedingTime(int breedingTime) {
-        super.setBreedingTime(breedingTime);
-    }
-
-    //Common position
-    public void setPosition(Point position) {
-        super.setPosition(position);
-    }
-    public Point getPosition(){
-        return super.getPosition();
-    }
-    @Override
-    protected abstract void move(Point point);
-
+    //Thread-management
     @Override
     public void run() {
         super.run();
     }
-
     @Override
     public synchronized void start() {
         super.start();
     }
-
     @Override
     public synchronized void stop() {
         super.stop();
     }
+
+    //Common hungry status
+    public boolean isHungry() {
+        return isHungry;
+    }
+    public void setIsHungry(boolean isHungry) {
+        this.isHungry = isHungry;
+    }
+    protected boolean isHungry;
+
+    //Common hungry counter
+    public int getHungryCounter() {
+        return hungryCounter;
+    }
+    public void setHungryCounter(int hungryCounter) {
+        this.hungryCounter = hungryCounter;
+    }
+    protected int hungryCounter;
+
+    //Common predator time
+    public int getPredatorTime() {
+        return predatorTime;
+    }
+    public void setPredatorTime(int predatorTime) {
+        this.predatorTime = predatorTime;
+    }
+    protected int predatorTime;
 }

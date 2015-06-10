@@ -8,6 +8,7 @@ public abstract class Animal extends Entity implements Runnable {
     protected Animal(Environment environment) {
         super(environment);
     }
+
     protected Animal(Environment environment, int x, int y) {
         super(environment, x, y);
         super.setLifeTime(Constants.getAnimalLifeTime());
@@ -17,29 +18,11 @@ public abstract class Animal extends Entity implements Runnable {
 
     public Environment getEnvironment(){return super.getEnvironment();}
 
-    //Common lifetime
-    public int getLifeTime() {
-        return super.getLifeTime();
-    }
-    public void setLifeTime(int lifeTime) {
-        super.setLifeTime(lifeTime);
-    }
-
-    //Common breeding counter
-    public int getBreedingTime() {
-        return super.getBreedingTime();
-    }
-    public void setBreedingTime(int breedingTime) {
-        super.setBreedingTime(breedingTime);
-    }
-
-    //Common position
-    public void setPosition(Point position) {
-        setPosition(position);
-    }
-    public Point getPosition(){
-        return super.getPosition();
-    }
+    //Common moving method
+    @Override
+    protected void move(Point point){
+        super.move(point);
+    };
 
     //Thread management
     @Override
@@ -54,7 +37,4 @@ public abstract class Animal extends Entity implements Runnable {
     public synchronized void stop() {
         super.stop();
     }
-
-    @Override
-    protected abstract void move(Point point);
 }

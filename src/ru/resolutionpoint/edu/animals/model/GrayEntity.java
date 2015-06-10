@@ -15,54 +15,24 @@ public class GrayEntity extends Predator implements Runnable {
     }
     public GrayEntity(Environment environment, int x, int y) {
         super(environment, x, y);
-        super.setLifeTime(Constants.getPredatorLifeTime());
-        super.setBreedingTime(Constants.getNoBreedingPredatorSteps());
-        isHungry = false;
-        hungryCounter = Constants.getPredatorSatiationTime();
-        predatorTime = Constants.getPredatorTime();
-        position = new Point(x, y);
+        setLifeTime(Constants.getPredatorLifeTime());
+        setBreedingTime(Constants.getNoBreedingPredatorSteps());
     }
-
-    private boolean mustDie = false;
-
-    private Point position;
 
     @Override
     public String getImagePath() {
         return "/images/gray.gif";
     }
 
-    public void setBreedingStatus(boolean status){
-        setBreeding(status);
-    }
-
-    @Override
-    public void setMustDie(boolean status) {
-        this.mustDie = status;
-    }
-
-    public int getX(){return getPosition().x;}
-
-    public int getY(){return getPosition().y;}
-
-    public Point getPosition(){
-        return position;
-    }
-
+    //Thread-management
     @Override
     public void run() {
         super.run();
     }
-
-    public void setPosition(Point position) {
-        this.position = position;
-    }
-
     @Override
     public synchronized void start() {
         super.start();
     }
-
     @Override
     public synchronized void stop() {
         super.stop();
@@ -77,21 +47,21 @@ public class GrayEntity extends Predator implements Runnable {
 
         boolean mustDie = false;
 
-        if (this.mustDie) mustDie = true;
+        if (getMustDie()) mustDie = true;
 
         //Update current entity
-        super.setLifeTime(super.getLifeTime()-1);
+        setLifeTime(getLifeTime() - 1);
         boolean eatingTime = false;
 
 
-        if (!isHungry) hungryCounter--;
+        if (!isHungry()) setHungryCounter(getHungryCounter() - 1);
 
-        if(hungryCounter < 0) {
-            isHungry = true;
+        if(getHungryCounter() < 0) {
+            setIsHungry(true);
             eatingTime = true;
         }
 
-        if (isHungry) setLifeTime(getLifeTime()-1);
+        if (isHungry()) setLifeTime(getLifeTime()-1);
 
         if(getLifeTime() < 0) {
             mustDie = true;
@@ -112,7 +82,6 @@ public class GrayEntity extends Predator implements Runnable {
         entities.remove(this);
 
         //Set minimal distance (initially max)
-        double minimalDistance = Environment.WIDTH * Environment.HEIGHT;
         int neighborCounter = 0;
         int sameTypeEntityNeighborCounter = 0;
         int dx;
@@ -173,7 +142,7 @@ public class GrayEntity extends Predator implements Runnable {
             if (neighborEntity != null) {
                 neighborEntity.setBreeding(false);
             }
-            setBreedingStatus(false);
+            setBreeding(false);
             super.getEnvironment().addEntity(newGrayEntity);
             EntitiesPanel.updateEntityView(newGrayEntity);
             newGrayEntity.start();
@@ -186,8 +155,8 @@ public class GrayEntity extends Predator implements Runnable {
                 if (Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
                     if (entity.getEntityType() != getEntityType()) {
                         entity.setMustDie(true);
-                        predatorTime = Constants.getPredatorTime();
-                        isHungry = false;
+                        setPredatorTime(Constants.getPredatorTime());
+                        setIsHungry(false);
                         eatingTime = false;
                         break;
                     }
