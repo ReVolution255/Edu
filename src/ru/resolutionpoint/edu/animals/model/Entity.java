@@ -32,7 +32,7 @@ public abstract class Entity implements Runnable {
 	}
 
     public abstract int getX();
-
+    public abstract void setBreedingStatus(boolean status);
     public abstract int getY();
 
     public Environment getEnvironment(){return environment;}

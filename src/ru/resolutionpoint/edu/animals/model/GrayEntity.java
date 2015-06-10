@@ -30,6 +30,10 @@ public class GrayEntity extends Predator implements Runnable {
         return "/images/gray.gif";
     }
 
+    public void setBreedingStatus(boolean status){
+        this.canBreeding = status;
+    }
+
     public int getX(){return getPosition().x;}
 
     public int getY(){return getPosition().y;}
@@ -136,6 +140,7 @@ public class GrayEntity extends Predator implements Runnable {
         int sameTypeEntityNeighborCounter = 0;
 
         Entity minimalDistanceEntity = this;
+        Entity neighborEntity = null;
 
         int dx;
         int dy;
@@ -148,7 +153,10 @@ public class GrayEntity extends Predator implements Runnable {
                         minimalDistanceEntity = entity;
                     if (Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
                         neighborCounter++;
-                        if (entity.getEntityType() == getEntityType()) sameTypeEntityNeighborCounter++;
+                        if (entity.getEntityType() == getEntityType()) {
+                            sameTypeEntityNeighborCounter++;
+                            neighborEntity = entity;
+                        }
                     }
                 }
                 //Find delta x for new point
@@ -172,28 +180,13 @@ public class GrayEntity extends Predator implements Runnable {
             if (entity.getPosition().compareTo(nextPoint) == 0) nextPoint = getPosition();
         }
 
-        //TODO make test for max X and max Y
-
-        if (nextPoint.getY() >= Environment.HEIGHT)
-            nextPoint.setY(position.getY());
-        else if (nextPoint.getY() <= 0)
-            nextPoint.setY(position.getY());
-        else {
-            // do nothing
-        }
-        if (nextPoint.getX() >= Environment.WIDTH)
-            nextPoint.setX(position.getX());
-        else if (nextPoint.getX() <= 0)
-            nextPoint.setX(position.getX());
-        else {
-            // do nothing
-        }
-
         move(nextPoint);
 
         if (predatorLifeTime < 0) mustDie = true;
 
         System.out.println("Neighbor Counter: " + neighborCounter);
+        System.out.println("Same type neighbor counter: " + sameTypeEntityNeighborCounter);
+        System.out.println("Can breeding? " + canBreeding);
 
         if (mustDie) {
             //die
@@ -201,7 +194,7 @@ public class GrayEntity extends Predator implements Runnable {
             super.getEnvironment().deleteEntity(this);
             EntitiesPanel.updateEntityView(this);
             super.stop();
-        } else if (canBreeding && sameTypeEntityNeighborCounter > 1) {
+        } else if (canBreeding && sameTypeEntityNeighborCounter >= 1) {
             //multiply
             System.out.println("And must multiply");
             Point multiplyPoint = Algorithms.getRandomNeighborPoint(this.getPosition());
@@ -212,11 +205,15 @@ public class GrayEntity extends Predator implements Runnable {
                     }
                 }
             }
-            Entity newRedEntity = new RedEntity(getEnvironment(), multiplyPoint.getX(), multiplyPoint.getY());
-            System.out.println("\n\n\nCREATING NEW ENTITY AT POINT: " + newRedEntity.getX() + " " + newRedEntity.getY());
-            super.getEnvironment().addEntity(newRedEntity);
-            EntitiesPanel.updateEntityView(newRedEntity);
-            newRedEntity.start();
+            Entity newGrayEntity = new GrayEntity(getEnvironment(), multiplyPoint.getX(), multiplyPoint.getY());
+            System.out.println("\n\n\nCREATING NEW ENTITY AT POINT: " + newGrayEntity.getX() + " " + newGrayEntity.getY());
+            if (neighborEntity != null) {
+                neighborEntity.setBreedingStatus(false);
+            }
+            setBreedingStatus(false);
+            super.getEnvironment().addEntity(newGrayEntity);
+            EntitiesPanel.updateEntityView(newGrayEntity);
+            newGrayEntity.start();
         }
     }
 

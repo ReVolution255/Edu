@@ -43,6 +43,10 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 	public void run() {super.run();
 	}
 
+	public void setBreedingStatus(boolean status){
+		this.canBreeding = status;
+	}
+
 	@Override
 	public synchronized void start() {super.start();
 	}
@@ -90,43 +94,50 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		int sameTypeEntityNeighborCounter = 0;
 
 		Entity minimalDistanceEntity = this;
+		Entity neighborEntity = null;
 
 		int dx;
 		int dy;
 		Point nextPoint;
 		//Find closest entity with same type
-		if (canBreeding){
-			for (Entity entity : entities){
-				if (entity.getEntityType() == this.getEntityType() && Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
-					minimalDistanceEntity = entity;
-				if (Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
-					neighborCounter++;
-					if (entity.getEntityType() == getEntityType()) sameTypeEntityNeighborCounter++;
+		do {
+			if (canBreeding){
+				for (Entity entity : entities){
+					if (entity.getEntityType() == this.getEntityType() && Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
+						minimalDistanceEntity = entity;
+					if (Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
+						neighborCounter++;
+						if (entity.getEntityType() == getEntityType()) {
+							sameTypeEntityNeighborCounter++;
+							neighborEntity = entity;
+						}
+					}
 				}
+				//Find delta x for new point
+				dx = Algorithms.getDeltaXfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
+
+				//Find delta y for new point
+				dy = Algorithms.getDeltaYfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
+
+				//Next point to target
+				nextPoint = new Point(getX() + dx, getY() + dy);
+			} else {
+				nextPoint = Algorithms.getRandomNeighborPoint(getPosition());
 			}
-			//Find delta x for new point
-			dx = Algorithms.getDeltaXfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
 
-			//Find delta y for new point
-			dy = Algorithms.getDeltaYfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
-
-			//Next point to target
-			nextPoint = new Point(getX() + dx, getY() + dy);
-		} else {
-			nextPoint = Algorithms.getRandomNeighborPoint(getPosition());
-		}
-
-		if(neighborCounter >= Constants.getNeighboringAnimalsLimit()) mustDie = true;
+			if(neighborCounter >= Constants.getNeighboringAnimalsLimit()) mustDie = true;
 
 
-		//If next point is busy not move
-		for (Entity entity : entities){
-			if (entity.getPosition().compareTo(nextPoint) == 0) nextPoint = getPosition();
-		}
+			//If next point is busy not move
+			for (Entity entity : entities){
+				if (entity.getPosition().compareTo(nextPoint) == 0) nextPoint = getPosition();
+			}
+		} while (nextPoint.getY() >= Environment.HEIGHT || nextPoint.getY() <= 0
+				|| nextPoint.getX() >= Environment.WIDTH || nextPoint.getX() <= 0);
 
-		//TODO make test for max X and max Y
+		//Uncomment and remove while-cycle if need fast job of algorithm
 
-		if (nextPoint.getY() >= Environment.HEIGHT)
+/*		if (nextPoint.getY() >= Environment.HEIGHT)
 			nextPoint.setY(position.getY());
 		else if (nextPoint.getY() <= 0)
 			nextPoint.setY(position.getY());
@@ -139,7 +150,7 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			nextPoint.setX(position.getX());
 		else {
 			// do nothing
-		}
+		}*/
 
 		move(nextPoint);
 
@@ -166,6 +177,10 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			}
 			Entity newRedEntity = new RedEntity(getEnvironment(), multiplyPoint.getX(), multiplyPoint.getY());
 			System.out.println("\n\n\nCREATING NEW ENTITY AT POINT: " + newRedEntity.getX() + " " + newRedEntity.getY());
+			if (neighborEntity != null) {
+				neighborEntity.setBreedingStatus(false);
+			}
+			setBreedingStatus(false);
 			super.getEnvironment().addEntity(newRedEntity);
 			EntitiesPanel.updateEntityView(newRedEntity);
 			newRedEntity.start();
