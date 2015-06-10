@@ -40,6 +40,6 @@ public abstract class Animal extends Entity implements Runnable {
     }
 
     @Override
-    protected void move(Direction direction){
+    protected void move(Point point){
     }
 }

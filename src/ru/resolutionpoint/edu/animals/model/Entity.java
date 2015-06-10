@@ -15,6 +15,10 @@ public abstract class Entity implements Runnable {
     protected Point position;
     protected abstract void visit();
 
+    public Point getPosition(){
+        return position;
+    }
+
 	private static int TIME_DELAY = Constants.getTimeDelay();
     private int movingAlgorithm = 0;
 
@@ -46,15 +50,8 @@ public abstract class Entity implements Runnable {
 
     public abstract String getImagePath();
 
-    public abstract int getNextX();
-
     public abstract Direction getDirection();
 
-    public abstract int getNextY();
-
-    public abstract void setNextX(int nextX);
-
-    public abstract void setNextY(int nextY);
 
     @Override
 	public void run() {
@@ -95,5 +92,5 @@ public abstract class Entity implements Runnable {
 		return y >= 0 && y < Environment.HEIGHT;
 	}
     
-    protected abstract void move(Direction direction);
+    protected abstract void move(Point point);
 }

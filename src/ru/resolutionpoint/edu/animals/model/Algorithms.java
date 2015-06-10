@@ -81,4 +81,24 @@ public class Algorithms {
         return getDirectionFromInt(random.nextInt(8));}
 
     public static Direction getNoDirection(){return Direction.NONE;}
+
+    public static double getDistanceBetweenPoints(Point a, Point b){
+        return Math.sqrt( Math.pow(a.getX() - b.getX(),2) + Math.pow(a.getY() - b.getY(),2) );
+    }
+
+    public static int getDeltaXfromPoints(Point current, Point target){
+        int x;
+        if (current.getX() < target.getX()) x = 1;
+        else if (current.getX() == target.getX()) x = 0;
+        else x = -1;
+        return x;
+    }
+
+    public static int getDeltaYfromPoints(Point current, Point target){
+        int y;
+        if (current.getY() < target.getY()) y = 1;
+        else if (current.getY() == target.getY()) y = 0;
+        else y = -1;
+        return y;
+    }
 }

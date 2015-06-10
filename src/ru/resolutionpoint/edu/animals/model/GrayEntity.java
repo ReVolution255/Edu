@@ -28,28 +28,8 @@ public class GrayEntity extends Predator implements Runnable {
     }
 
     @Override
-    public int getNextX() {
-        return 0;
-    }
-
-    @Override
     public Direction getDirection() {
         return null;
-    }
-
-    @Override
-    public int getNextY() {
-        return 0;
-    }
-
-    @Override
-    public void setNextX(int nextX) {
-
-    }
-
-    @Override
-    public void setNextY(int nextY) {
-
     }
 
     private int nextX;
@@ -231,12 +211,12 @@ public class GrayEntity extends Predator implements Runnable {
             direction = Algorithms.getDirectionFromInt(x, y, getX(), getY());
             System.out.print(direction.toString() + " direction and x = " + x + " y = " + y);
             System.out.println();
-            move(direction);
+            //move(direction);
         }
     }
 
     @Override
-    protected void move(Direction direction) {
+    protected void move(Point point) {
 
         if(direction == Direction.NORTH) {
             y -= checkVertical(y -= dy) ? dy : 0;
