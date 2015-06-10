@@ -16,47 +16,46 @@ public abstract class Entity implements Runnable {
         this.position = new Point (x, y);
     }
 
+    //Unique entity type (must have)
     protected abstract int getEntityType(); //0 if redentity, 1 if grayentity
 
-    protected int entityType;
-
     //Common lifetime
-    public int getLifeTime() {
+    protected int getLifeTime() {
         return lifeTime;
     }
-    public void setLifeTime(int lifeTime) {
+    protected void setLifeTime(int lifeTime) {
         this.lifeTime = lifeTime;
     }
     private int lifeTime;
 
     //Common breeding counter
-    public int getBreedingTime() {
+    protected int getBreedingTime() {
         return breedingTime;
     }
-    public void setBreedingTime(int breedingTime) {
+    protected void setBreedingTime(int breedingTime) {
         this.breedingTime = breedingTime;
     }
     private int breedingTime;
 
     //Common breeding key
-    public boolean getBreeding(){return canBreeding;}
-    public void setBreeding(boolean canBreeding){this.canBreeding = canBreeding;}
+    protected boolean getBreeding(){return canBreeding;}
+    protected void setBreeding(boolean canBreeding){this.canBreeding = canBreeding;}
     private boolean canBreeding;
 
     //Common life status
-    public boolean getMustDie(){return mustDie;}
-    public void setMustDie(boolean mustDie){this.mustDie = mustDie;}
+    protected boolean getMustDie(){return mustDie;}
+    protected void setMustDie(boolean mustDie){this.mustDie = mustDie;}
     private boolean mustDie;
 
     //Common position
-    public Point getPosition(){
+    protected Point getPosition(){
         return position;
     }
-    public void setPosition(Point position) {this.position = position;}
+    protected void setPosition(Point position) {this.position = position;}
     private Point position;
 
     //Common visit method
-    protected abstract void visit();
+    public abstract void visit();
 
     //Common moving method
     protected void move(Point point){
@@ -81,7 +80,7 @@ public abstract class Entity implements Runnable {
 
     public Environment getEnvironment(){return environment;}
 
-    //Unique abstract imagepath
+    //Unique abstract image path
     public abstract String getImagePath();
 
     //Thread management

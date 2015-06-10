@@ -17,7 +17,7 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		super.setBreeding(false);
     }
 
-	private boolean mustDie = false;
+	setMustDie(false);
 
     @Override
 	public String getImagePath() {
@@ -29,7 +29,7 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 	public int getY(){return getPosition().y;}
 
 	public void setMustDie(boolean status){
-		this.mustDie = status;
+		setMustDie(status);
 	}
 
 	@Override
@@ -56,24 +56,11 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 	}
 
 	public void visit() {
-		//Update current entity
-		super.setLifeTime(super.getLifeTime()-1);
-
-		boolean mustDie = false;
-
-		if (this.mustDie) mustDie = true;
-
-		if (!getBreeding()) setBreedingTime(getBreedingTime()-1);
-
-		if (getBreedingTime() < 0) {
-			setBreeding(true);
-			setBreedingTime(Constants.getNoBreedingAnimalSteps());
-		}
+		//Init. values
 
 		//List of neighbor entities
 		List<Entity> entities = new ArrayList<>();
 		entities.addAll(getEnvironment().getEntities());
-
 		//Remove yourself from entities/points array
 		entities.remove(this);
 
@@ -81,6 +68,20 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		double minimalDistance = Environment.WIDTH * Environment.HEIGHT;
 		int neighborCounter = 0;
 		int sameTypeEntityNeighborCounter = 0;
+
+		boolean mustDie = false;
+
+		//Update values
+
+		//Update current entity
+		super.setLifeTime(super.getLifeTime()-1);
+		if (getMustDie()) mustDie = true;
+		if (!getBreeding()) setBreedingTime(getBreedingTime()-1);
+		if (getBreedingTime() < 0) {
+			setBreeding(true);
+			setBreedingTime(Constants.getNoBreedingAnimalSteps());
+		}
+
 		int dx;
 		int dy;
 		Entity minimalDistanceEntity = this;

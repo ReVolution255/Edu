@@ -41,16 +41,15 @@ public abstract class Animal extends Entity implements Runnable {
         return super.getPosition();
     }
 
+    //Thread management
     @Override
     public void run() {
         super.run();
     }
-
     @Override
     public synchronized void start() {
         super.start();
     }
-
     @Override
     public synchronized void stop() {
         super.stop();

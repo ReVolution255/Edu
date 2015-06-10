@@ -113,16 +113,14 @@ public class GrayEntity extends Predator implements Runnable {
 
         //Set minimal distance (initially max)
         double minimalDistance = Environment.WIDTH * Environment.HEIGHT;
-
         int neighborCounter = 0;
         int sameTypeEntityNeighborCounter = 0;
-
-        Entity minimalDistanceEntity = this;
-        Entity neighborEntity = null;
-
         int dx;
         int dy;
+        Entity minimalDistanceEntity = this;
+        Entity neighborEntity = null;
         Point nextPoint;
+
         //Find closest entity with same type
         do {
             if (getBreeding()) {
