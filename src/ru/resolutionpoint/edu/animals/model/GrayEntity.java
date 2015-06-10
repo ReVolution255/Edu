@@ -68,47 +68,6 @@ public class GrayEntity extends Predator implements Runnable {
         super.stop();
     }
 
-    /**protected Direction getEntityDirection(Entity currentEntity, int algorithm) {
-        //Direction, that must be returned
-        Direction direction;
-        Environment environment = getEnvironment();
-        int currentX = currentEntity.getX();
-        int currentY = currentEntity.getY();
-        if (algorithm == 0) {
-            direction = Algorithms.getRandomDirection();
-            for (Entity entity : environment.getEntities()) {
-                int x = entity.getX();
-                int y = entity.getY();
-                if (Math.abs(x - currentX) <= 1 && Math.abs(y - currentY) <= 1){
-                    Direction dir = Algorithms.getDirectionFromInt(x ,y, currentX, currentY);
-                    if (dir != direction) break;
-                }
-            }
-        }
-        else if (algorithm == 1){
-            int x;
-            int y;
-            int currX = currentEntity.getX();
-            int currY = currentEntity.getY();
-            double minimalDistance = Environment.WIDTH * Environment.HEIGHT;
-            double temp;
-            Entity minimalDistanceEntity = currentEntity;
-            for(Entity entity : getEnvironment().getEntities()){
-                if(!entity.equals(currentEntity) && entity.getEntityType() == 1){
-                    x = entity.getX();
-                    y = entity.getY();
-                    temp = Math.sqrt(Math.pow(x-currX,2)+Math.pow(y-currY,2));
-                    if (temp < minimalDistance) {minimalDistance = temp; minimalDistanceEntity = entity;}
-                }
-            }
-            x = minimalDistanceEntity.getX();
-            y = minimalDistanceEntity.getY();
-            direction = Algorithms.getDirectionFromInt(x, y, currX, currY);
-        }
-        else direction = Algorithms.getRandomDirection();
-        return direction;
-    }*/
-
     @Override
     protected int getEntityType() {
         return 1;
@@ -174,9 +133,9 @@ public class GrayEntity extends Predator implements Runnable {
         do {
             if (canBreeding) {
                 for (Entity entity : entities) {
-                    if (entity.getEntityType() == this.getEntityType() && Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
+                    if (entity.getEntityType() == this.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
                         minimalDistanceEntity = entity;
-                    if (Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
+                    if (Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
                         neighborCounter++;
                         if (entity.getEntityType() == getEntityType()) {
                             sameTypeEntityNeighborCounter++;
@@ -185,15 +144,15 @@ public class GrayEntity extends Predator implements Runnable {
                     }
                 }
                 //Find delta x for new point
-                dx = Algorithms.getDeltaXfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
+                dx = Entity.getDeltaXfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
 
                 //Find delta y for new point
-                dy = Algorithms.getDeltaYfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
+                dy = Entity.getDeltaYfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
 
                 //Next point to target
                 nextPoint = new Point(getX() + dx, getY() + dy);
             } else {
-                nextPoint = Algorithms.getRandomNeighborPoint(getPosition());
+                nextPoint = Entity.getRandomNeighborPoint(getPosition());
             }
         } while (nextPoint.getY() >= Environment.HEIGHT || nextPoint.getY() <= 0
                 || nextPoint.getX() >= Environment.WIDTH || nextPoint.getX() <= 0);
@@ -219,11 +178,11 @@ public class GrayEntity extends Predator implements Runnable {
         } else if (canBreeding && sameTypeEntityNeighborCounter >= 1) {
             //multiply
             System.out.println("And must multiply");
-            Point multiplyPoint = Algorithms.getRandomNeighborPoint(this.getPosition());
+            Point multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
             for (Entity entity : entities){
-                if (getEntityType() == entity.getEntityType() && Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2){
+                if (getEntityType() == entity.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2){
                     while (entity.getPosition().compareTo(multiplyPoint) == 0){
-                        multiplyPoint = Algorithms.getRandomNeighborPoint(this.getPosition());
+                        multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
                     }
                 }
             }
@@ -240,9 +199,9 @@ public class GrayEntity extends Predator implements Runnable {
         else if (eatingTime) {
             Entity minimalDistanceFoodEntity = this;
             for (Entity entity : entities) {
-                if (entity.getEntityType() != this.getEntityType() && Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
+                if (entity.getEntityType() != this.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
                     minimalDistanceFoodEntity = entity;
-                if (Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
+                if (Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
                     if (entity.getEntityType() != getEntityType()) {
                         entity.setMustDie(true);
                         predatorTime = Constants.getPredatorTime();
@@ -253,16 +212,16 @@ public class GrayEntity extends Predator implements Runnable {
                 }
             }
             //Find delta x for new point
-            dx = Algorithms.getDeltaXfromPoints(this.getPosition(), minimalDistanceFoodEntity.getPosition());
+            dx = Entity.getDeltaXfromPoints(this.getPosition(), minimalDistanceFoodEntity.getPosition());
 
             //Find delta y for new point
-            dy = Algorithms.getDeltaYfromPoints(this.getPosition(), minimalDistanceFoodEntity.getPosition());
+            dy = Entity.getDeltaYfromPoints(this.getPosition(), minimalDistanceFoodEntity.getPosition());
 
             //Next point to target
             nextPoint = new Point(getX() + dx, getY() + dy);
 
             if (minimalDistanceFoodEntity.equals(this)){
-                nextPoint = Algorithms.getRandomNeighborPoint(getPosition());
+                nextPoint = Entity.getRandomNeighborPoint(getPosition());
             }
         }
         //If next point is busy not move
