@@ -116,13 +116,22 @@ public class GrayEntity extends Predator implements Runnable {
 
     public void visit() {
 
+        boolean mustDie = false;
+
+        if (this.mustDie) mustDie = true;
+
         System.out.println();
         System.out.println("Visited Entity: " + this.toString() + " x = " + getX() + " y = " + getY());
         //Update current entity
         predatorLifeTime--;
-
-        boolean mustDie = false;
         boolean eatingTime = false;
+
+        if(!isHungry) hungryCounter--;
+
+        if(hungryCounter < 0) {
+            mustDie = true;
+        }
+
         System.out.println("Lifetime: " + predatorLifeTime);
 
         if (!canBreeding) breedingCounter--;
@@ -193,6 +202,8 @@ public class GrayEntity extends Predator implements Runnable {
         System.out.println("Neighbor Counter: " + neighborCounter);
         System.out.println("Same type neighbor counter: " + sameTypeEntityNeighborCounter);
         System.out.println("Can breeding? " + canBreeding);
+        System.out.println("Eating time? " + eatingTime);
+        System.out.println("Hungry Counter? " + hungryCounter);
 
         if (mustDie) {
             //die
