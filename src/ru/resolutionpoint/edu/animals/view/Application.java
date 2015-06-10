@@ -18,11 +18,11 @@ public class Application {
 		Environment environment = new Environment();
 		environment.addEntity(new GrayEntity(environment, 1, 1));
         environment.addEntity(new RedEntity(environment, 1, 10));
-        //environment.addEntity(new RedEntity(environment, 7, 14));
-        //environment.addEntity(new RedEntity(environment, 10, 1));
-		//environment.addEntity(new RedEntity(environment, 1, 15));
-		//environment.addEntity(new RedEntity(environment, 16, 14));
-		//environment.addEntity(new RedEntity(environment, 19, 1));
+        environment.addEntity(new GrayEntity(environment, 7, 14));
+        environment.addEntity(new GrayEntity(environment, 10, 1));
+		environment.addEntity(new GrayEntity(environment, 1, 15));
+		environment.addEntity(new GrayEntity(environment, 16, 14));
+		environment.addEntity(new RedEntity(environment, 19, 1));
 		environment.addEntity(new RedEntity(environment, 22, 1));
 		environment.addEntity(new GrayEntity(environment, 22, 15));
 		new MainFrame(environment);
