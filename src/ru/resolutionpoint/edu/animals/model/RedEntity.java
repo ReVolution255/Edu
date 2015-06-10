@@ -23,6 +23,8 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 
 	private Point position;
 
+	private boolean mustDie = false;
+
 	public void setPosition(Point position) {
 		this.position = position;
 	}
@@ -39,6 +41,11 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 	public int getX(){return getPosition().x;}
 
 	public int getY(){return getPosition().y;}
+
+	public void setMustDie(boolean status){
+		this.mustDie = status;
+	}
+
 	@Override
 	public void run() {super.run();
 	}
@@ -69,6 +76,8 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		animalLifeTime--;
 
 		boolean mustDie = false;
+
+		if (this.mustDie) mustDie = true;
 		System.out.println("Lifetime: " + animalLifeTime);
 
 		if (!canBreeding) breedingCounter--;
@@ -152,8 +161,6 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			// do nothing
 		}*/
 
-		move(nextPoint);
-
 		if (animalLifeTime < 0) mustDie = true;
 
 		System.out.println("Neighbor Counter: " + neighborCounter);
@@ -185,6 +192,7 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			EntitiesPanel.updateEntityView(newRedEntity);
 			newRedEntity.start();
 		}
+		move(nextPoint);
 	}
 
 	@Override

@@ -7,7 +7,7 @@ public class Constants {
     private Constants(){}
 
     private static int animalLifeTime = 100;
-    private static int predatorLifeTime = 10000;
+    private static int predatorLifeTime = 100;
     private static int noBreedingAnimalSteps = 10;
     private static int noBreedingPredatorSteps = 30;
     private static int neighboringAnimalsLimit = 4;

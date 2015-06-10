@@ -23,6 +23,8 @@ public class GrayEntity extends Predator implements Runnable {
         position = new Point(x, y);
     }
 
+    private boolean mustDie = false;
+
     private Point position;
 
     @Override
@@ -32,6 +34,11 @@ public class GrayEntity extends Predator implements Runnable {
 
     public void setBreedingStatus(boolean status){
         this.canBreeding = status;
+    }
+
+    @Override
+    public void setMustDie(boolean status) {
+        this.mustDie = status;
     }
 
     public int getX(){return getPosition().x;}
@@ -115,6 +122,7 @@ public class GrayEntity extends Predator implements Runnable {
         predatorLifeTime--;
 
         boolean mustDie = false;
+        boolean eatingTime = false;
         System.out.println("Lifetime: " + predatorLifeTime);
 
         if (!canBreeding) breedingCounter--;
@@ -180,8 +188,6 @@ public class GrayEntity extends Predator implements Runnable {
             if (entity.getPosition().compareTo(nextPoint) == 0) nextPoint = getPosition();
         }
 
-        move(nextPoint);
-
         if (predatorLifeTime < 0) mustDie = true;
 
         System.out.println("Neighbor Counter: " + neighborCounter);
@@ -215,6 +221,28 @@ public class GrayEntity extends Predator implements Runnable {
             EntitiesPanel.updateEntityView(newGrayEntity);
             newGrayEntity.start();
         }
+        else if (eatingTime) {
+            Entity minimalDistanceFoodEntity = this;
+            Entity foodEntity = this;
+            for (Entity entity : entities) {
+                if (entity.getEntityType() != this.getEntityType() && Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
+                    minimalDistanceFoodEntity = entity;
+                if (Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
+                    if (entity.getEntityType() != getEntityType()) {
+                        entity.setMustDie(true);
+                    }
+                }
+            }
+            //Find delta x for new point
+            dx = Algorithms.getDeltaXfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
+
+            //Find delta y for new point
+            dy = Algorithms.getDeltaYfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
+
+            //Next point to target
+            nextPoint = new Point(getX() + dx, getY() + dy);
+        }
+        move(nextPoint);
     }
 
     @Override
