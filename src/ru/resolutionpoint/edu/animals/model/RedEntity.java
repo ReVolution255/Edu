@@ -164,7 +164,7 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			super.getEnvironment().deleteEntity(this);
 			EntitiesPanel.updateEntityView(this);
 			super.stop();
-		} else if (canBreeding && sameTypeEntityNeighborCounter > 1) {
+		} else if (canBreeding && sameTypeEntityNeighborCounter >= 1) {
 			//multiply
 			System.out.println("And must multiply");
 			Point multiplyPoint = Algorithms.getRandomNeighborPoint(this.getPosition());
