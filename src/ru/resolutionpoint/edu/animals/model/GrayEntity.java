@@ -34,6 +34,10 @@ public class GrayEntity extends Predator implements Runnable {
 
     public int getY(){return getPosition().y;}
 
+    public Point getPosition(){
+        return position;
+    }
+
     @Override
     public void run() {
         super.run();
@@ -104,16 +108,16 @@ public class GrayEntity extends Predator implements Runnable {
         System.out.println();
         System.out.println("Visited Entity: " + this.toString() + " x = " + getX() + " y = " + getY());
         //Update current entity
-        animalLifeTime--;
+        predatorLifeTime--;
 
         boolean mustDie = false;
-        System.out.println("Lifetime: " + animalLifeTime);
+        System.out.println("Lifetime: " + predatorLifeTime);
 
         if (!canBreeding) breedingCounter--;
 
         if (breedingCounter < 0) {
             canBreeding = true;
-            breedingCounter = Constants.getNoBreedingAnimalSteps();
+            breedingCounter = Constants.getNoBreedingPredatorSteps();
         }
 
         System.out.println("Breeding counter: " + breedingCounter);
@@ -137,29 +141,31 @@ public class GrayEntity extends Predator implements Runnable {
         int dy;
         Point nextPoint;
         //Find closest entity with same type
-        if (canBreeding){
-            for (Entity entity : entities){
-                if (entity.getEntityType() == this.getEntityType() && Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
-                    minimalDistanceEntity = entity;
-                if (Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
-                    neighborCounter++;
-                    if (entity.getEntityType() == getEntityType()) sameTypeEntityNeighborCounter++;
+        do {
+            if (canBreeding) {
+                for (Entity entity : entities) {
+                    if (entity.getEntityType() == this.getEntityType() && Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
+                        minimalDistanceEntity = entity;
+                    if (Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
+                        neighborCounter++;
+                        if (entity.getEntityType() == getEntityType()) sameTypeEntityNeighborCounter++;
+                    }
                 }
+                //Find delta x for new point
+                dx = Algorithms.getDeltaXfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
+
+                //Find delta y for new point
+                dy = Algorithms.getDeltaYfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
+
+                //Next point to target
+                nextPoint = new Point(getX() + dx, getY() + dy);
+            } else {
+                nextPoint = Algorithms.getRandomNeighborPoint(getPosition());
             }
-            //Find delta x for new point
-            dx = Algorithms.getDeltaXfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
-
-            //Find delta y for new point
-            dy = Algorithms.getDeltaYfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
-
-            //Next point to target
-            nextPoint = new Point(getX() + dx, getY() + dy);
-        } else {
-            nextPoint = Algorithms.getRandomNeighborPoint(getPosition());
-        }
+        } while (nextPoint.getY() >= Environment.HEIGHT || nextPoint.getY() <= 0
+                || nextPoint.getX() >= Environment.WIDTH || nextPoint.getX() <= 0);
 
         if(neighborCounter >= Constants.getNeighboringAnimalsLimit()) mustDie = true;
-
 
         //If next point is busy not move
         for (Entity entity : entities){
@@ -185,7 +191,7 @@ public class GrayEntity extends Predator implements Runnable {
 
         move(nextPoint);
 
-        if (animalLifeTime < 0) mustDie = true;
+        if (predatorLifeTime < 0) mustDie = true;
 
         System.out.println("Neighbor Counter: " + neighborCounter);
 
