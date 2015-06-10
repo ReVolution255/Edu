@@ -6,7 +6,7 @@ package ru.resolutionpoint.edu.animals.model;
 public class Constants {
     private Constants(){}
 
-    private static int animalLifeTime = 10000;
+    private static int animalLifeTime = 5;
     private static int predatorLifeTime = 10000;
     private static int noBreedingAnimalSteps = 10;
     private static int noBreedingPredatorSteps = 3000;

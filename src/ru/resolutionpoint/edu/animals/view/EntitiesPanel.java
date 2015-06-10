@@ -47,13 +47,13 @@ public class EntitiesPanel extends JPanel implements Observer {
 		setPreferredSize(new Dimension(width, height));
 	}
 
-	public static synchronized List<EntityView> getEntitiesList(){return entities;}
+	public static List<EntityView> getEntitiesList(){return entities;}
 
 	public static void updateEntityView(Entity entity) {
-		if (getEntitiesList().contains(entity))
-			getEntitiesList().remove(getEntityViewByEntity(entity));
+		if (entities.contains(getEntityViewByEntity(entity)))
+			entities.remove(getEntityViewByEntity(entity));
 		else
-			getEntitiesList().add(new EntityView(entity));
+			entities.add(new EntityView(entity));
 	}
 
 	@Override

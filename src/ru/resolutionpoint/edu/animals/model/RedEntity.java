@@ -20,11 +20,6 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		breedingCounter = Constants.getNoBreedingAnimalSteps();
 		canBreeding = false;
 		position = new Point(x, y);
-		state = new boolean[4];
-		state[0] = false; //mustDie
-		state[1] = false; //shouldMultiply
-		state[2] = true; //mustMove
-		state[3] = false; //mustHunt
     }
 
 	public void setPosition(Point position) {
@@ -37,26 +32,8 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		return position;
 	}
 
-	public int getNextX() {
-		return nextX;
-	}
-
-	public int getNextY() {
-		return nextY;
-	}
-
 	public Direction getDirection(){
 		return direction;
-	}
-
-	private int nextX;
-
-	private int nextY;
-
-	private boolean[] state;
-
-	public boolean[] getState(){
-		return state;
 	}
 
     @Override
@@ -80,9 +57,6 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 	public synchronized void stop() {super.stop();
 	}
 
-	private int x;
-	private int y;
-
 	@Override
 	public int compareTo(RedEntity o) {
 		if(this.equals(o))
@@ -98,6 +72,7 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		//Update current entity
 		animalLifeTime--;
 
+		boolean mustDie = false;
 		System.out.println("Lifetime: " + animalLifeTime);
 
 		if (!canBreeding) breedingCounter--;
@@ -142,39 +117,21 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 
 		move(nextPoint);
 
-		if (animalLifeTime < 0) state[0] = true;
+		if (animalLifeTime < 0) mustDie = true;
 
 		int neighborCounter = 0;
 
 		System.out.println("Neighbor Counter: " + neighborCounter);
 
-		if (state[0]) {
+		if (mustDie) {
 			//die
 			System.out.println("And must die");
 			super.getEnvironment().deleteEntity(this);
 			EntitiesPanel.updateEntityView(this);
 			super.stop();
-		} else if (state[1]){
+		} else {
 			//multiply
 			System.out.println("And must multiply");
-
-		} else if (state[2]){
-			//move
-			/*int x = minimalDistanceEntity.getX();
-			int y = minimalDistanceEntity.getY();
-			direction = Algorithms.getDirectionFromInt(x, y, getX(), getY());
-			for (Entity entity : getEnvironment().getEntities()){
-				if(!this.equals(entity)){
-					int temp_x = getX() + Algorithms.getDeltaXfromDirection(getDirection());
-					int temp_y = getY() + Algorithms.getDeltaYfromDirection(getDirection());
-					int _x = entity.getX() + Algorithms.getDeltaXfromDirection(entity.getDirection());
-					int _y = entity.getY() + Algorithms.getDeltaYfromDirection(entity.getDirection());
-					if (_x == temp_x && _y == temp_y) direction = Direction.NONE;
-				}
-			}
-			System.out.println("And must move to " + minimalDistanceEntity.toString() + ", to direction ");
-			System.out.print(direction.toString() + " direction and x = " + x + " y = " + y);*/
-			//move(direction);
 		}
 	}
 
@@ -227,48 +184,6 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 
     @Override
 	protected void move(Point point) {
-
 		setPosition(point);
-		/*for (Entity entity : getEnvironment().getEntities()){
-			System.out.println("X: " + (entity.getNextX() + entity.getX()));
-			System.out.println("Y: " + (entity.getNextY() + entity.getY()));
-			if (getX() + Algorithms.getDeltaXfromDirection(direction) == entity.getNextX() + entity.getX() &&
-					getY() + Algorithms.getDeltaYfromDirection(direction) == entity.getNextY() + entity.getY()){
-				direction = Direction.NONE;
-			}
-		}*/
-
-		//System.out.println();
-/*
-		if(direction == Direction.NORTH) {
-			y -= checkVertical(y -= dy) ? dy : 0;
-		}
-		else if (direction == Direction.EAST) {
-			x -= checkHorizontal(x -= dx) ? dx : 0;
-		}
-		else if (direction == Direction.WEST) {
-			x += checkHorizontal(x += dx) ? dx : 0;
-		}
-		else if (direction == Direction.SOUTH){
-			y += checkVertical(y += dy) ? dy : 0;
-		}
-		else if (direction == Direction.NORTHWEST) {
-			y -= checkVertical(y -= dy) ? dy : 0;
-			x += checkHorizontal(x += dx) ? dx : 0;
-		}
-		else if (direction == Direction.NORTHEAST) {
-			y -= checkVertical(y -= dy) ? dy : 0;
-			x -= checkHorizontal(x -= dx) ? dx : 0;
-		}
-		else if (direction == Direction.SOUTHWEST){
-			y += checkVertical(y += dy) ? dy : 0;
-			x += checkHorizontal(x += dx) ? dx : 0;
-		}
-		else if (direction == Direction.SOUTHEAST){
-			y += checkVertical(y += dy) ? dy : 0;
-			x -= checkHorizontal(x -= dx) ? dx : 0;
-		}
-		else if (direction == Direction.NONE){
-		}*/
 	}
 }
