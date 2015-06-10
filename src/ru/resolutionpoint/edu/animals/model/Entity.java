@@ -12,6 +12,7 @@ public abstract class Entity implements Runnable {
     //protected abstract Direction getEntityDirection(Entity entity, int algorithm);
     protected abstract int getEntityType(); //0 if redentity, 1 if grayentity
     protected int entityType;
+    protected Point position;
     protected abstract void visit();
 
 	private static int TIME_DELAY = Constants.getTimeDelay();
@@ -46,6 +47,8 @@ public abstract class Entity implements Runnable {
     public abstract String getImagePath();
 
     public abstract int getNextX();
+
+    public abstract Direction getDirection();
 
     public abstract int getNextY();
 

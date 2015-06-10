@@ -19,8 +19,8 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		overCrowdingCounter = Constants.getNeighboringAnimalsLimit();
 		breedingCounter = Constants.getNoBreedingAnimalSteps();
 		canBreeding = false;
-		this.x = x;
-		this.y = y;
+		this.position.x = x;
+		this.position.y = y;
 		state = new boolean[4];
 		state[0] = false; //mustDie
 		state[1] = false; //shouldMultiply
@@ -28,12 +28,22 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		state[3] = false; //mustHunt
     }
 
+	private Point position;
+
+	public Point getPosition(){
+		return position;
+	}
+
 	public int getNextX() {
 		return nextX;
 	}
 
 	public int getNextY() {
 		return nextY;
+	}
+
+	public Direction getDirection(){
+		return direction;
 	}
 
 	public void setNextX(int nextX) {
@@ -59,9 +69,9 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
         return "/images/red.gif";
     }
 
-	public int getX(){return x;}
+	public int getX(){return getPosition().x;}
 
-	public int getY(){return y;}
+	public int getY(){return getPosition().y;}
 
 	@Override
 	public void run() {super.run();
@@ -177,10 +187,19 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 
 		} else if (state[2]){
 			//move
-			System.out.println("And must move to " + minimalDistanceEntity.toString() + ", to direction ");
 			int x = minimalDistanceEntity.getX();
 			int y = minimalDistanceEntity.getY();
 			direction = Algorithms.getDirectionFromInt(x, y, getX(), getY());
+			for (Entity entity : getEnvironment().getEntities()){
+				if(!this.equals(entity)){
+					int temp_x = getX() + Algorithms.getDeltaXfromDirection(getDirection());
+					int temp_y = getY() + Algorithms.getDeltaYfromDirection(getDirection());
+					int _x = entity.getX() + Algorithms.getDeltaXfromDirection(entity.getDirection());
+					int _y = entity.getY() + Algorithms.getDeltaYfromDirection(entity.getDirection());
+					if (_x == temp_x && _y == temp_y) direction = Direction.NONE;
+				}
+			}
+			System.out.println("And must move to " + minimalDistanceEntity.toString() + ", to direction ");
 			System.out.print(direction.toString() + " direction and x = " + x + " y = " + y);
 			setNextX(Algorithms.getDeltaXfromDirection(direction));
 			setNextY(Algorithms.getDeltaYfromDirection(direction));

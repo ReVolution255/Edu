@@ -33,6 +33,11 @@ public class GrayEntity extends Predator implements Runnable {
     }
 
     @Override
+    public Direction getDirection() {
+        return null;
+    }
+
+    @Override
     public int getNextY() {
         return 0;
     }
