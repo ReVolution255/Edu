@@ -12,7 +12,6 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
     public RedEntity(Environment environment) {
 		super(environment);
 	}
-
     public RedEntity(Environment environment, int x, int y) {
         super(environment, x, y);
 		animalLifeTime = Constants.getAnimalLifeTime();
@@ -22,18 +21,14 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		position = new Point(x, y);
     }
 
+	private Point position;
+
 	public void setPosition(Point position) {
 		this.position = position;
 	}
 
-	private Point position;
-
 	public Point getPosition(){
 		return position;
-	}
-
-	public Direction getDirection(){
-		return direction;
 	}
 
     @Override
@@ -44,14 +39,6 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 	public int getX(){return getPosition().x;}
 
 	public int getY(){return getPosition().y;}
-
-	public void setX(int x){
-		position.x = x;
-	}
-
-	public void setY(){
-		position.y = y;
-	}
 	@Override
 	public void run() {super.run();
 	}
@@ -70,8 +57,6 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			return 0;
 		else return 1;
 	}
-
-	Direction direction;
 
 	public void visit() {
 		System.out.println();
@@ -186,48 +171,6 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			newRedEntity.start();
 		}
 	}
-
-	//Deprecated
-	/**protected Direction getEntityDirection(Entity currentEntity, int algorithm) {
-		//Direction, that must be returned
-		Direction direction;
-		Environment environment = getEnvironment();
-		int currentX = currentEntity.getX();
-		int currentY = currentEntity.getY();
-		if (algorithm == 0) {
-			direction = Algorithms.getRandomDirection();
-			for (Entity entity : environment.getEntities()) {
-				int x = entity.getX();
-				int y = entity.getY();
-				if (Math.abs(x - currentX) <= 1 && Math.abs(y - currentY) <= 1){
-					Direction dir = Algorithms.getDirectionFromInt(x ,y, currentX, currentY);
-					if (dir != direction) break;
-				}
-			}
-		}
-		else if (algorithm == 1){
-			int x;
-			int y;
-			int currX = currentEntity.getX();
-			int currY = currentEntity.getY();
-			double minimalDistance = Environment.WIDTH*Environment.HEIGHT;
-			double temp;
-			Entity minimalDistanceEntity = currentEntity;
-			for(Entity entity : getEnvironment().getEntities()){
-				if(!entity.equals(currentEntity) && entity.getEntityType() == 0){
-					x = entity.getX();
-					y = entity.getY();
-					temp = Math.sqrt(Math.pow(x-currX,2)+Math.pow(y-currY,2));
-					if (temp < minimalDistance) {minimalDistance = temp; minimalDistanceEntity = entity;}
-				}
-			}
-			x = minimalDistanceEntity.getX();
-			y = minimalDistanceEntity.getY();
-			direction = Algorithms.getDirectionFromInt(x, y, currX, currY);
-		}
-		else direction = Algorithms.getRandomDirection();
-		return direction;
-	}*/
 
 	@Override
 	protected int getEntityType() {

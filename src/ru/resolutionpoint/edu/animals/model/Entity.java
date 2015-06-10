@@ -20,17 +20,6 @@ public abstract class Entity implements Runnable {
     }
 
 	private static int TIME_DELAY = Constants.getTimeDelay();
-    private int movingAlgorithm = 0;
-
-    /*
-    Directions enumeration with such mapping:
-                NORTH
-        NORTHWEST   NORTHEAST
-    WEST                    EAST
-        SOUTHWEST   SOUTHEAST
-                SOUTH
-     */
-    public enum Direction {NORTH, NORTHWEST, WEST, SOUTHWEST, SOUTH, SOUTHEAST, EAST, NORTHEAST, NONE}
 
 	private Environment environment;
 	private Thread thread = new Thread(this);
@@ -49,8 +38,6 @@ public abstract class Entity implements Runnable {
     public Environment getEnvironment(){return environment;}
 
     public abstract String getImagePath();
-
-    public abstract Direction getDirection();
 
 
     @Override
@@ -83,14 +70,6 @@ public abstract class Entity implements Runnable {
         moveFlag = false;
         //System.out.println("Thread "+thread.getName()+" stopped");
     }
-
-    protected boolean checkHorizontal(int x) {
-        return x >= 0 && x < Environment.WIDTH;
-    }
-
-    protected boolean checkVertical(int y) {
-		return y >= 0 && y < Environment.HEIGHT;
-	}
     
     protected abstract void move(Point point);
 }
