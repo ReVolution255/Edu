@@ -94,12 +94,18 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		//Set minimal distance (initially max)
 		double minimalDistance = Environment.WIDTH * Environment.HEIGHT;
 
+		int neighborCounter = 0;
+
 		Entity minimalDistanceEntity = this;
+
 		//Find closest entity with same type
 		for (Entity entity : entities){
 			if (entity.getEntityType() == this.getEntityType() && Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
 				minimalDistanceEntity = entity;
+			if (Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) neighborCounter++;
 		}
+
+		if(neighborCounter >= Constants.getNeighboringAnimalsLimit()) mustDie = true;
 
 		//Find delta x for new point
 		int dx = Algorithms.getDeltaXfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
@@ -118,8 +124,6 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		move(nextPoint);
 
 		if (animalLifeTime < 0) mustDie = true;
-
-		int neighborCounter = 0;
 
 		System.out.println("Neighbor Counter: " + neighborCounter);
 

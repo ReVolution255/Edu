@@ -6,11 +6,11 @@ package ru.resolutionpoint.edu.animals.model;
 public class Constants {
     private Constants(){}
 
-    private static int animalLifeTime = 5;
+    private static int animalLifeTime = 100;
     private static int predatorLifeTime = 10000;
     private static int noBreedingAnimalSteps = 10;
     private static int noBreedingPredatorSteps = 3000;
-    private static int neighboringAnimalsLimit = 5;
+    private static int neighboringAnimalsLimit = 4;
     private static int predatorSatiationTime = 10;
     private static int predatorTime = 10;
     private static int TIME_DELAY = 1500;
