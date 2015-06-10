@@ -9,9 +9,6 @@ import java.util.TreeSet;
 
 public class RedEntity extends Animal implements Runnable {
 
-    public RedEntity(Environment environment) {
-		super(environment);
-	}
     public RedEntity(Environment environment, int x, int y) {
         super(environment, x, y);
 		setBreeding(false);
@@ -34,7 +31,6 @@ public class RedEntity extends Animal implements Runnable {
 	public synchronized void stop() {super.stop();
 	}
 
-
 	public void visit() {
 		//Init. values
 
@@ -53,19 +49,11 @@ public class RedEntity extends Animal implements Runnable {
 		//Update values
 
 		//Update current entity
-		super.setLifeTime(super.getLifeTime()-1);
 		if (getMustDie()) mustDie = true;
-		if (!getBreeding()) setBreedingTime(getBreedingTime()-1);
 		if (getBreedingTime() < 0) {
 			setBreeding(true);
 			setBreedingTime(Constants.getNoBreedingAnimalSteps());
 		}
-
-		int dx;
-		int dy;
-		Entity minimalDistanceEntity = this;
-		Entity neighborEntity = null;
-		Point nextPoint;
 
 
 		//Find closest entity with same type

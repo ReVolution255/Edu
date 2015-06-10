@@ -10,9 +10,6 @@ import java.util.List;
  */
 public class GrayEntity extends Predator implements Runnable {
 
-    public GrayEntity(Environment environment) {
-        super(environment);
-    }
     public GrayEntity(Environment environment, int x, int y) {
         super(environment, x, y);
         setLifeTime(Constants.getPredatorLifeTime());
@@ -44,30 +41,16 @@ public class GrayEntity extends Predator implements Runnable {
     }
 
     public void visit() {
+        //Init. values
 
+        //Set minimal distance (initially max)
+        int neighborCounter = 0;
+        int sameTypeEntityNeighborCounter = 0;
         boolean mustDie = false;
 
         if (getMustDie()) mustDie = true;
 
         //Update current entity
-        setLifeTime(getLifeTime() - 1);
-        boolean eatingTime = false;
-
-
-        if (!isHungry()) setHungryCounter(getHungryCounter() - 1);
-
-        if(getHungryCounter() < 0) {
-            setIsHungry(true);
-            eatingTime = true;
-        }
-
-        if (isHungry()) setLifeTime(getLifeTime()-1);
-
-        if(getLifeTime() < 0) {
-            mustDie = true;
-        }
-
-        if (!getBreeding()) setBreedingTime(getBreedingTime()-1);
 
         if (getBreedingTime() < 0) {
             setBreeding(true);
@@ -80,15 +63,6 @@ public class GrayEntity extends Predator implements Runnable {
 
         //Remove yourself from entities/points array
         entities.remove(this);
-
-        //Set minimal distance (initially max)
-        int neighborCounter = 0;
-        int sameTypeEntityNeighborCounter = 0;
-        int dx;
-        int dy;
-        Entity minimalDistanceEntity = this;
-        Entity neighborEntity = null;
-        Point nextPoint;
 
         //Find closest entity with same type
         do {
@@ -121,7 +95,7 @@ public class GrayEntity extends Predator implements Runnable {
         if(neighborCounter >= Constants.getNeighboringAnimalsLimit()) mustDie = true;
 
 
-        if (super.getLifeTime() < 0) mustDie = true;
+        if (getLifeTime() < 0) mustDie = true;
 
         if (mustDie) {
             //die

@@ -9,6 +9,11 @@ public abstract class Entity implements Runnable {
 
     private static int TIME_DELAY = Constants.getTimeDelay();
     public static double minimalDistance = Environment.WIDTH * Environment.HEIGHT;
+    protected int dx;
+    protected int dy;
+    protected Entity minimalDistanceEntity = this;
+    protected Entity neighborEntity = null;
+    protected Point nextPoint;
 
     public Entity(Environment environment, int x, int y){
         this.environment = environment;
@@ -54,7 +59,11 @@ public abstract class Entity implements Runnable {
     private Point position;
 
     //Common visit method
-    public abstract void visit();
+    public void visit(){
+        //Update current entity
+        setLifeTime(getLifeTime()-1);
+        if (!getBreeding()) setBreedingTime(getBreedingTime()-1);
+    }
 
     //Common moving method
     protected void move(Point point){

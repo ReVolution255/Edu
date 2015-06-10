@@ -21,6 +21,33 @@ public abstract class Predator extends Animal implements Runnable {
 
     public Environment getEnvironment(){return super.getEnvironment();}
 
+    //Common eating-time status
+    public boolean isEatingTime() {
+        return eatingTime;
+    }
+    public void setEatingTime(boolean eatingTime) {
+        this.eatingTime = eatingTime;
+    }
+    private boolean eatingTime = false;
+
+    //Common visit method
+    public void visit(){
+        super.visit();
+
+        if (!isHungry()) setHungryCounter(getHungryCounter() - 1);
+
+        if(getHungryCounter() < 0) {
+            setIsHungry(true);
+            setEatingTime(true);
+        }
+
+        if (isHungry()) setPredatorTime((getPredatorTime()-1));
+
+        if(getPredatorTime() < 0) {
+            setMustDie(true);
+        }
+    }
+
     //Common moving method
     protected void move(Point point){
         super.move(point);
