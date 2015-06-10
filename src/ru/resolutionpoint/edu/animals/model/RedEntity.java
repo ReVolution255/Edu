@@ -45,6 +45,13 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 
 	public int getY(){return getPosition().y;}
 
+	public void setX(int x){
+		position.x = x;
+	}
+
+	public void setY(){
+		position.y = y;
+	}
 	@Override
 	public void run() {super.run();
 	}
@@ -95,30 +102,58 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 		double minimalDistance = Environment.WIDTH * Environment.HEIGHT;
 
 		int neighborCounter = 0;
+		int sameTypeEntityNeighborCounter = 0;
 
 		Entity minimalDistanceEntity = this;
 
+		int dx;
+		int dy;
+		Point nextPoint;
 		//Find closest entity with same type
-		for (Entity entity : entities){
-			if (entity.getEntityType() == this.getEntityType() && Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
-				minimalDistanceEntity = entity;
-			if (Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) neighborCounter++;
+		if (canBreeding){
+			for (Entity entity : entities){
+				if (entity.getEntityType() == this.getEntityType() && Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
+					minimalDistanceEntity = entity;
+				if (Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
+					neighborCounter++;
+					if (entity.getEntityType() == getEntityType()) sameTypeEntityNeighborCounter++;
+				}
+			}
+			//Find delta x for new point
+			dx = Algorithms.getDeltaXfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
+
+			//Find delta y for new point
+			dy = Algorithms.getDeltaYfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
+
+			//Next point to target
+			nextPoint = new Point(getX() + dx, getY() + dy);
+		} else {
+			nextPoint = Algorithms.getRandomNeighborPoint(getPosition());
 		}
 
 		if(neighborCounter >= Constants.getNeighboringAnimalsLimit()) mustDie = true;
 
-		//Find delta x for new point
-		int dx = Algorithms.getDeltaXfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
-
-		//Find delta y for new point
-		int dy = Algorithms.getDeltaYfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
-
-		//Next point to target
-		Point nextPoint = new Point(getX() + dx, getY() + dy);
 
 		//If next point is busy not move
 		for (Entity entity : entities){
 			if (entity.getPosition().compareTo(nextPoint) == 0) nextPoint = getPosition();
+		}
+
+		//TODO make test for max X and max Y
+
+		if (nextPoint.getY() >= Environment.HEIGHT)
+			nextPoint.setY(position.getY());
+		else if (nextPoint.getY() <= 0)
+			nextPoint.setY(position.getY());
+		else {
+			// do nothing
+		}
+		if (nextPoint.getX() >= Environment.WIDTH)
+			nextPoint.setX(position.getX());
+		else if (nextPoint.getX() <= 0)
+			nextPoint.setX(position.getX());
+		else {
+			// do nothing
 		}
 
 		move(nextPoint);
@@ -133,9 +168,22 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			super.getEnvironment().deleteEntity(this);
 			EntitiesPanel.updateEntityView(this);
 			super.stop();
-		} else {
+		} else if (canBreeding && sameTypeEntityNeighborCounter > 1) {
 			//multiply
 			System.out.println("And must multiply");
+			Point multiplyPoint = Algorithms.getRandomNeighborPoint(this.getPosition());
+			for (Entity entity : entities){
+				if (getEntityType() == entity.getEntityType() && Algorithms.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2){
+					while (entity.getPosition().compareTo(multiplyPoint) == 0){
+						multiplyPoint = Algorithms.getRandomNeighborPoint(this.getPosition());
+					}
+				}
+			}
+			Entity newRedEntity = new RedEntity(getEnvironment(), multiplyPoint.getX(), multiplyPoint.getY());
+			System.out.println("\n\n\nCREATING NEW ENTITY AT POINT: " + newRedEntity.getX() + " " + newRedEntity.getY());
+			super.getEnvironment().addEntity(newRedEntity);
+			EntitiesPanel.updateEntityView(newRedEntity);
+			newRedEntity.start();
 		}
 	}
 

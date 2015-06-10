@@ -36,29 +36,6 @@ public class Algorithms {
         }
     }
 
-    public static int getDeltaYfromDirection(Direction direction){
-        int y = 0;
-        if (direction == Direction.NORTH) y = 1;
-        else if (direction == Direction.SOUTH) y = -1;
-        else if (direction == Direction.NORTHEAST) {y = 1;}
-        else if (direction == Direction.SOUTHEAST) {y = -1;}
-        else if (direction == Direction.SOUTHWEST) {y = -1;}
-        else if (direction == Direction.NORTHWEST) {y = 1;}
-        return y;
-    }
-
-    public static int getDeltaXfromDirection(Direction direction){
-        int x;
-        if (direction == Direction.EAST) x = 1;
-        else if (direction == Direction.WEST) x = -1;
-        else if (direction == Direction.NORTHEAST) {x = 1;}
-        else if (direction == Direction.SOUTHEAST) {x = 1;}
-        else if (direction == Direction.SOUTHWEST) {x = -1;}
-        else if (direction == Direction.NORTHWEST) {x = -1;}
-        else x = 0;
-        return x;
-    }
-
     public static Direction getDirectionFromInt(int x, int y, int currX, int currY) {
         Direction d;
         if (Math.abs(Math.abs(x) - Math.abs(currX)) <= 0 & Math.abs(Math.abs(y) - Math.abs(currY)) <= 0)
@@ -100,5 +77,23 @@ public class Algorithms {
         else if (current.getY() == target.getY()) y = 0;
         else y = -1;
         return y;
+    }
+
+    public static Point getRandomNeighborPoint(Point current){
+        int dx;
+        int random = (int)(Math.random()*10)%3;
+        if (random == 0){
+            dx = 1;
+        } else if ( random == 1) {
+            dx = 0;
+        } else dx = -1;
+        int dy;
+        random = (int)Math.random()*10%3;
+        if (random == 0){
+            dy = 1;
+        } else if ( random == 1) {
+            dy = 0;
+        } else dy = -1;
+        return new Point(current.getX()+dx,current.getY()+dy);
     }
 }
