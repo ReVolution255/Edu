@@ -200,10 +200,6 @@ public class GrayEntity extends Predator implements Runnable {
 
         if(neighborCounter >= Constants.getNeighboringAnimalsLimit()) mustDie = true;
 
-        //If next point is busy not move
-        for (Entity entity : entities){
-            if (entity.getPosition().compareTo(nextPoint) == 0) nextPoint = getPosition();
-        }
 
         if (predatorLifeTime < 0) mustDie = true;
 
@@ -264,6 +260,14 @@ public class GrayEntity extends Predator implements Runnable {
 
             //Next point to target
             nextPoint = new Point(getX() + dx, getY() + dy);
+
+            if (minimalDistanceFoodEntity.equals(this)){
+                nextPoint = Algorithms.getRandomNeighborPoint(getPosition());
+            }
+        }
+        //If next point is busy not move
+        for (Entity entity : entities){
+            if (entity.getPosition().compareTo(nextPoint) == 0) nextPoint = getPosition();
         }
         move(nextPoint);
     }

@@ -192,6 +192,10 @@ public class RedEntity extends Animal implements Runnable, Comparable<RedEntity>
 			EntitiesPanel.updateEntityView(newRedEntity);
 			newRedEntity.start();
 		}
+		//If next point is busy not move
+		for (Entity entity : entities){
+			if (entity.getPosition().compareTo(nextPoint) == 0) nextPoint = getPosition();
+		}
 		move(nextPoint);
 	}
 
