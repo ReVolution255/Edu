@@ -40,7 +40,10 @@ public class GrayEntity extends Predator implements Runnable {
         return 1;
     }
 
+    @Override
     public void visit() {
+        System.out.println("Visited: " + this.toString());
+        super.visit();
         //Init. values
 
         //Set minimal distance (initially max)
@@ -154,11 +157,6 @@ public class GrayEntity extends Predator implements Runnable {
             if (entity.getPosition().compareTo(nextPoint) == 0) nextPoint = getPosition();
         }
         move(nextPoint);
-    }
-
-    @Override
-    protected void move(Point point) {
-        setPosition(point);
     }
 
 }

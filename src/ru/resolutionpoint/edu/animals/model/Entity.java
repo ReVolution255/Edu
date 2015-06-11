@@ -24,21 +24,13 @@ public abstract class Entity implements Runnable {
     protected abstract int getEntityType(); //0 if redentity, 1 if grayentity
 
     //Common lifetime
-    protected int getLifeTime() {
-        return lifeTime;
-    }
-    protected void setLifeTime(int lifeTime) {
-        this.lifeTime = lifeTime;
-    }
+    protected int getLifeTime() {return lifeTime;}
+    protected void setLifeTime(int lifeTime){this.lifeTime = lifeTime;}
     private int lifeTime;
 
     //Common breeding counter
-    protected int getBreedingTime() {
-        return breedingTime;
-    }
-    protected void setBreedingTime(int breedingTime) {
-        this.breedingTime = breedingTime;
-    }
+    protected int getBreedingTime() {return breedingTime;}
+    protected void setBreedingTime(int breedingTime){this.breedingTime = breedingTime;}
     private int breedingTime;
 
     //Common breeding key
@@ -52,14 +44,13 @@ public abstract class Entity implements Runnable {
     private boolean mustDie;
 
     //Common position
-    protected Point getPosition(){
-        return position;
-    }
+    protected Point getPosition(){return position;}
     protected void setPosition(Point position) {this.position = position;}
     private Point position;
 
     //Common visit method
     public void visit(){
+        System.out.println("Visited: " + this.toString());
         //Update current entity
         setLifeTime(getLifeTime()-1);
         if (!getBreeding()) setBreedingTime(getBreedingTime()-1);
@@ -67,6 +58,8 @@ public abstract class Entity implements Runnable {
 
     //Common moving method
     protected void move(Point point){
+        System.out.println("Going to: " + point.getX() + " " + point.getY());
+        System.out.println();
         setPosition(point);
     }
 
@@ -84,12 +77,6 @@ public abstract class Entity implements Runnable {
 	private Thread thread = new Thread(this);
 	private boolean moveFlag = false;
 
-    protected Entity(Environment environment) {
-		this.environment = environment;
-        System.out.println("Thread "+thread.getName()+" created and ready to start");
-		thread.start();
-	}
-
     public Environment getEnvironment(){return environment;}
 
     //Unique abstract image path
@@ -98,6 +85,7 @@ public abstract class Entity implements Runnable {
     //Thread management
     @Override
 	public void run() {
+        System.out.println("Thread "+thread.getName()+" run");
         while (true) {
             try {
                 Thread.sleep(TIME_DELAY);
@@ -110,6 +98,7 @@ public abstract class Entity implements Runnable {
             	// Nothing to do
             }
             if (moveFlag) {
+                System.out.println("Visited: mf " + this.toString());
                 visit();
                 environment.change();
             }
@@ -129,7 +118,6 @@ public abstract class Entity implements Runnable {
     public static double getDistanceBetweenPoints(Point a, Point b){
         return Math.sqrt( Math.pow(a.getX() - b.getX(),2) + Math.pow(a.getY() - b.getY(),2) );
     }
-
     public static int getDeltaXfromPoints(Point current, Point target){
         int x;
         if (current.getX() < target.getX()) x = 1;
@@ -137,7 +125,6 @@ public abstract class Entity implements Runnable {
         else x = -1;
         return x;
     }
-
     public static int getDeltaYfromPoints(Point current, Point target){
         int y;
         if (current.getY() < target.getY()) y = 1;
@@ -145,7 +132,6 @@ public abstract class Entity implements Runnable {
         else y = -1;
         return y;
     }
-
     public static Point getRandomNeighborPoint(Point current){
         int dx;
         int random = (int)(Math.random()*100)%3;

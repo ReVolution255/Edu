@@ -69,6 +69,7 @@ public class Environment extends Observable {
      * Called when environment status changed
      */
     public void change() {
+		System.out.println("Env changed");
 		setChanged();
 		notifyObservers();
 	}

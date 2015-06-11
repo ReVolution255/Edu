@@ -31,7 +31,9 @@ public class RedEntity extends Animal implements Runnable {
 	public synchronized void stop() {super.stop();
 	}
 
+	@Override
 	public void visit() {
+		super.visit();
 		//Init. values
 
 		//List of neighbor entities
@@ -128,10 +130,5 @@ public class RedEntity extends Animal implements Runnable {
 	@Override
 	public int getEntityType() {
 		return 0;
-	}
-
-    @Override
-	protected void move(Point point) {
-		super.setPosition(point);
 	}
 }
