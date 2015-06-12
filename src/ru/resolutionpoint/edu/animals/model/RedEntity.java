@@ -22,14 +22,11 @@ public class RedEntity extends Animal implements Runnable {
 
 	//Thread-management
 	@Override
-	public void run() {super.run();
-	}
+	public void run() {super.run();}
 	@Override
-	public synchronized void start() {super.start();
-	}
+	public synchronized void start() {super.start();}
 	@Override
-	public synchronized void stop() {super.stop();
-	}
+	public synchronized void stop() {super.stop();}
 
 	@Override
 	public void visit() {

@@ -42,7 +42,6 @@ public class GrayEntity extends Predator implements Runnable {
 
     @Override
     public void visit() {
-        System.out.println("Visited: " + this.toString());
         super.visit();
         //Init. values
 

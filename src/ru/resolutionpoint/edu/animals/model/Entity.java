@@ -18,6 +18,7 @@ public abstract class Entity implements Runnable {
     public Entity(Environment environment, int x, int y){
         this.environment = environment;
         this.position = new Point (x, y);
+        thread.start();
     }
 
     //Unique entity type (must have)
@@ -50,7 +51,6 @@ public abstract class Entity implements Runnable {
 
     //Common visit method
     public void visit(){
-        System.out.println("Visited: " + this.toString());
         //Update current entity
         setLifeTime(getLifeTime()-1);
         if (!getBreeding()) setBreedingTime(getBreedingTime()-1);
@@ -58,8 +58,6 @@ public abstract class Entity implements Runnable {
 
     //Common moving method
     protected void move(Point point){
-        System.out.println("Going to: " + point.getX() + " " + point.getY());
-        System.out.println();
         setPosition(point);
     }
 
@@ -85,7 +83,6 @@ public abstract class Entity implements Runnable {
     //Thread management
     @Override
 	public void run() {
-        System.out.println("Thread "+thread.getName()+" run");
         while (true) {
             try {
                 Thread.sleep(TIME_DELAY);
@@ -98,7 +95,6 @@ public abstract class Entity implements Runnable {
             	// Nothing to do
             }
             if (moveFlag) {
-                System.out.println("Visited: mf " + this.toString());
                 visit();
                 environment.change();
             }
@@ -107,11 +103,11 @@ public abstract class Entity implements Runnable {
     public synchronized void start() {
         moveFlag = true;
         System.out.println("Thread "+thread.getName()+" started");
-        notify();     
+        notify();
     }
     public void stop() {
         moveFlag = false;
-        //System.out.println("Thread "+thread.getName()+" stopped");
+        System.out.println("Thread "+thread.getName()+" stopped");
     }
 
     //Static methods
