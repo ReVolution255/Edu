@@ -19,10 +19,13 @@ public abstract class Entity implements Runnable {
     protected Entity minimalDistanceEntity = this;
     protected Entity neighborEntity = null;
     protected Point nextPoint;
+    int neighborCounter;
+    int sameTypeEntityNeighborCounter;
 
     public Entity(Environment environment, int x, int y){
         this.environment = environment;
         this.position = new Point (x, y);
+        this.mustDie = false;
         thread.start();
     }
 
@@ -30,21 +33,13 @@ public abstract class Entity implements Runnable {
     protected abstract int getEntityType(); //0 if redentity, 1 if grayentity
 
     //Common lifetime
-    protected int getLifeTime() {
-        return lifeTime;
-    }
-    protected void setLifeTime(int lifeTime) {
-        this.lifeTime = lifeTime;
-    }
+    protected int getLifeTime() {return lifeTime;}
+    protected void setLifeTime(int lifeTime){this.lifeTime = lifeTime;}
     private int lifeTime;
 
     //Common breeding counter
-    protected int getBreedingTime() {
-        return breedingTime;
-    }
-    protected void setBreedingTime(int breedingTime) {
-        this.breedingTime = breedingTime;
-    }
+    protected int getBreedingTime() {return breedingTime;}
+    protected void setBreedingTime(int breedingTime){this.breedingTime = breedingTime;}
     private int breedingTime;
 
     //Common breeding key
@@ -58,9 +53,7 @@ public abstract class Entity implements Runnable {
     private boolean mustDie;
 
     //Common position
-    protected Point getPosition(){
-        return position;
-    }
+    protected Point getPosition(){return position;}
     protected void setPosition(Point position) {this.position = position;}
     private Point position;
 
@@ -69,101 +62,34 @@ public abstract class Entity implements Runnable {
 
     //Common visit method
     public void visit(){
-        //Init. values
+        //Init. values: counters, entities
+        initValues();
 
-        //Set minimal distance (initially max)
-        int neighborCounter = 0;
-        int sameTypeEntityNeighborCounter = 0;
+        //Update the values on this step: lifetime, breeding time
+        updateValues();
 
-        //List of neighbor entities
-        entities = new ArrayList<>();
-        entities.addAll(getEnvironment().getEntities());
-
-        //Remove yourself from entities/points array
-        entities.remove(this);
-
-        //Update current entity
-        setLifeTime(getLifeTime() - 1);
-        if (!getBreeding()) setBreedingTime(getBreedingTime() - 1);
-
-        boolean mustDie = false;
-
-        //Update values
-
-        //Update current entity
-        if (getMustDie()) mustDie = true;
-        if (getBreedingTime() < 0) {
-            setBreeding(true);
-            setBreedingTime(getNoBreedingSteps());
-        }
-
-
-        //Find closest entity with same type
+        //Find next point
         do {
             if (getBreeding()){
-                for (Entity entity : entities){
-                    if (entity.getEntityType() == this.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
-                        minimalDistanceEntity = entity;
-                    if (Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
-                        neighborCounter++;
-                        if (entity.getEntityType() == getEntityType()) {
-                            sameTypeEntityNeighborCounter++;
-                            neighborEntity = entity;
-                        }
-                    }
-                }
-                //Find delta x for new point
-                dx = Entity.getDeltaXfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
-
-                //Find delta y for new point
-                dy = Entity.getDeltaYfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
-
-                //Next point to target
-                nextPoint = new Point(getX() + dx, getY() + dy);
+                //Next point to same type entity
+                nextPoint = getClosestNeighborPoint();
             } else {
+                //Next random point
                 nextPoint = Entity.getRandomNeighborPoint(getPosition());
             }
+            if (neighborCounter >= Constants.getNeighboringAnimalsLimit()) mustDie = true;
+        } while (checkConstraints(nextPoint));
 
-            if(neighborCounter >= Constants.getNeighboringAnimalsLimit()) mustDie = true;
-
-
-            //If next point is busy not move
-            for (Entity entity : entities){
-                if (entity.getPosition().compareTo(nextPoint) == 0) nextPoint = getPosition();
-            }
-        } while (nextPoint.getY() >= Environment.HEIGHT || nextPoint.getY() <= 0
-                || nextPoint.getX() >= Environment.WIDTH || nextPoint.getX() <= 0);
-
-        if (getLifeTime() < 0) mustDie = true;
-
+        //Behavior of the entity in this step
         if (mustDie) {
             //die
-            getEnvironment().deleteEntity(this);
-            EntitiesPanel.deleteEntityView(this);
-            stop();
+            die();
         } else if (getBreeding() && sameTypeEntityNeighborCounter >= 1) {
             //multiply
-            Point multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
-            for (Entity entity : entities){
-                if (getEntityType() == entity.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2){
-                    while (entity.getPosition().compareTo(multiplyPoint) == 0){
-                        multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
-                    }
-                }
-            }
-            Entity newEntity = bornChild(multiplyPoint);
-            if (neighborEntity != null) {
-                neighborEntity.setBreeding(false);
-            }
-            setBreeding(false);
-            getEnvironment().addEntity(newEntity);
-            EntitiesPanel.addEntityView(newEntity);
-            newEntity.start();
+            multiply();
         }
         //If next point is busy not move
-        for (Entity entity : entities){
-            if (entity.getPosition().compareTo(nextPoint) == 0) nextPoint = getPosition();
-        }
+        checkBusyPoint();
         move(nextPoint);
     }
 
@@ -185,12 +111,6 @@ public abstract class Entity implements Runnable {
     //Multi-threading
 	private Thread thread = new Thread(this);
 	private boolean moveFlag = false;
-
-    protected Entity(Environment environment) {
-		this.environment = environment;
-        System.out.println("Thread "+thread.getName()+" created and ready to start");
-		thread.start();
-	}
 
     public Environment getEnvironment(){return environment;}
 
@@ -219,21 +139,97 @@ public abstract class Entity implements Runnable {
 	}
     public synchronized void start() {
         moveFlag = true;
-        System.out.println("Thread "+thread.getName()+" started");
-        notify();     
+        //System.out.println("Thread "+thread.getName()+" started");
+        notify();
     }
     public void stop() {
         moveFlag = false;
-        //System.out.println("Thread "+thread.getName()+" stopped");
     }
 
+    //Utility methods for visit()
+    private void die(){
+        getEnvironment().deleteEntity(this);
+        EntitiesPanel.deleteEntityView(this);
+        stop();
+    }
+    private void multiply(){
+        Point multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
+        for (Entity entity : entities){
+            if (getEntityType() == entity.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2){
+                while (entity.getPosition().compareTo(multiplyPoint) == 0){
+                    multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
+                }
+            }
+        }
+        Entity newEntity = bornChild(multiplyPoint);
+        if (neighborEntity != null) {
+            neighborEntity.setBreeding(false);
+        }
+        setBreeding(false);
+        getEnvironment().addEntity(newEntity);
+        EntitiesPanel.addEntityView(newEntity);
+        newEntity.start();
+    }
+    private void initValues(){
+        //Set minimal distance (initially max)
+        neighborCounter = 0;
+        sameTypeEntityNeighborCounter = 0;
+
+        //List of neighbor entities
+        entities = new ArrayList<>();
+        entities.addAll(getEnvironment().getEntities());
+
+        //Remove yourself from entities/points array
+        entities.remove(this);
+    }
+    private void updateValues() {
+        //Update current entity
+        setLifeTime(getLifeTime() - 1);
+        if (getLifeTime() < 0) mustDie = true;
+        if (!getBreeding()) setBreedingTime(getBreedingTime() - 1);
+
+        if (getBreedingTime() < 0) {
+            setBreeding(true);
+            setBreedingTime(getNoBreedingSteps());
+        }
+    }
+    protected void checkBusyPoint(){
+        for (Entity entity : entities){
+            if (entity.getPosition().compareTo(nextPoint) == 0) nextPoint = getPosition();
+        }
+    }
+    protected boolean checkConstraints(Point point){
+        return point.getY() >= Environment.HEIGHT || point.getY() <= 0
+                || point.getX() >= Environment.WIDTH || point.getX() <= 0;
+    }
+    private Point getClosestNeighborPoint(){
+        for (Entity entity : entities){
+            if (entity.getEntityType() == this.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
+                minimalDistanceEntity = entity;
+            if (Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
+                neighborCounter++;
+                if (entity.getEntityType() == getEntityType()) {
+                    sameTypeEntityNeighborCounter++;
+                    neighborEntity = entity;
+                }
+            }
+        }
+        //Find delta x for new point
+        dx = Entity.getDeltaXfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
+
+        //Find delta y for new point
+        dy = Entity.getDeltaYfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
+
+        //Next point to target
+        return new Point(getX() + dx, getY() + dy);
+    }
     public abstract int getNoBreedingSteps();
-    public abstract Entity bornChild(Point multiplyPont);
+    public abstract Entity bornChild(Point multiplyPoint);
+
     //Static methods
     public static double getDistanceBetweenPoints(Point a, Point b){
         return Math.sqrt( Math.pow(a.getX() - b.getX(),2) + Math.pow(a.getY() - b.getY(),2) );
     }
-
     public static int getDeltaXfromPoints(Point current, Point target){
         int x;
         if (current.getX() < target.getX()) x = 1;
@@ -241,7 +237,6 @@ public abstract class Entity implements Runnable {
         else x = -1;
         return x;
     }
-
     public static int getDeltaYfromPoints(Point current, Point target){
         int y;
         if (current.getY() < target.getY()) y = 1;
@@ -249,7 +244,6 @@ public abstract class Entity implements Runnable {
         else y = -1;
         return y;
     }
-
     public static Point getRandomNeighborPoint(Point current){
         int dx;
         int random = (int)(Math.random()*100)%3;

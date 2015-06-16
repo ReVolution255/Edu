@@ -22,7 +22,7 @@ public class EntitiesPanel extends JPanel implements Observer {
 
 	private int width;
 	private int height;
-	private static List<EntityView> entities = new ArrayList<EntityView>();
+	private static List<EntityView> entities = new ArrayList<>();
 
 	public static EntityView getEntityViewByEntity(Entity entity){
 		for (EntityView entityView : getEntitiesList()){
@@ -50,18 +50,18 @@ public class EntitiesPanel extends JPanel implements Observer {
 	public static List<EntityView> getEntitiesList(){return entities;}
 
 	public static void deleteEntityView(Entity entity){
-		entities.add(new EntityView(entity));
+		entities.remove(getEntityViewByEntity(entity));
 	}
 
 	public static void addEntityView(Entity entity){
-		entities.remove(getEntityViewByEntity(entity));
+		entities.add(new EntityView(entity));
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		g.setColor(Color.LIGHT_GRAY);
+		g.setColor(Color.DARK_GRAY);
 		for (int i = 1; i <= Environment.WIDTH; i++) {
 			int x = i * EntityView.WIDTH;
 			g.drawLine(x, 0, x, height);

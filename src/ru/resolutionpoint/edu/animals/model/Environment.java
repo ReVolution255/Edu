@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Class <code>Environment</code> is main model class
  *
@@ -13,8 +15,9 @@ import java.util.Observable;
  */
 public class Environment extends Observable {
 
-	public static final int WIDTH = 30;
-	public static final int HEIGHT = 20;
+	public static final int WIDTH = 60;
+	public static final int HEIGHT = 30;
+	public boolean started = true;
 
 	private List<Entity> entities = new ArrayList<>();
 

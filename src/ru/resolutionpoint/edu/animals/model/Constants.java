@@ -8,12 +8,12 @@ public class Constants {
 
     private static int animalLifeTime = 100;
     private static int predatorLifeTime = 100;
-    private static int noBreedingAnimalSteps = 10;
-    private static int noBreedingPredatorSteps = 30;
+    private static int noBreedingAnimalSteps = 12;
+    private static int noBreedingPredatorSteps = 20;
     private static int neighboringAnimalsLimit = 4;
-    private static int predatorSatiationTime = 8;
-    private static int predatorTime = 11;
-    private static int TIME_DELAY = 500;
+    private static int predatorSatiationTime = 25;
+    private static int predatorTime = 14;
+    private static int TIME_DELAY = 50;
 
     public static int getAnimalLifeTime() {
         return animalLifeTime;

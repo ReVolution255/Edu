@@ -44,6 +44,7 @@ public class GrayEntity extends Predator implements Runnable {
         return 1;
     }
 
+    @Override
     public void visit() {
         super.visit();
         if (eatingTime) {
@@ -75,15 +76,8 @@ public class GrayEntity extends Predator implements Runnable {
             }
         }
         //If next point is busy not move
-        for (Entity entity : entities){
-            if (entity.getPosition().compareTo(nextPoint) == 0) nextPoint = getPosition();
-        }
+        checkBusyPoint();
         move(nextPoint);
-    }
-
-    @Override
-    protected void move(Point point) {
-        setPosition(point);
     }
 
 }

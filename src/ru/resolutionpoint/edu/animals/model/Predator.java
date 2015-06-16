@@ -7,9 +7,9 @@ public abstract class Predator extends Animal implements Runnable {
 
     protected Predator(Environment environment, int x, int y) {
         super(environment, x, y);
-        super.setLifeTime(Constants.getPredatorLifeTime());
-        super.setBreedingTime(Constants.getNoBreedingPredatorSteps());
-        super.setBreeding(false);
+        setLifeTime(Constants.getPredatorLifeTime());
+        setBreedingTime(Constants.getNoBreedingPredatorSteps());
+        setBreeding(false);
         setHungryCounter(Constants.getPredatorSatiationTime());
         setPredatorTime(Constants.getPredatorTime());
         setIsHungry(false);
@@ -27,6 +27,7 @@ public abstract class Predator extends Animal implements Runnable {
     protected boolean eatingTime = false;
 
     //Common visit method
+    @Override
     public void visit(){
         super.visit();
 
@@ -45,9 +46,9 @@ public abstract class Predator extends Animal implements Runnable {
     }
 
     //Common moving method
-    protected void move(Point point){
+/*    protected void move(Point point){
         super.move(point);
-    }
+    }*/
 
     //Thread-management
     @Override

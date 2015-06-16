@@ -5,10 +5,6 @@ package ru.resolutionpoint.edu.animals.model;
  */
 public abstract class Animal extends Entity implements Runnable {
 
-    protected Animal(Environment environment) {
-        super(environment);
-    }
-
     protected Animal(Environment environment, int x, int y) {
         super(environment, x, y);
         super.setLifeTime(Constants.getAnimalLifeTime());
@@ -18,11 +14,11 @@ public abstract class Animal extends Entity implements Runnable {
 
     public Environment getEnvironment(){return super.getEnvironment();}
 
-    //Common moving method
+/*    //Common moving method
     @Override
     protected void move(Point point){
         super.move(point);
-    };
+    };*/
 
     //Thread management
     @Override
