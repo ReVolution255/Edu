@@ -73,9 +73,6 @@ public class MainFrame extends JFrame {
                     pauseButton.setText("Pause");
                 }
                 pauseButton.setEnabled(started);
-                synchronized (environment) {
-                    notify();
-                }
             }
         });
         panel.add(startButton, BorderLayout.LINE_START);

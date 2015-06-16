@@ -60,6 +60,7 @@ public class Environment extends Observable implements Runnable {
      */
     public synchronized void start() {
 		moveFlag = true;
+		notify();
 	}
 
 	//normal
