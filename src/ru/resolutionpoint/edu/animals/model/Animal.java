@@ -3,7 +3,7 @@ package ru.resolutionpoint.edu.animals.model;
 /**
  * Created by 1 on 09.05.2015.
  */
-public abstract class Animal extends Entity implements Runnable {
+public abstract class Animal extends Entity {
 
     protected Animal(Environment environment, int x, int y) {
         super(environment, x, y);
@@ -21,7 +21,7 @@ public abstract class Animal extends Entity implements Runnable {
     };*/
 
     //Thread management
-    @Override
+/*    @Override
     public void run() {
         super.run();
     }
@@ -32,5 +32,5 @@ public abstract class Animal extends Entity implements Runnable {
     @Override
     public synchronized void stop() {
         super.stop();
-    }
+    }*/
 }

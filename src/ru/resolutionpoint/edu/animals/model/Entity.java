@@ -10,9 +10,9 @@ import java.util.List;
  *
  * @author Denis Murashev
  */
-public abstract class Entity implements Runnable {
+public abstract class Entity {
 
-    private static int TIME_DELAY = Constants.getTimeDelay();
+    //private static int TIME_DELAY = Constants.getTimeDelay();
     public static double minimalDistance = Environment.WIDTH * Environment.HEIGHT;
     protected int dx;
     protected int dy;
@@ -26,7 +26,7 @@ public abstract class Entity implements Runnable {
         this.environment = environment;
         this.position = new Point (x, y);
         this.mustDie = false;
-        thread.start();
+        //thread.start();
     }
 
     //Unique entity type (must have)
@@ -62,6 +62,7 @@ public abstract class Entity implements Runnable {
 
     //Common visit method
     public void visit(){
+        System.out.println("Visited " + toString());
         //Init. values: counters, entities
         initValues();
 
@@ -109,8 +110,8 @@ public abstract class Entity implements Runnable {
 	private Environment environment;
 
     //Multi-threading
-	private Thread thread = new Thread(this);
-	private boolean moveFlag = false;
+	//private Thread thread = new Thread(this);
+	//private boolean moveFlag = false;
 
     public Environment getEnvironment(){return environment;}
 
@@ -118,8 +119,8 @@ public abstract class Entity implements Runnable {
     public abstract String getImagePath();
 
     //Thread management
-    @Override
-	public void run() {
+/*	@Override
+    public void run() {
         while (true) {
             try {
                 Thread.sleep(TIME_DELAY);
@@ -136,21 +137,21 @@ public abstract class Entity implements Runnable {
                 environment.change();
             }
         }     
-	}
-    public synchronized void start() {
+	}*/
+/*    public synchronized void start() {
         moveFlag = true;
         //System.out.println("Thread "+thread.getName()+" started");
         notify();
     }
     public void stop() {
         moveFlag = false;
-    }
+    }*/
 
     //Utility methods for visit()
     private void die(){
         getEnvironment().deleteEntity(this);
         EntitiesPanel.deleteEntityView(this);
-        stop();
+        //stop();
     }
     private void multiply(){
         Point multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
@@ -168,7 +169,7 @@ public abstract class Entity implements Runnable {
         setBreeding(false);
         getEnvironment().addEntity(newEntity);
         EntitiesPanel.addEntityView(newEntity);
-        newEntity.start();
+        //newEntity.start();
     }
     private void initValues(){
         //Set minimal distance (initially max)

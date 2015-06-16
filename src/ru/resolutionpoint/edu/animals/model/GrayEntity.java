@@ -4,7 +4,7 @@ package ru.resolutionpoint.edu.animals.model;
 /**
  * Created by 1 on 08.05.2015.
  */
-public class GrayEntity extends Predator implements Runnable {
+public class GrayEntity extends Predator {
 
     public GrayEntity(Environment environment, int x, int y) {
         super(environment, x, y);
@@ -18,7 +18,7 @@ public class GrayEntity extends Predator implements Runnable {
     }
 
     //Thread-management
-    @Override
+/*    @Override
     public void run() {
         super.run();
     }
@@ -29,7 +29,7 @@ public class GrayEntity extends Predator implements Runnable {
     @Override
     public synchronized void stop() {
         super.stop();
-    }
+    }*/
 
     public int getNoBreedingSteps(){
         return Constants.getNoBreedingPredatorSteps();

@@ -17,9 +17,9 @@ public class Application {
 	public static void main(String[] args) {
 		Environment environment = new Environment();
 		//x, y (max 60, max 30)
-		environment.addEntity(new RedEntity(environment, 19, 1));
+		environment.addEntity(new RedEntity(environment, 12, 1));
 		environment.addEntity(new RedEntity(environment, 1, 10));
-		environment.addEntity(new RedEntity(environment, 22, 6));
+/*		environment.addEntity(new RedEntity(environment, 22, 6));
 		environment.addEntity(new RedEntity(environment, 36, 27));
 		environment.addEntity(new RedEntity(environment, 48, 10));
 		environment.addEntity(new RedEntity(environment, 54, 15));
@@ -38,7 +38,7 @@ public class Application {
 		environment.addEntity(new GrayEntity(environment, 22, 15));
 		environment.addEntity(new GrayEntity(environment, 27, 15));
 		environment.addEntity(new GrayEntity(environment, 56, 12));
-		environment.addEntity(new GrayEntity(environment, 245, 15));
+		environment.addEntity(new GrayEntity(environment, 245, 15));*/
 		new MainFrame(environment);
 	}
 }

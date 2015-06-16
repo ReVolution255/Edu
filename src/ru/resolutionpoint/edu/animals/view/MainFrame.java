@@ -64,7 +64,11 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
                 started = !started;
                 if (started) {
-                    environment.start();
+                    try {
+                        environment.start();
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
                     startButton.setText("Stop");
                 } else {
                     environment.stop();
@@ -84,7 +88,11 @@ public class MainFrame extends JFrame {
                     environment.stop();
                     pauseButton.setText("Resume");
                 } else {
-                    environment.start();
+                    try {
+                        environment.start();
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
                     pauseButton.setText("Pause");
                 }
             }

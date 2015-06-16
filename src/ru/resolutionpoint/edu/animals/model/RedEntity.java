@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 
-public class RedEntity extends Animal implements Runnable {
+public class RedEntity extends Animal {
 
     public RedEntity(Environment environment, int x, int y) {
         super(environment, x, y);
@@ -21,12 +21,12 @@ public class RedEntity extends Animal implements Runnable {
     }
 
 	//Thread-management
-	@Override
+/*	@Override
 	public void run() {super.run();}
 	@Override
 	public synchronized void start() {super.start();}
 	@Override
-	public synchronized void stop() {super.stop();}
+	public synchronized void stop() {super.stop();}*/
 
 	public int getNoBreedingSteps(){
 		return Constants.getNoBreedingAnimalSteps();

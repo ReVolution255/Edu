@@ -3,7 +3,7 @@ package ru.resolutionpoint.edu.animals.model;
 /**
  * Created by 1 on 09.05.2015.
  */
-public abstract class Predator extends Animal implements Runnable {
+public abstract class Predator extends Animal {
 
     protected Predator(Environment environment, int x, int y) {
         super(environment, x, y);
@@ -51,7 +51,7 @@ public abstract class Predator extends Animal implements Runnable {
     }*/
 
     //Thread-management
-    @Override
+/*    @Override
     public void run() {
         super.run();
     }
@@ -62,7 +62,7 @@ public abstract class Predator extends Animal implements Runnable {
     @Override
     public synchronized void stop() {
         super.stop();
-    }
+    }*/
 
     //Common hungry status
     public boolean isHungry() {

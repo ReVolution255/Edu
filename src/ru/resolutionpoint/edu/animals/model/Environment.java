@@ -15,8 +15,8 @@ import static java.lang.Thread.sleep;
  */
 public class Environment extends Observable {
 
-	public static final int WIDTH = 60;
-	public static final int HEIGHT = 30;
+	public static final int WIDTH = 15;
+	public static final int HEIGHT = 15;
 	public boolean started = true;
 
 	private List<Entity> entities = new ArrayList<>();
@@ -50,9 +50,14 @@ public class Environment extends Observable {
     /**
      * Starts entities movement
      */
-    public void start() {
-		for (Entity entity : entities) {
-			entity.start();
+    public void start() throws InterruptedException {
+		while(started){
+			for (Entity entity : entities) {
+				entity.visit();
+				sleep(Constants.getTimeDelay());
+				change();
+				//entity.start();
+			}
 		}
 	}
 
@@ -62,7 +67,7 @@ public class Environment extends Observable {
      */
 	public void stop() {
 		for (Entity entity : entities) {
-			entity.stop();
+			//entity.stop();
 		}
 	}
 
