@@ -35,93 +35,23 @@ public class GrayEntity extends Predator implements Runnable {
         super.stop();
     }
 
+    public Entity bornChild(Point multiplyPoint){
+        return new GrayEntity(getEnvironment(), multiplyPoint.getX(), multiplyPoint.getY());
+    }
+
     @Override
     public int getEntityType() {
         return 1;
     }
 
+    public int getNoBreedingSteps(){
+        return Constants.getNoBreedingPredatorSteps();
+    }
+
+
     public void visit() {
-        //Init. values
-
-        //Set minimal distance (initially max)
-        int neighborCounter = 0;
-        int sameTypeEntityNeighborCounter = 0;
-        boolean mustDie = false;
-
-        if (getMustDie()) mustDie = true;
-
-        //Update current entity
-
-        if (getBreedingTime() < 0) {
-            setBreeding(true);
-            setBreedingTime(Constants.getNoBreedingPredatorSteps());
-        }
-
-        //List of neighbor entities
-        List<Entity> entities = new ArrayList<>();
-        entities.addAll(getEnvironment().getEntities());
-
-        //Remove yourself from entities/points array
-        entities.remove(this);
-
-        //Find closest entity with same type
-        do {
-            if (getBreeding()) {
-                for (Entity entity : entities) {
-                    if (entity.getEntityType() == this.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
-                        minimalDistanceEntity = entity;
-                    if (Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
-                        neighborCounter++;
-                        if (entity.getEntityType() == getEntityType()) {
-                            sameTypeEntityNeighborCounter++;
-                            neighborEntity = entity;
-                        }
-                    }
-                }
-                //Find delta x for new point
-                dx = Entity.getDeltaXfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
-
-                //Find delta y for new point
-                dy = Entity.getDeltaYfromPoints(this.getPosition(), minimalDistanceEntity.getPosition());
-
-                //Next point to target
-                nextPoint = new Point(getX() + dx, getY() + dy);
-            } else {
-                nextPoint = Entity.getRandomNeighborPoint(getPosition());
-            }
-        } while (nextPoint.getY() >= Environment.HEIGHT || nextPoint.getY() <= 0
-                || nextPoint.getX() >= Environment.WIDTH || nextPoint.getX() <= 0);
-
-        if(neighborCounter >= Constants.getNeighboringAnimalsLimit()) mustDie = true;
-
-
-        if (getLifeTime() < 0) mustDie = true;
-
-        if (mustDie) {
-            //die
-            super.getEnvironment().deleteEntity(this);
-            EntitiesPanel.updateEntityView(this);
-            super.stop();
-        } else if (getBreeding() && sameTypeEntityNeighborCounter >= 1) {
-            //multiply
-            Point multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
-            for (Entity entity : entities){
-                if (getEntityType() == entity.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2){
-                    while (entity.getPosition().compareTo(multiplyPoint) == 0){
-                        multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
-                    }
-                }
-            }
-            Entity newGrayEntity = new GrayEntity(getEnvironment(), multiplyPoint.getX(), multiplyPoint.getY());
-            if (neighborEntity != null) {
-                neighborEntity.setBreeding(false);
-            }
-            setBreeding(false);
-            super.getEnvironment().addEntity(newGrayEntity);
-            EntitiesPanel.updateEntityView(newGrayEntity);
-            newGrayEntity.start();
-        }
-        else if (eatingTime) {
+        super.visit();
+        if (eatingTime) {
             Entity minimalDistanceFoodEntity = this;
             for (Entity entity : entities) {
                 if (entity.getEntityType() != this.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) <= minimalDistance)
