@@ -20,6 +20,8 @@ public class Environment extends Observable {
 	public boolean started = true;
 
 	private List<Entity> entities = new ArrayList<>();
+	public List<Entity> deletedEntities = new ArrayList<>();
+	public List<Entity> addedEntities = new ArrayList<>();
 
     /**
      * @return list of entities
@@ -58,6 +60,10 @@ public class Environment extends Observable {
 				entity.visit();
 				change();
 				sleep(Constants.getTimeDelay());
+			}
+			if (addedEntities.size() != 0 || deletedEntities.size() != 0){
+				entities.removeAll(deletedEntities);
+				entities.addAll(addedEntities);
 			}
 		}
 	}

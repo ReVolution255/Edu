@@ -113,7 +113,7 @@ public abstract class Entity {
 
     //Utility methods for visit()
     private void die(){
-        getEnvironment().deleteEntity(this);
+        getEnvironment().deletedEntities.add(this);
         EntitiesPanel.deleteEntityView(this);
     }
     private void multiply(){
@@ -130,7 +130,7 @@ public abstract class Entity {
             neighborEntity.setBreeding(false);
         }
         setBreeding(false);
-        getEnvironment().addEntity(newEntity);
+        getEnvironment().addedEntities.add(newEntity);
         EntitiesPanel.addEntityView(newEntity);
     }
     private void initValues(){
