@@ -59,7 +59,6 @@ public class Environment extends Observable {
      */
 	public void stop() {
 		for (Entity entity : entities) {
-			//System.out.println("Entity " + entity.toString() + " movement stopped");
 			entity.stop();
 		}
 	}

@@ -18,6 +18,7 @@ public abstract class Entity implements Runnable {
     public Entity(Environment environment, int x, int y){
         this.environment = environment;
         this.position = new Point (x, y);
+        thread.start();
     }
 
     //Unique entity type (must have)

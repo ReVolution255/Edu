@@ -28,7 +28,7 @@ public abstract class Predator extends Animal implements Runnable {
     public void setEatingTime(boolean eatingTime) {
         this.eatingTime = eatingTime;
     }
-    private boolean eatingTime = false;
+    protected boolean eatingTime = false;
 
     //Common visit method
     public void visit(){
