@@ -83,8 +83,8 @@ public abstract class Entity implements Runnable {
         entities.remove(this);
 
         //Update current entity
-        setLifeTime(getLifeTime()-1);
-        if (!getBreeding()) setBreedingTime(getBreedingTime()-1);
+        setLifeTime(getLifeTime() - 1);
+        if (!getBreeding()) setBreedingTime(getBreedingTime() - 1);
 
         boolean mustDie = false;
 
