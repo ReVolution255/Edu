@@ -1,6 +1,7 @@
 package ru.resolutionpoint.edu.animals.model;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -18,7 +19,7 @@ public class Environment extends Observable {
 	public static final int HEIGHT = 15;
 	public boolean started = true;
 
-	private List<Entity> entities = new CopyOnWriteArrayList<>();
+	private List<Entity> entities = new ArrayList<>();
 
     /**
      * @return list of entities
@@ -51,11 +52,12 @@ public class Environment extends Observable {
      */
     public void start() throws InterruptedException {
 		//TODO fix for comodification
+
 		while(started){
 			for (Entity entity : entities) {
 				entity.visit();
-				sleep(Constants.getTimeDelay());
 				change();
+				sleep(Constants.getTimeDelay());
 			}
 		}
 	}
