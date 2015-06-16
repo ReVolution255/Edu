@@ -4,7 +4,6 @@ package ru.resolutionpoint.edu.animals.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.lang.Thread.sleep;
 
@@ -13,7 +12,12 @@ import static java.lang.Thread.sleep;
  *
  * @author Denis Murashev
  */
-public class Environment extends Observable {
+public class Environment extends Observable implements Runnable {
+
+	public Environment(){
+		thread = new Thread(this);
+		thread.start();
+	}
 
 	public static final int WIDTH = 15;
 	public static final int HEIGHT = 15;
@@ -22,6 +26,8 @@ public class Environment extends Observable {
 	private List<Entity> entities = new ArrayList<>();
 	public List<Entity> deletedEntities = new ArrayList<>();
 	public List<Entity> addedEntities = new ArrayList<>();
+	Thread thread;
+	boolean moveFlag = false;
 
     /**
      * @return list of entities
@@ -52,20 +58,8 @@ public class Environment extends Observable {
     /**
      * Starts entities movement
      */
-    public void start() throws InterruptedException {
-		//TODO fix for comodification
-
-		while(started){
-			for (Entity entity : entities) {
-				entity.visit();
-				change();
-				sleep(Constants.getTimeDelay());
-			}
-			if (addedEntities.size() != 0 || deletedEntities.size() != 0){
-				entities.removeAll(deletedEntities);
-				entities.addAll(addedEntities);
-			}
-		}
+    public synchronized void start() {
+		moveFlag = true;
 	}
 
 	//normal
@@ -73,9 +67,7 @@ public class Environment extends Observable {
      * Stops entities movement
      */
 	public void stop() {
-		for (Entity entity : entities) {
-			//entity.stop();
-		}
+		moveFlag = false;
 	}
 
 	//normal
@@ -85,5 +77,30 @@ public class Environment extends Observable {
     public void change() {
 		setChanged();
 		notifyObservers();
+	}
+
+	@Override
+	public void run() {
+		while (true){
+			if (moveFlag) {
+				for (Entity entity : entities) {
+					entity.visit();
+					change();
+				}
+				if (addedEntities.size() != 0 || deletedEntities.size() != 0) {
+					entities.removeAll(deletedEntities);
+					entities.addAll(addedEntities);
+				}
+			}
+			try {
+				sleep(Constants.getTimeDelay());
+				synchronized (this){
+					if (!moveFlag)
+						wait();
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

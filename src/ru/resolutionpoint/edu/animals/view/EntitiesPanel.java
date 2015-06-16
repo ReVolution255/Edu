@@ -10,6 +10,7 @@ import java.util.Observer;
 
 import javax.swing.JPanel;
 
+import jdk.nashorn.internal.runtime.Context;
 import ru.resolutionpoint.edu.animals.model.Entity;
 import ru.resolutionpoint.edu.animals.model.Environment;
 
