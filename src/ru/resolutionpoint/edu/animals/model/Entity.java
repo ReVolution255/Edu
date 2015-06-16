@@ -65,7 +65,7 @@ public abstract class Entity implements Runnable {
         //Init. values: counters, entities
         initValues();
 
-        //Update the values on this step: life time, breeding time
+        //Update the values on this step: lifetime, breeding time
         updateValues();
 
         //Find next point
