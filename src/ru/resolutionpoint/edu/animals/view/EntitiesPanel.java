@@ -57,14 +57,6 @@ public class EntitiesPanel extends JPanel implements Observer {
 		entities.remove(getEntityViewByEntity(entity));
 	}
 
-	public static void updateEntityView(Entity entity) {
-		EntityView view = getEntityViewByEntity(entity);
-		if (entities.contains(view))
-			entities.remove(view);
-		else
-			entities.add(new EntityView(entity));
-	}
-
 	@Override
 	protected void paintComponent(Graphics g) {
 		g.setColor(Color.BLACK);

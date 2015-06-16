@@ -139,7 +139,7 @@ public abstract class Entity implements Runnable {
         if (mustDie) {
             //die
             getEnvironment().deleteEntity(this);
-            EntitiesPanel.updateEntityView(this);
+            EntitiesPanel.deleteEntityView(this);
             stop();
         } else if (getBreeding() && sameTypeEntityNeighborCounter >= 1) {
             //multiply
@@ -157,7 +157,7 @@ public abstract class Entity implements Runnable {
             }
             setBreeding(false);
             getEnvironment().addEntity(newEntity);
-            EntitiesPanel.updateEntityView(newEntity);
+            EntitiesPanel.addEntityView(newEntity);
             newEntity.start();
         }
         //If next point is busy not move

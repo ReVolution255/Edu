@@ -5,10 +5,6 @@ package ru.resolutionpoint.edu.animals.model;
  */
 public abstract class Predator extends Animal implements Runnable {
 
-    protected Predator(Environment environment) {
-        super(environment);
-    }
-
     protected Predator(Environment environment, int x, int y) {
         super(environment, x, y);
         super.setLifeTime(Constants.getPredatorLifeTime());

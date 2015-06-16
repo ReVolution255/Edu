@@ -34,17 +34,18 @@ public class RedEntity extends Animal implements Runnable {
 	public int getNoBreedingSteps(){
 		return Constants.getNoBreedingAnimalSteps();
 	}
+
 	public Entity bornChild(Point multiplyPoint){
 		return new RedEntity(getEnvironment(), multiplyPoint.getX(), multiplyPoint.getY());
-	}
-
-	public void visit() {
-		super.visit();
 	}
 
 	@Override
 	public int getEntityType() {
 		return 0;
+	}
+
+	public void visit() {
+		super.visit();
 	}
 
     @Override

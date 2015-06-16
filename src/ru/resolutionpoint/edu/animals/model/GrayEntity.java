@@ -1,9 +1,5 @@
 package ru.resolutionpoint.edu.animals.model;
 
-import ru.resolutionpoint.edu.animals.view.EntitiesPanel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by 1 on 08.05.2015.
@@ -35,6 +31,10 @@ public class GrayEntity extends Predator implements Runnable {
         super.stop();
     }
 
+    public int getNoBreedingSteps(){
+        return Constants.getNoBreedingPredatorSteps();
+    }
+
     public Entity bornChild(Point multiplyPoint){
         return new GrayEntity(getEnvironment(), multiplyPoint.getX(), multiplyPoint.getY());
     }
@@ -43,11 +43,6 @@ public class GrayEntity extends Predator implements Runnable {
     public int getEntityType() {
         return 1;
     }
-
-    public int getNoBreedingSteps(){
-        return Constants.getNoBreedingPredatorSteps();
-    }
-
 
     public void visit() {
         super.visit();
