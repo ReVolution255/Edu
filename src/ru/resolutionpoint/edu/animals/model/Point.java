@@ -1,8 +1,5 @@
 package ru.resolutionpoint.edu.animals.model;
 
-/**
- * Created by admin on 10.06.2015.
- */
 public class Point implements Comparable<Point> {
     public Point(int x, int y){
         this.x = x;

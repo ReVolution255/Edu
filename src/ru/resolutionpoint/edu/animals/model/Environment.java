@@ -1,10 +1,9 @@
 package ru.resolutionpoint.edu.animals.model;
 
-import ru.resolutionpoint.edu.animals.view.EntitiesPanel;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.lang.Thread.sleep;
 
@@ -19,7 +18,7 @@ public class Environment extends Observable {
 	public static final int HEIGHT = 15;
 	public boolean started = true;
 
-	private List<Entity> entities = new ArrayList<>();
+	private List<Entity> entities = new CopyOnWriteArrayList<>();
 
     /**
      * @return list of entities
@@ -51,12 +50,12 @@ public class Environment extends Observable {
      * Starts entities movement
      */
     public void start() throws InterruptedException {
+		//TODO fix for comodification
 		while(started){
 			for (Entity entity : entities) {
 				entity.visit();
 				sleep(Constants.getTimeDelay());
 				change();
-				//entity.start();
 			}
 		}
 	}

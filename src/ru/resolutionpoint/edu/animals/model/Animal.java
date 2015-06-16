@@ -13,24 +13,4 @@ public abstract class Animal extends Entity {
     }
 
     public Environment getEnvironment(){return super.getEnvironment();}
-
-/*    //Common moving method
-    @Override
-    protected void move(Point point){
-        super.move(point);
-    };*/
-
-    //Thread management
-/*    @Override
-    public void run() {
-        super.run();
-    }
-    @Override
-    public synchronized void start() {
-        super.start();
-    }
-    @Override
-    public synchronized void stop() {
-        super.stop();
-    }*/
 }

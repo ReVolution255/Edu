@@ -11,8 +11,6 @@ import java.util.List;
  * @author Denis Murashev
  */
 public abstract class Entity {
-
-    //private static int TIME_DELAY = Constants.getTimeDelay();
     public static double minimalDistance = Environment.WIDTH * Environment.HEIGHT;
     protected int dx;
     protected int dy;
@@ -26,7 +24,6 @@ public abstract class Entity {
         this.environment = environment;
         this.position = new Point (x, y);
         this.mustDie = false;
-        //thread.start();
     }
 
     //Unique entity type (must have)
@@ -109,49 +106,15 @@ public abstract class Entity {
 
 	private Environment environment;
 
-    //Multi-threading
-	//private Thread thread = new Thread(this);
-	//private boolean moveFlag = false;
-
     public Environment getEnvironment(){return environment;}
 
     //Unique abstract image path
     public abstract String getImagePath();
 
-    //Thread management
-/*	@Override
-    public void run() {
-        while (true) {
-            try {
-                Thread.sleep(TIME_DELAY);
-                synchronized (this) {
-                    if (!moveFlag) {
-                        wait();
-                    }
-                }
-            } catch (InterruptedException e) {
-            	// Nothing to do
-            }
-            if (moveFlag) {
-                visit();
-                environment.change();
-            }
-        }     
-	}*/
-/*    public synchronized void start() {
-        moveFlag = true;
-        //System.out.println("Thread "+thread.getName()+" started");
-        notify();
-    }
-    public void stop() {
-        moveFlag = false;
-    }*/
-
     //Utility methods for visit()
     private void die(){
         getEnvironment().deleteEntity(this);
         EntitiesPanel.deleteEntityView(this);
-        //stop();
     }
     private void multiply(){
         Point multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
@@ -169,7 +132,6 @@ public abstract class Entity {
         setBreeding(false);
         getEnvironment().addEntity(newEntity);
         EntitiesPanel.addEntityView(newEntity);
-        //newEntity.start();
     }
     private void initValues(){
         //Set minimal distance (initially max)

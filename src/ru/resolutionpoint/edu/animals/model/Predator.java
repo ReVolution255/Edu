@@ -18,9 +18,6 @@ public abstract class Predator extends Animal {
     public Environment getEnvironment(){return super.getEnvironment();}
 
     //Common eating-time status
-    public boolean isEatingTime() {
-        return eatingTime;
-    }
     public void setEatingTime(boolean eatingTime) {
         this.eatingTime = eatingTime;
     }
@@ -44,25 +41,6 @@ public abstract class Predator extends Animal {
             setMustDie(true);
         }
     }
-
-    //Common moving method
-/*    protected void move(Point point){
-        super.move(point);
-    }*/
-
-    //Thread-management
-/*    @Override
-    public void run() {
-        super.run();
-    }
-    @Override
-    public synchronized void start() {
-        super.start();
-    }
-    @Override
-    public synchronized void stop() {
-        super.stop();
-    }*/
 
     //Common hungry status
     public boolean isHungry() {

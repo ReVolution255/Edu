@@ -16,9 +16,10 @@ public class Application {
 	 */
 	public static void main(String[] args) {
 		Environment environment = new Environment();
-		//x, y (max 60, max 30)
+		//x, y (max 15, max 15)
 		environment.addEntity(new RedEntity(environment, 12, 1));
 		environment.addEntity(new RedEntity(environment, 1, 10));
+		//Only for big environment
 /*		environment.addEntity(new RedEntity(environment, 22, 6));
 		environment.addEntity(new RedEntity(environment, 36, 27));
 		environment.addEntity(new RedEntity(environment, 48, 10));

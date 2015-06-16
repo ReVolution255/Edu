@@ -17,20 +17,6 @@ public class GrayEntity extends Predator {
         return "/images/gray.gif";
     }
 
-    //Thread-management
-/*    @Override
-    public void run() {
-        super.run();
-    }
-    @Override
-    public synchronized void start() {
-        super.start();
-    }
-    @Override
-    public synchronized void stop() {
-        super.stop();
-    }*/
-
     public int getNoBreedingSteps(){
         return Constants.getNoBreedingPredatorSteps();
     }
