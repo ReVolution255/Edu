@@ -21,7 +21,6 @@ public class Environment extends Observable implements Runnable {
 
 	public static final int WIDTH = 60;
 	public static final int HEIGHT = 30;
-	public boolean started = true;
 
 	private List<Entity> entities = new ArrayList<>();
 	public List<Entity> deletedEntities = new ArrayList<>();

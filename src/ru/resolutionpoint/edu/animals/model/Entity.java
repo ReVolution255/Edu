@@ -164,8 +164,8 @@ public abstract class Entity {
         }
     }
     protected static boolean checkConstraints(Point point){
-        return point.getY() >= Environment.HEIGHT || point.getY() <= 0
-                || point.getX() >= Environment.WIDTH || point.getX() <= 0;
+        return point.getY() >= Environment.HEIGHT || point.getY() < 0
+                || point.getX() >= Environment.WIDTH || point.getX() < 0;
     }
     private Point getClosestNeighborPoint(){
         for (Entity entity : entities){

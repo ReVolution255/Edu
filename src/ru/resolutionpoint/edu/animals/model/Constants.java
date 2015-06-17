@@ -13,7 +13,7 @@ public class Constants {
     private static int neighboringAnimalsLimit = 4;
     private static int predatorSatiationTime = 25;
     private static int predatorTime = 14;
-    private static int TIME_DELAY = 50;
+    private static int TIME_DELAY = 20;
 
     public static int getAnimalLifeTime() {
         return animalLifeTime;

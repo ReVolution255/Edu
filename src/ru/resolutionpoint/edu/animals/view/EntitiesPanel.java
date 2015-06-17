@@ -21,6 +21,8 @@ public class EntitiesPanel extends JPanel implements Observer {
 
 	private int width;
 	private int height;
+	private static List<Entity> deletedEntities = new ArrayList<>();
+	private static List<EntityView> addedEntities = new ArrayList<>();
 	private static List<EntityView> entities = new ArrayList<>();
 
 	public static EntityView getEntityViewByEntity(Entity entity){
@@ -49,15 +51,15 @@ public class EntitiesPanel extends JPanel implements Observer {
 	public static List<EntityView> getEntitiesList(){return entities;}
 
 	public static void deleteEntityView(Entity entity){
-		entities.remove(getEntityViewByEntity(entity));
+		deletedEntities.add(entity);
 	}
 
 	public static void addEntityView(Entity entity){
-		entities.add(new EntityView(entity));
+		addedEntities.add(new EntityView(entity));
 	}
 
 	@Override
-	protected void paintComponent(Graphics g) {
+	protected synchronized void paintComponent(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.DARK_GRAY);
@@ -68,6 +70,17 @@ public class EntitiesPanel extends JPanel implements Observer {
 		for (int j = 1; j <= Environment.HEIGHT; j++) {
 			int y = j * EntityView.HEIGHT;
 			g.drawLine(0, y, width, y);
+		}
+		if (deletedEntities.size() != 0){
+			for (Entity entity : deletedEntities){
+				entities.remove(getEntityViewByEntity(entity));
+			}
+			deletedEntities.clear();
+		}
+
+		if (addedEntities.size() != 0) {
+			entities.addAll(addedEntities);
+			addedEntities.clear();
 		}
 		for (EntityView view : getEntitiesList()) {
 			view.paint(g);
