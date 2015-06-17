@@ -11,6 +11,4 @@ public abstract class Animal extends Entity {
         super.setBreedingTime(Constants.getNoBreedingAnimalSteps());
         super.setBreeding(false);
     }
-
-    public Environment getEnvironment(){return super.getEnvironment();}
 }
