@@ -19,8 +19,8 @@ public class Environment extends Observable implements Runnable {
 		thread.start();
 	}
 
-	public static final int WIDTH = 15;
-	public static final int HEIGHT = 15;
+	public static final int WIDTH = 60;
+	public static final int HEIGHT = 30;
 	public boolean started = true;
 
 	private List<Entity> entities = new ArrayList<>();
@@ -43,15 +43,6 @@ public class Environment extends Observable implements Runnable {
      */
     public void addEntity(Entity entity) {
 		entities.add(entity);
-	}
-
-    /**
-     * Deletes entity
-     *
-     * @param entity entity to be deleted
-     */
-    public void deleteEntity(Entity entity) {
-		entities.remove(entity);
 	}
 
 	//normal
@@ -89,8 +80,10 @@ public class Environment extends Observable implements Runnable {
 					change();
 				}
 				if (addedEntities.size() != 0 || deletedEntities.size() != 0) {
-					entities.removeAll(deletedEntities);
 					entities.addAll(addedEntities);
+					entities.removeAll(deletedEntities);
+					addedEntities.clear();
+					deletedEntities.clear();
 				}
 			}
 			try {

@@ -118,13 +118,15 @@ public abstract class Entity {
     }
     private void multiply(){
         Point multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
-        for (Entity entity : entities){
-            if (getEntityType() == entity.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2){
-                while (entity.getPosition().compareTo(multiplyPoint) == 0){
-                    multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
+        do {
+            for (Entity entity : entities) {
+                if (getEntityType() == entity.getEntityType() && Entity.getDistanceBetweenPoints(this.getPosition(), entity.getPosition()) < 2) {
+                    while (entity.getPosition().compareTo(multiplyPoint) == 0) {
+                        multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
+                    }
                 }
             }
-        }
+        } while (checkConstraints(multiplyPoint));
         Entity newEntity = bornChild(multiplyPoint);
         if (neighborEntity != null) {
             neighborEntity.setBreeding(false);
@@ -161,7 +163,7 @@ public abstract class Entity {
             if (entity.getPosition().compareTo(nextPoint) == 0) nextPoint = getPosition();
         }
     }
-    protected boolean checkConstraints(Point point){
+    protected static boolean checkConstraints(Point point){
         return point.getY() >= Environment.HEIGHT || point.getY() <= 0
                 || point.getX() >= Environment.WIDTH || point.getX() <= 0;
     }
@@ -209,19 +211,23 @@ public abstract class Entity {
     }
     public static Point getRandomNeighborPoint(Point current){
         int dx;
-        int random = (int)(Math.random()*100)%3;
-        if (random == 0){
-            dx = 1;
-        } else if ( random == 1) {
-            dx = 0;
-        } else dx = -1;
         int dy;
-        random = (int)(Math.random()*100)%3;
-        if (random == 0){
-            dy = 1;
-        } else if ( random == 1) {
-            dy = 0;
-        } else dy = -1;
-        return new Point(current.getX() + dx,current.getY() + dy);
+        Point point;
+        do {
+            int random = (int)(Math.random()*100)%3;
+            if (random == 0){
+                dx = 1;
+            } else if ( random == 1) {
+                dx = 0;
+            } else dx = -1;
+            random = (int)(Math.random()*100)%3;
+            if (random == 0){
+                dy = 1;
+            } else if ( random == 1) {
+                dy = 0;
+            } else dy = -1;
+            point = new Point(current.getX() + dx, current.getY() + dy);
+        } while (checkConstraints(point));
+        return point;
     }
 }
