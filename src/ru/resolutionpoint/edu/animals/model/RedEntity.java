@@ -8,6 +8,13 @@ public class RedEntity extends Animal {
 		setBreeding(false);
 		setMustDie(false);
     }
+	public RedEntity(Environment environment, int x, int y, int breedingTime, int lifeTime, boolean mustDie, boolean canBreeding) {
+		super(environment, x, y);
+		setMustDie(mustDie);
+		setBreeding(canBreeding);
+		setBreedingTime(breedingTime);
+		setLifeTime(lifeTime);
+	}
 
     @Override
 	public String getImagePath() {

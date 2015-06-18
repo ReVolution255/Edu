@@ -40,6 +40,7 @@ public class Application {
 			System.out.println("Lifetime: " + red.getLifeTime());
 			System.out.println("Must die?: " + red.isMustDie());
 			System.out.println("Can breeding?: " + red.isCanBreeding());
+			environment.addEntity(new RedEntity(environment, red.getX().intValue(),  red.getY().intValue(), red.getBreedingTime().intValue(), red.getLifeTime().intValue(), red.isMustDie(), red.isCanBreeding()));
 		}
 
 		for (Gray gray : sw.entities.getGrayentity()){
@@ -55,7 +56,7 @@ public class Application {
 			System.out.println("Eating time?: " + gray.isEatingTime());
 			System.out.println("Is hungry?: " + gray.isIsHungry());
 		}
-		ObjectFactory of = new ObjectFactory();
+/*		ObjectFactory of = new ObjectFactory();
 		Red newRed = of.createRed();
 		newRed.setBreedingTime(new BigInteger("11"));
 		newRed.setCanBreeding(true);
@@ -64,7 +65,7 @@ public class Application {
 		newRed.setX(new BigInteger("21"));
 		newRed.setY(new BigInteger("31"));
 		sw.entities.getRedentity().add(newRed);
-		sw.writeFile(sw.entities);
+		sw.writeFile(sw.entities);*/
 	/*	for (Red red : redentity){
 			System.out.println(red.getType());
 			System.out.println(red.getX());

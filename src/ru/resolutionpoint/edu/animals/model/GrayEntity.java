@@ -11,6 +11,17 @@ public class GrayEntity extends Predator {
         setLifeTime(Constants.getPredatorLifeTime());
         setBreedingTime(Constants.getNoBreedingPredatorSteps());
     }
+    public GrayEntity(Environment environment, int x, int y, int breedingTime, int lifeTime, boolean mustDie, boolean canBreeding, int hungryCounter, int predatorTime, boolean eatingTime, boolean isHungry) {
+        super(environment, x, y);
+        setMustDie(mustDie);
+        setBreeding(canBreeding);
+        setBreedingTime(breedingTime);
+        setLifeTime(lifeTime);
+        setEatingTime(eatingTime);
+        setPredatorTime(predatorTime);
+        setHungryCounter(hungryCounter);
+        setIsHungry(isHungry);
+    }
 
     @Override
     public String getImagePath() {
