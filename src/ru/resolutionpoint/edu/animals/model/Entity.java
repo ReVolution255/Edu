@@ -27,7 +27,6 @@ public abstract class Entity {
 
     }
     public Entity(Environment environment, int x, int y){
-        this.environment = environment;
         this.position = new Point (x, y);
         this.mustDie = false;
     }
@@ -71,10 +70,10 @@ public abstract class Entity {
     protected List<Entity> entities;
 
     //Common visit method
-    public void visit(){
+    public void visit(Environment environment){
         System.out.println("Visited " + toString());
         //Init. values: counters, entities
-        initValues();
+        initValues(environment);
 
         //Update the values on this step: lifetime, breeding time
         updateValues();
@@ -94,10 +93,10 @@ public abstract class Entity {
         //Behavior of the entity in this step
         if (mustDie) {
             //die
-            die();
+            die(environment);
         } else if (getBreeding() && sameTypeEntityNeighborCounter >= 1) {
             //multiply
-            multiply();
+            multiply(environment);
         }
         //If next point is busy not move
         checkBusyPoint();
@@ -114,24 +113,26 @@ public abstract class Entity {
     public int getX(){
         return getPosition().getX();
     }
+    public void setX(int x) {position.x = x;}
     @XmlElement
     public int getY(){
         return getPosition().getY();
     }
+    public void setY(int y) {position.y = y;}
 
-	private Environment environment;
+	//private Environment environment;
 
-    public Environment getEnvironment(){return environment;}
+    //public Environment getEnvironment(){return environment;}
 
     //Unique abstract image path
     public abstract String getImagePath();
 
     //Utility methods for visit()
-    private void die(){
-        getEnvironment().deletedEntities.add(this);
+    private void die(Environment environment){
+        environment.deletedEntities.add(this);
         EntitiesPanel.deleteEntityView(this);
     }
-    private void multiply(){
+    private void multiply(Environment environment){
         Point multiplyPoint = Entity.getRandomNeighborPoint(this.getPosition());
         do {
             for (Entity entity : entities) {
@@ -142,22 +143,22 @@ public abstract class Entity {
                 }
             }
         } while (checkConstraints(multiplyPoint));
-        Entity newEntity = bornChild(multiplyPoint);
+        Entity newEntity = bornChild(multiplyPoint, environment);
         if (neighborEntity != null) {
             neighborEntity.setBreeding(false);
         }
         setBreeding(false);
-        getEnvironment().addedEntities.add(newEntity);
+        environment.addedEntities.add(newEntity);
         EntitiesPanel.addEntityView(newEntity);
     }
-    private void initValues(){
+    private void initValues(Environment environment){
         //Set minimal distance (initially max)
         neighborCounter = 0;
         sameTypeEntityNeighborCounter = 0;
 
         //List of neighbor entities
         entities = new ArrayList<>();
-        entities.addAll(getEnvironment().getEntities());
+        entities.addAll(environment.getEntities());
 
         //Remove yourself from entities/points array
         entities.remove(this);
@@ -204,7 +205,7 @@ public abstract class Entity {
         return new Point(getX() + dx, getY() + dy);
     }
     public abstract int getNoBreedingSteps();
-    public abstract Entity bornChild(Point multiplyPoint);
+    public abstract Entity bornChild(Point multiplyPoint, Environment environment);
 
     //Static methods
     public static double getDistanceBetweenPoints(Point a, Point b){

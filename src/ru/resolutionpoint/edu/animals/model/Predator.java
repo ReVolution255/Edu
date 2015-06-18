@@ -23,7 +23,7 @@ public abstract class Predator extends Animal {
         setIsHungry(false);
     }
 
-    public Environment getEnvironment(){return super.getEnvironment();}
+    //public Environment getEnvironment(){return super.getEnvironment();}
 
     //Common eating-time status
     public void setEatingTime(boolean eatingTime) {
@@ -37,8 +37,8 @@ public abstract class Predator extends Animal {
 
     //Common visit method
     @Override
-    public void visit(){
-        super.visit();
+    public void visit(Environment environment){
+        super.visit(environment);
 
         if (!isHungry()) setHungryCounter(getHungryCounter() - 1);
 

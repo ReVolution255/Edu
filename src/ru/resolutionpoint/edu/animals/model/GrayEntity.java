@@ -41,8 +41,8 @@ public class GrayEntity extends Predator {
         return Constants.getNoBreedingPredatorSteps();
     }
 
-    public Entity bornChild(Point multiplyPoint){
-        return new GrayEntity(getEnvironment(), multiplyPoint.getX(), multiplyPoint.getY());
+    public Entity bornChild(Point multiplyPoint, Environment environment){
+        return new GrayEntity(environment, multiplyPoint.getX(), multiplyPoint.getY());
     }
 
     @Override
@@ -51,8 +51,8 @@ public class GrayEntity extends Predator {
     }
 
     @Override
-    public void visit() {
-        super.visit();
+    public void visit(Environment environment) {
+        super.visit(environment);
         if (eatingTime) {
             Entity minimalDistanceFoodEntity = this;
             for (Entity entity : entities) {

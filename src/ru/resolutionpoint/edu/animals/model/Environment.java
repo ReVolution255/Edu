@@ -84,7 +84,7 @@ public class Environment extends Observable implements Runnable {
 		while (true){
 			if (moveFlag) {
 				for (Entity entity : entities) {
-					entity.visit();
+					entity.visit(this);
 					change();
 				}
 				if (addedEntities.size() != 0 || deletedEntities.size() != 0) {

@@ -32,12 +32,12 @@ public class RedEntity extends Animal {
 		return Constants.getNoBreedingAnimalSteps();
 	}
 	@Override
-	public void visit() {
-		super.visit();
+	public void visit(Environment environment) {
+		super.visit(environment);
 	}
 
-	public Entity bornChild(Point multiplyPoint){
-		return new RedEntity(getEnvironment(), multiplyPoint.getX(), multiplyPoint.getY());
+	public Entity bornChild(Point multiplyPoint, Environment environment){
+		return new RedEntity(environment, multiplyPoint.getX(), multiplyPoint.getY());
 	}
 
 	@Override
