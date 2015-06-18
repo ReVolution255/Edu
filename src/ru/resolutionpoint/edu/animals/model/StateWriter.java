@@ -7,9 +7,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by admin on 18.06.2015.
@@ -23,15 +20,18 @@ public class StateWriter {
     private String xmlFile;
     public Entities entities;
     private Unmarshaller um;
+    private Marshaller m;
 
-    public void readFile() throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance(jaxbFile);
+    public Environment readFile() throws JAXBException {
+        JAXBContext jc = JAXBContext.newInstance(Environment.class);
         um = jc.createUnmarshaller();
-        entities = (Entities) um.unmarshal(new File(xmlFile));
+        Environment environment = (Environment) um.unmarshal(new File(xmlFile));
+        return  environment;
     }
-    public void writeFile(Object jaxbElement) throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance(jaxbFile);
+    public void writeFile(Environment environment) throws JAXBException {
+        JAXBContext jc = JAXBContext.newInstance(Environment.class);
         Marshaller m = jc.createMarshaller();
-        m.marshal(jaxbElement, new File(xmlFile));
+        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        m.marshal(environment, new File(xmlFile));
     }
 }

@@ -2,6 +2,8 @@ package ru.resolutionpoint.edu.animals.model;
 
 import ru.resolutionpoint.edu.animals.view.EntitiesPanel;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import java.util.List;
  *
  * @author Denis Murashev
  */
+@XmlRootElement
 public abstract class Entity {
     public static double minimalDistance = Environment.WIDTH * Environment.HEIGHT;
     protected int dx;
@@ -20,6 +23,9 @@ public abstract class Entity {
     int neighborCounter;
     int sameTypeEntityNeighborCounter;
 
+    public Entity(){
+
+    }
     public Entity(Environment environment, int x, int y){
         this.environment = environment;
         this.position = new Point (x, y);
@@ -27,24 +33,29 @@ public abstract class Entity {
     }
 
     //Unique entity type (must have)
+    @XmlElement
     protected abstract int getEntityType(); //0 if redentity, 1 if grayentity
 
     //Common lifetime
+    @XmlElement
     protected int getLifeTime() {return lifeTime;}
     protected void setLifeTime(int lifeTime){this.lifeTime = lifeTime;}
     private int lifeTime;
 
     //Common breeding counter
+    @XmlElement
     protected int getBreedingTime() {return breedingTime;}
     protected void setBreedingTime(int breedingTime){this.breedingTime = breedingTime;}
     private int breedingTime;
 
     //Common breeding key
+    @XmlElement
     protected boolean getBreeding(){return canBreeding;}
     protected void setBreeding(boolean canBreeding){this.canBreeding = canBreeding;}
     private boolean canBreeding;
 
     //Common life status
+    @XmlElement
     protected boolean getMustDie(){return mustDie;}
     protected void setMustDie(boolean mustDie){this.mustDie = mustDie;}
     private boolean mustDie;
@@ -97,9 +108,11 @@ public abstract class Entity {
     }
 
     //Common x,y getters
+    @XmlElement
     public int getX(){
         return getPosition().getX();
     }
+    @XmlElement
     public int getY(){
         return getPosition().getY();
     }
@@ -109,6 +122,7 @@ public abstract class Entity {
     public Environment getEnvironment(){return environment;}
 
     //Unique abstract image path
+    @XmlElement
     public abstract String getImagePath();
 
     //Utility methods for visit()

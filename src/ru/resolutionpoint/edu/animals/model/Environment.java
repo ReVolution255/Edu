@@ -4,6 +4,9 @@ package ru.resolutionpoint.edu.animals.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import static java.lang.Thread.sleep;
 
@@ -12,6 +15,7 @@ import static java.lang.Thread.sleep;
  *
  * @author Denis Murashev
  */
+@XmlRootElement
 public class Environment extends Observable implements Runnable {
 
 	public Environment(){
@@ -31,6 +35,7 @@ public class Environment extends Observable implements Runnable {
     /**
      * @return list of entities
      */
+	@XmlElement
     public synchronized List<Entity> getEntities() {
 		return entities;
 	}

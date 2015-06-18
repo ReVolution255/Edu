@@ -1,9 +1,13 @@
 package ru.resolutionpoint.edu.animals.model;
 
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Created by 1 on 08.05.2015.
  */
+@XmlRootElement
 public class GrayEntity extends Predator {
 
     public GrayEntity(Environment environment, int x, int y) {
@@ -24,6 +28,7 @@ public class GrayEntity extends Predator {
     }
 
     @Override
+    @XmlElement
     public String getImagePath() {
         return "/images/gray.gif";
     }
