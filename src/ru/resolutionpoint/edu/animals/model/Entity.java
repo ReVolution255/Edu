@@ -61,11 +61,13 @@ public abstract class Entity {
     private boolean mustDie;
 
     //Common position
+    @XmlElement
     protected Point getPosition(){return position;}
     protected void setPosition(Point position) {this.position = position;}
     private Point position;
 
     //Common entities
+    @XmlElement
     protected List<Entity> entities;
 
     //Common visit method

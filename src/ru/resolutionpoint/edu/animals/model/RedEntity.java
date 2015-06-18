@@ -3,8 +3,12 @@ package ru.resolutionpoint.edu.animals.model;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+
 public class RedEntity extends Animal {
+
+	public RedEntity(){
+		super();
+	}
 
     public RedEntity(Environment environment, int x, int y) {
         super(environment, x, y);

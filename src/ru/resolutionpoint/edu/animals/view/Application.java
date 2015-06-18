@@ -27,6 +27,7 @@ public class Application {
 		Environment environment = new Environment();
 		environment.addEntity(new RedEntity(environment, 12, 1));
 		environment.addEntity(new RedEntity(environment, 1, 10));
+		environment.addEntity(new GrayEntity(environment, 16, 14));
 		StateWriter sw = new StateWriter("xmlstate.jaxb", "C:\\Users\\admin\\IdeaProjects\\Edu\\xmlstate\\xmlstate.xml");
 		sw.writeFile(environment);
 		environment = sw.readFile();

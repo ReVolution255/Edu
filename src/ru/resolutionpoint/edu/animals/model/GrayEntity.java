@@ -7,8 +7,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * Created by 1 on 08.05.2015.
  */
-@XmlRootElement
+
 public class GrayEntity extends Predator {
+
+    public GrayEntity(){
+        super();
+    }
 
     public GrayEntity(Environment environment, int x, int y) {
         super(environment, x, y);
