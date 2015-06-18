@@ -1,9 +1,6 @@
 package ru.resolutionpoint.edu.animals.view;
 
-import ru.resolutionpoint.edu.animals.model.Environment;
-import ru.resolutionpoint.edu.animals.model.RedEntity;
-import ru.resolutionpoint.edu.animals.model.GrayEntity;
-import ru.resolutionpoint.edu.animals.model.StateWriter;
+import ru.resolutionpoint.edu.animals.model.*;
 import xmlstate.jaxb.Entities;
 import xmlstate.jaxb.Gray;
 import xmlstate.jaxb.ObjectFactory;
@@ -31,6 +28,7 @@ public class Application {
 		StateWriter sw = new StateWriter("xmlstate.jaxb", "C:\\Users\\admin\\IdeaProjects\\Edu\\xmlstate\\xmlstate.xml");
 		sw.writeFile(environment);
 		environment = sw.readFile();
+		//for (Entity ent : environment.getEntities()) ent.setEnvironment(environment);
 
 
 

@@ -1,5 +1,7 @@
 package ru.resolutionpoint.edu.animals.model;
 
+import javax.xml.bind.annotation.XmlElement;
+
 public class Point implements Comparable<Point> {
     public Point(){
 
@@ -10,9 +12,11 @@ public class Point implements Comparable<Point> {
     }
 
     int x;
+    @XmlElement
     public int getX(){
         return x;
     }
+    @XmlElement
     public int getY(){
         return y;
     }

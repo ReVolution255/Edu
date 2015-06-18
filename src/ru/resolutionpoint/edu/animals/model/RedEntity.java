@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class RedEntity extends Animal {
 
 	public RedEntity(){
-		super();
 	}
 
     public RedEntity(Environment environment, int x, int y) {
@@ -23,8 +22,8 @@ public class RedEntity extends Animal {
 		setLifeTime(lifeTime);
 	}
 
-	@XmlElement
     @Override
+	@XmlElement
 	public String getImagePath() {
         return "/images/red.gif";
     }

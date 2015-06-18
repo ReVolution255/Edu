@@ -8,10 +8,12 @@
             <breeding>false</breeding>
             <breedingTime>12</breedingTime>
             <entityType>0</entityType>
-            <imagePath>/images/red.gif</imagePath>
             <lifeTime>100</lifeTime>
             <mustDie>false</mustDie>
-            <position/>
+            <position>
+                <x>12</x>
+                <y>1</y>
+            </position>
             <x>12</x>
             <y>1</y>
             <imagePath>/images/red.gif</imagePath>
@@ -20,10 +22,12 @@
             <breeding>false</breeding>
             <breedingTime>12</breedingTime>
             <entityType>0</entityType>
-            <imagePath>/images/red.gif</imagePath>
             <lifeTime>100</lifeTime>
             <mustDie>false</mustDie>
-            <position/>
+            <position>
+                <x>1</x>
+                <y>10</y>
+            </position>
             <x>1</x>
             <y>10</y>
             <imagePath>/images/red.gif</imagePath>
@@ -32,10 +36,12 @@
             <breeding>false</breeding>
             <breedingTime>20</breedingTime>
             <entityType>1</entityType>
-            <imagePath>/images/gray.gif</imagePath>
             <lifeTime>100</lifeTime>
             <mustDie>false</mustDie>
-            <position/>
+            <position>
+                <x>16</x>
+                <y>14</y>
+            </position>
             <x>16</x>
             <y>14</y>
             <eatingTime>false</eatingTime>

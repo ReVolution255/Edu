@@ -124,7 +124,6 @@ public abstract class Entity {
     public Environment getEnvironment(){return environment;}
 
     //Unique abstract image path
-    @XmlElement
     public abstract String getImagePath();
 
     //Utility methods for visit()

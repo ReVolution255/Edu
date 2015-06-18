@@ -25,12 +25,11 @@ public class StateWriter {
     public Environment readFile() throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance(Environment.class);
         um = jc.createUnmarshaller();
-        Environment environment = (Environment) um.unmarshal(new File(xmlFile));
-        return  environment;
+        return (Environment) um.unmarshal(new File(xmlFile));
     }
     public void writeFile(Environment environment) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance(Environment.class);
-        Marshaller m = jc.createMarshaller();
+        m = jc.createMarshaller();
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         m.marshal(environment, new File(xmlFile));
     }
