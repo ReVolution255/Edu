@@ -22,40 +22,17 @@ public class Application {
 	 */
 	public static void main(String[] args) throws JAXBException {
 		Environment environment = new Environment();
+
+		//Creating init-xml
 		environment.addEntity(new RedEntity(environment, 12, 1));
 		environment.addEntity(new RedEntity(environment, 1, 10));
 		environment.addEntity(new GrayEntity(environment, 16, 14));
-		StateWriter sw = new StateWriter("xmlstate.jaxb", "C:\\Users\\admin\\IdeaProjects\\Edu\\xmlstate\\xmlstate.xml");
+		StateWriter sw = new StateWriter("xmlstate.jaxb", "xmlstate/xmlstate.xml");
 		sw.writeFile(environment);
+
+		//Reading init-xml
 		environment = sw.readFile();
-		//for (Entity ent : environment.getEntities()) ent.setEnvironment(environment);
 
-
-
-		//x, y (max 15, max 15)
-/*		environment.addEntity(new RedEntity(environment, 12, 1));
-		environment.addEntity(new RedEntity(environment, 1, 10));*/
-/*		//Only for big environment
-		environment.addEntity(new RedEntity(environment, 22, 6));
-		environment.addEntity(new RedEntity(environment, 36, 27));
-		environment.addEntity(new RedEntity(environment, 48, 10));
-		environment.addEntity(new RedEntity(environment, 54, 15));
-		environment.addEntity(new RedEntity(environment, 43, 11));
-		environment.addEntity(new RedEntity(environment, 15, 10));
-		environment.addEntity(new RedEntity(environment, 22, 1));
-		environment.addEntity(new RedEntity(environment, 56, 25));
-		environment.addEntity(new RedEntity(environment, 52, 20));
-
-		environment.addEntity(new GrayEntity(environment, 24, 1));
-        environment.addEntity(new GrayEntity(environment, 7, 14));
-        environment.addEntity(new GrayEntity(environment, 10, 1));
-		environment.addEntity(new GrayEntity(environment, 1, 15));
-		environment.addEntity(new GrayEntity(environment, 16, 14));
-		environment.addEntity(new GrayEntity(environment, 1, 1));
-		environment.addEntity(new GrayEntity(environment, 22, 15));
-		environment.addEntity(new GrayEntity(environment, 27, 15));
-		environment.addEntity(new GrayEntity(environment, 56, 12));
-		environment.addEntity(new GrayEntity(environment, 24, 15));*/
 		new MainFrame(environment);
 	}
 }

@@ -19,13 +19,12 @@ public class EntityView {
 
 	static final int WIDTH = 30;
 	static final int HEIGHT = 30;
+    private Entity entity;
+    private Image image;
 
     public Entity getEntity() {
         return entity;
     }
-
-    private Entity entity;
-	private Image image;
 
     /**
      * Constructs new view for given entity

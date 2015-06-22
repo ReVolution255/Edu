@@ -1,12 +1,10 @@
 package ru.resolutionpoint.edu.animals.model;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
 
 public class RedEntity extends Animal {
 
-	public RedEntity(){
+	public RedEntity(){ super();
 	}
 
     public RedEntity(Environment environment, int x, int y) {
@@ -14,6 +12,7 @@ public class RedEntity extends Animal {
 		setBreeding(false);
 		setMustDie(false);
     }
+
 	public RedEntity(Environment environment, int x, int y, int breedingTime, int lifeTime, boolean mustDie, boolean canBreeding) {
 		super(environment, x, y);
 		setMustDie(mustDie);

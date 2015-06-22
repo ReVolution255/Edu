@@ -22,10 +22,20 @@ public abstract class Entity {
     protected Point nextPoint;
     int neighborCounter;
     int sameTypeEntityNeighborCounter;
+    private int lifeTime;
+    private int breedingTime;
+    private boolean canBreeding;
+    private boolean mustDie;
+    private Point position;
+
+    //Common entities
+    @XmlElement
+    protected List<Entity> entities;
 
     public Entity(){
 
     }
+
     public Entity(Environment environment, int x, int y){
         this.position = new Point (x, y);
         this.mustDie = false;
@@ -39,35 +49,26 @@ public abstract class Entity {
     @XmlElement
     protected int getLifeTime() {return lifeTime;}
     protected void setLifeTime(int lifeTime){this.lifeTime = lifeTime;}
-    private int lifeTime;
 
     //Common breeding counter
     @XmlElement
     protected int getBreedingTime() {return breedingTime;}
     protected void setBreedingTime(int breedingTime){this.breedingTime = breedingTime;}
-    private int breedingTime;
 
     //Common breeding key
     @XmlElement
     protected boolean getBreeding(){return canBreeding;}
     protected void setBreeding(boolean canBreeding){this.canBreeding = canBreeding;}
-    private boolean canBreeding;
 
     //Common life status
     @XmlElement
     protected boolean getMustDie(){return mustDie;}
     protected void setMustDie(boolean mustDie){this.mustDie = mustDie;}
-    private boolean mustDie;
 
     //Common position
     @XmlElement
     protected Point getPosition(){return position;}
     protected void setPosition(Point position) {this.position = position;}
-    private Point position;
-
-    //Common entities
-    @XmlElement
-    protected List<Entity> entities;
 
     //Common visit method
     public void visit(Environment environment){
@@ -119,10 +120,6 @@ public abstract class Entity {
         return getPosition().getY();
     }
     public void setY(int y) {position.y = y;}
-
-	//private Environment environment;
-
-    //public Environment getEnvironment(){return environment;}
 
     //Unique abstract image path
     public abstract String getImagePath();

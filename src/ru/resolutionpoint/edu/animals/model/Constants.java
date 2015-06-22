@@ -18,7 +18,6 @@ public class Constants {
     public static int getAnimalLifeTime() {
         return animalLifeTime;
     }
-
     public static void setAnimalLifeTime(int animalLifeTime) {
         Constants.animalLifeTime = animalLifeTime;
     }
@@ -26,7 +25,6 @@ public class Constants {
     public static int getPredatorLifeTime() {
         return predatorLifeTime;
     }
-
     public static void setPredatorLifeTime(int predatorLifeTime) {
         Constants.predatorLifeTime = predatorLifeTime;
     }
@@ -34,7 +32,6 @@ public class Constants {
     public static int getNoBreedingAnimalSteps() {
         return noBreedingAnimalSteps;
     }
-
     public static void setNoBreedingAnimalSteps(int noBreedingSteps) {
         Constants.noBreedingAnimalSteps = noBreedingSteps;
     }
@@ -42,7 +39,6 @@ public class Constants {
     public static int getNoBreedingPredatorSteps() {
         return noBreedingPredatorSteps;
     }
-
     public static void setNoBreedingPredatorSteps(int noBreedingPredatorSteps) {
         Constants.noBreedingPredatorSteps = noBreedingPredatorSteps;
     }
@@ -66,7 +62,6 @@ public class Constants {
     public static int getPredatorSatiationTime() {
         return predatorSatiationTime;
     }
-
     public static void setPredatorSatiationTime(int predatorSatiationTime) {
         Constants.predatorSatiationTime = predatorSatiationTime;
     }
@@ -74,7 +69,6 @@ public class Constants {
     public static int getTimeDelay() {
         return TIME_DELAY;
     }
-
     public static void setTimeDelay(int timeDelay) {
         TIME_DELAY = timeDelay;
     }
@@ -82,7 +76,6 @@ public class Constants {
     public static int getPredatorTime() {
         return predatorTime;
     }
-
     public static void setPredatorTime(int predatorTime) {
         Constants.predatorTime = predatorTime;
     }

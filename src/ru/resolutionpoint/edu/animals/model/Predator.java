@@ -1,11 +1,6 @@
 package ru.resolutionpoint.edu.animals.model;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-/**
- * Created by 1 on 09.05.2015.
- */
 
 public abstract class Predator extends Animal {
 
@@ -23,15 +18,13 @@ public abstract class Predator extends Animal {
         setIsHungry(false);
     }
 
-    //public Environment getEnvironment(){return super.getEnvironment();}
-
     //Common eating-time status
-    public void setEatingTime(boolean eatingTime) {
-        this.eatingTime = eatingTime;
-    }
     @XmlElement
     public boolean isEatingTime() {
         return eatingTime;
+    }
+    public void setEatingTime(boolean eatingTime) {
+        this.eatingTime = eatingTime;
     }
     protected boolean eatingTime = false;
 

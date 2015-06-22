@@ -17,7 +17,7 @@ elementFormDefault="qualified">
 		</xsd:complexType>
 	</xsd:element>
 	
-	<xsd:complexType name="red">
+	<xsd:complexType name="entity">
 		<xsd:sequence>
 			<xsd:element name="type" type="xsd:string"/>
 			<xsd:element name="lifeTime" type="xsd:integer"/>
@@ -29,6 +29,18 @@ elementFormDefault="qualified">
 		</xsd:sequence>
 	</xsd:complexType>
 	
+	<xsd:complexType name="red">
+	<xsd:complexContext>
+		<xsd:sequence>
+			<xsd:element name="type" type="xsd:string"/>
+			<xsd:element name="lifeTime" type="xsd:integer"/>
+			<xsd:element name="breedingTime" type="xsd:integer"/>
+			<xsd:element name="canBreeding" type="xsd:boolean"/>
+			<xsd:element name="mustDie" type="xsd:boolean"/>
+			<xsd:element name="x" type="xsd:integer"/>
+			<xsd:element name="y" type="xsd:integer"/>
+		</xsd:sequence>
+	</xsd:complexType>
 	<xsd:complexType name="gray">
 		<xsd:complexContent>
 			<xsd:extension base="red">

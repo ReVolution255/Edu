@@ -1,12 +1,6 @@
 package ru.resolutionpoint.edu.animals.model;
 
-
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-/**
- * Created by 1 on 08.05.2015.
- */
 
 public class GrayEntity extends Predator {
 
@@ -19,6 +13,7 @@ public class GrayEntity extends Predator {
         setLifeTime(Constants.getPredatorLifeTime());
         setBreedingTime(Constants.getNoBreedingPredatorSteps());
     }
+
     public GrayEntity(Environment environment, int x, int y, int breedingTime, int lifeTime, boolean mustDie, boolean canBreeding, int hungryCounter, int predatorTime, boolean eatingTime, boolean isHungry) {
         super(environment, x, y);
         setMustDie(mustDie);
@@ -85,5 +80,4 @@ public class GrayEntity extends Predator {
         checkBusyPoint();
         move(nextPoint);
     }
-
 }

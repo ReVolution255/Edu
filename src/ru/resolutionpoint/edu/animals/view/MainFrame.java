@@ -13,8 +13,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.xml.bind.JAXBException;
 
 import ru.resolutionpoint.edu.animals.model.Environment;
+import ru.resolutionpoint.edu.animals.model.StateWriter;
 
 /**
  * Class <code>MainFrame</code> is main application frame

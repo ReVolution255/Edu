@@ -16,21 +16,23 @@ import static java.lang.Thread.sleep;
 @XmlRootElement
 public class Environment extends Observable implements Runnable {
 
-	public Environment(){
-		thread = new Thread(this);
-		thread.start();
-	}
 	@XmlElement
 	public static final int WIDTH = 60;
 	@XmlElement
 	public static final int HEIGHT = 30;
+	@XmlElement
+	boolean moveFlag = false;
 
 	private List<Entity> entities = new ArrayList<>();
 	public List<Entity> deletedEntities = new ArrayList<>();
 	public List<Entity> addedEntities = new ArrayList<>();
+
 	Thread thread;
-	@XmlElement
-	boolean moveFlag = false;
+
+	public Environment(){
+		thread = new Thread(this);
+		thread.start();
+	}
 	@XmlElements({
 			@XmlElement(name="redentity",type=RedEntity.class),
 			@XmlElement(name="grayentity",type=GrayEntity.class)
