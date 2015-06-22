@@ -8,8 +8,8 @@ public abstract class Predator extends Animal {
 
     }
 
-    protected Predator(Environment environment, int x, int y) {
-        super(environment, x, y);
+    protected Predator(int x, int y) {
+        super(x, y);
         setLifeTime(Constants.getPredatorLifeTime());
         setBreedingTime(Constants.getNoBreedingPredatorSteps());
         setBreeding(false);

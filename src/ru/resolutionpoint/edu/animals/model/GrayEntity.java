@@ -8,14 +8,14 @@ public class GrayEntity extends Predator {
         super();
     }
 
-    public GrayEntity(Environment environment, int x, int y) {
-        super(environment, x, y);
+    public GrayEntity(int x, int y) {
+        super(x, y);
         setLifeTime(Constants.getPredatorLifeTime());
         setBreedingTime(Constants.getNoBreedingPredatorSteps());
     }
 
-    public GrayEntity(Environment environment, int x, int y, int breedingTime, int lifeTime, boolean mustDie, boolean canBreeding, int hungryCounter, int predatorTime, boolean eatingTime, boolean isHungry) {
-        super(environment, x, y);
+    public GrayEntity(int x, int y, int breedingTime, int lifeTime, boolean mustDie, boolean canBreeding, int hungryCounter, int predatorTime, boolean eatingTime, boolean isHungry) {
+        super(x, y);
         setMustDie(mustDie);
         setBreeding(canBreeding);
         setBreedingTime(breedingTime);
@@ -37,7 +37,7 @@ public class GrayEntity extends Predator {
     }
 
     public Entity bornChild(Point multiplyPoint, Environment environment){
-        return new GrayEntity(environment, multiplyPoint.getX(), multiplyPoint.getY());
+        return new GrayEntity(multiplyPoint.getX(), multiplyPoint.getY());
     }
 
     @Override

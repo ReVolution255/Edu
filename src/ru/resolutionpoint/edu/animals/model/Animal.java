@@ -6,8 +6,8 @@ public abstract class Animal extends Entity {
         super();
     }
 
-    protected Animal(Environment environment, int x, int y) {
-        super(environment, x, y);
+    protected Animal(int x, int y) {
+        super(x, y);
         super.setLifeTime(Constants.getAnimalLifeTime());
         super.setBreedingTime(Constants.getNoBreedingAnimalSteps());
         super.setBreeding(false);

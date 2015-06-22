@@ -7,14 +7,14 @@ public class RedEntity extends Animal {
 	public RedEntity(){ super();
 	}
 
-    public RedEntity(Environment environment, int x, int y) {
-        super(environment, x, y);
+    public RedEntity(int x, int y) {
+        super(x, y);
 		setBreeding(false);
 		setMustDie(false);
     }
 
-	public RedEntity(Environment environment, int x, int y, int breedingTime, int lifeTime, boolean mustDie, boolean canBreeding) {
-		super(environment, x, y);
+	public RedEntity(int x, int y, int breedingTime, int lifeTime, boolean mustDie, boolean canBreeding) {
+		super(x, y);
 		setMustDie(mustDie);
 		setBreeding(canBreeding);
 		setBreedingTime(breedingTime);
@@ -36,7 +36,7 @@ public class RedEntity extends Animal {
 	}
 
 	public Entity bornChild(Point multiplyPoint, Environment environment){
-		return new RedEntity(environment, multiplyPoint.getX(), multiplyPoint.getY());
+		return new RedEntity(multiplyPoint.getX(), multiplyPoint.getY());
 	}
 
 	@Override

@@ -36,7 +36,7 @@ public abstract class Entity {
 
     }
 
-    public Entity(Environment environment, int x, int y){
+    public Entity(int x, int y){
         this.position = new Point (x, y);
         this.mustDie = false;
     }
@@ -72,7 +72,7 @@ public abstract class Entity {
 
     //Common visit method
     public void visit(Environment environment){
-        System.out.println("Visited " + toString());
+        //System.out.println("Visited " + toString());
         //Init. values: counters, entities
         initValues(environment);
 
@@ -176,7 +176,7 @@ public abstract class Entity {
             if (entity.getPosition().compareTo(nextPoint) == 0) nextPoint = getPosition();
         }
     }
-    protected static boolean checkConstraints(Point point){
+    public static boolean checkConstraints(Point point){
         return point.getY() >= Environment.HEIGHT || point.getY() < 0
                 || point.getX() >= Environment.WIDTH || point.getX() < 0;
     }
