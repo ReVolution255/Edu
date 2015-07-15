@@ -1,101 +1,129 @@
 package ru.resolutionpoint.edu.animals.model;
 
-import java.io.File;
+import java.io.*;
 import java.util.*;
 
 
 public class SearchMode implements Observer {
-    public SearchMode(Environment environment){
-        this.environment = environment;
+    public SearchMode(){
         Constants.setTimeDelay(TIME_DELAY);
     }
+    private int TIME_DELAY = 10;
 
-    Environment environment;
+    SearchObject searchObject = new SearchObject();
 
-    //Initial state
-    private int animalLifeTime = 10;
-    private int predatorLifeTime = 10;
-    private int noBreedingAnimalSteps = 1;
-    private int noBreedingPredatorSteps = 1;
-    private int neighboringAnimalsLimit = 4;
-    private int predatorSatiationTime = 100;
-    private int predatorTime = 1;
-    private int TIME_DELAY = 1;
+    //Temp var's
+    private int animalLifeTime;
+    private int predatorLifeTime;
+    private int noBreedingAnimalSteps;
+    private int noBreedingPredatorSteps;
+    private int predatorSatiationTime;
+    private int predatorTime;
 
-    //Entities number
-    private int redentities = 4;
-    private int grayentities = 4;
+    //Range var's
+    private int animalLifeTimeRange;
+    private int predatorLifeTimeRange;
+    private int noBreedingAnimalStepsRange;
+    private int noBreedingPredatorStepsRange;
+    private int predatorSatiationTimeRange;
+    private int predatorTimeRange;
 
-    private List<Point> busyPoints;
+    private boolean alt_param = true;
+    private boolean plt_param = true;
+    private boolean nbas_param = true;
+    private boolean nbps_param = true;
+    private boolean pst_paraam = true;
+    private boolean pt_param = true;
 
-    private int stepCounter;
-
+    private final int interval = 10;
+    private final int rangeLimit = 500;
     //Log file
-    File logfile = new File("search-log.txt");
+    File logfile = new File("search_log.txt");
+    PrintWriter writer;
 
-    public void search() {
-        busyPoints = new ArrayList<>();
-        fillArrayWithRandomPoints();
 
-        for (int i = 0; i < redentities; i++){
-            environment.addEntity(new RedEntity(busyPoints.get(i).getX(), busyPoints.get(i).getY()));
-        }
-        for (int i = 0; i < grayentities; i++){
-            environment.addEntity(new GrayEntity(busyPoints.get(i).getX(), busyPoints.get(i).getY()));
-        }
-        environment.addObserver(this);
-        environment.start();
-        while (true){
-            System.out.println(stepCounter);
-            int check = checkCondition();
-            if (check == 0 && stepCounter <= 1000) {environment.stop(); System.out.println("Steps not over and condition is " + checkCondition()); break;}
-            else if (stepCounter >= 1000 && check == 2) {environment.stop(); System.out.println("Steps over and condition is (normal = 2)" + checkCondition()); break;}
-            else if (stepCounter >= 1000 && check == 1) {environment.stop(); System.out.println("Steps over and condition is (normal = 1)" + checkCondition()); break;}
-        }
-        System.out.println("Search over");
-        //
+    public void startSearch(){
+        searchObject.addObserver(this);
+        searchObject.search();
     }
-    private void resetConstants(){
-        Constants.setPredatorTime(animalLifeTime);
-        Constants.setAnimalLifeTime(predatorLifeTime);
-        Constants.setPredatorLifeTime(noBreedingAnimalSteps);
-        Constants.setNoBreedingAnimalSteps(noBreedingPredatorSteps);
-        Constants.setNoBreedingPredatorSteps(neighboringAnimalsLimit);
-        Constants.setNeighboringAnimalsLimit(predatorSatiationTime);
-        Constants.setPredatorSatiationTime(predatorTime);
+
+    public boolean rangeStarted = false;
+
+    public void rangeStart(){
+        animalLifeTime = searchObject.getAnimalLifeTime();
+        predatorLifeTime = searchObject.getPredatorLifeTime();
+        noBreedingAnimalSteps = searchObject.getNoBreedingAnimalSteps();
+        noBreedingPredatorSteps = searchObject.getNoBreedingPredatorSteps();
+        predatorSatiationTime = searchObject.getPredatorSatiationTime();
+        predatorTime = searchObject.getPredatorTime();
     }
-    // 0 if all grays or red die, 1 if red/gray < 2 and 2 else (is normal for 1000 steps)
-    private int checkCondition(){
-        int gray = 0;
-        int red = 0;
-        for (Entity entity : environment.getEntities()){
-            if (entity != null) {
-                if (entity.getEntityType() == 0) red++;
-                else gray++;
-            }
+
+    public void rangeEnd(){
+        try {
+            writer = new PrintWriter(logfile);
+        } catch (FileNotFoundException e){
+            e.printStackTrace();
         }
-        return red <= 0 || gray <= 0 ? 0 : red < 2 || gray < 2 ? 1 : 2;
+        //Current range
+        animalLifeTimeRange = searchObject.getAnimalLifeTime() - animalLifeTime;
+        predatorLifeTimeRange = searchObject.getPredatorLifeTime() - predatorLifeTime;
+        noBreedingAnimalStepsRange = searchObject.getNoBreedingAnimalSteps() - noBreedingAnimalSteps;
+        noBreedingPredatorStepsRange = searchObject.getNoBreedingPredatorSteps() - noBreedingPredatorSteps;
+        predatorSatiationTimeRange = searchObject.getPredatorSatiationTime() - predatorSatiationTime;
+        predatorTimeRange = searchObject.getPredatorTime() - predatorTime;
+
+        if (animalLifeTimeRange > 100) {
+            System.out.println("Animal lifetime range: " + (animalLifeTime + " - " + searchObject.getAnimalLifeTime()) + " ");
+            writer.println("Animal lifetime range: " + (animalLifeTime + " - " + searchObject.getAnimalLifeTime()) + " ");
+        }
+        if (predatorLifeTime > 100) {
+            System.out.println("Predator lifetime range: " + (predatorLifeTime + " - " + searchObject.getPredatorLifeTime()) + " ");
+            writer.println("Predator lifetime range: " + (predatorLifeTime + " - " + searchObject.getPredatorLifeTime()) + " ");
+        }
+        if (noBreedingAnimalSteps > 100) {
+            System.out.println("No breeding animal steps range: " + (noBreedingAnimalSteps + " - " + searchObject.getNoBreedingAnimalSteps()) + " ");
+            writer.println("No breeding animal steps range: " + (noBreedingAnimalSteps + " - " + searchObject.getNoBreedingAnimalSteps()) + " ");
+        }
+        if (noBreedingPredatorSteps > 100) {
+            System.out.println("No breeding predator steps range: " + (noBreedingPredatorSteps + " - " + searchObject.getNoBreedingPredatorSteps()) + " ");
+            writer.println("No breeding predator steps range: " + (noBreedingPredatorSteps + " - " + searchObject.getNoBreedingPredatorSteps()) + " ");
+        }
+        if (predatorSatiationTime > 100) {
+            System.out.println("Predator satiation time range: " + (predatorSatiationTime + " - " + searchObject.getPredatorSatiationTime()) + " ");
+            writer.println("Predator satiation time range: " + (predatorSatiationTime + " - " + searchObject.getPredatorSatiationTime()) + " ");
+        }
+        if (predatorTime > 100) {
+            System.out.println("Predator time range: " + (predatorTime + " - " + searchObject.getPredatorTime()) + " ");
+            writer.println("Predator time range: " + (predatorTime + " - " + searchObject.getPredatorTime()) + " ");
+        }
     }
-    private void fillArrayWithRandomPoints(){
-        for(int i =0; i < redentities; i++){
-            Point point;
-            Random random = new Random();
-            do{
-                point = new Point(random.nextInt(Environment.WIDTH), random.nextInt(Environment.HEIGHT));
-            }while (busyPoints.contains(point));
-        }
-        for(int i =0; i < grayentities; i++){
-            Point point;
-            Random random = new Random();
-            do{
-                point = new Point(random.nextInt(Environment.WIDTH), random.nextInt(Environment.HEIGHT));
-            }while (busyPoints.contains(point));
-            busyPoints.add(point);
-        }
+
+    private void updateConstants(){
+        searchObject.setAnimalLifeTime(searchObject.getAnimalLifeTime() + interval);
+        searchObject.setNoBreedingAnimalSteps(searchObject.getAnimalLifeTime() / 10);
+        searchObject.setPredatorLifeTime(searchObject.getPredatorLifeTime() + interval);
+        searchObject.setNoBreedingPredatorSteps(searchObject.getPredatorLifeTime() / 10);
+        searchObject.setPredatorSatiationTime(searchObject.getPredatorSatiationTime() + interval);
+        searchObject.setPredatorTime(searchObject.getPredatorTime() + interval);
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        stepCounter++;
+        if (searchObject.check != 2) {
+            if (rangeStarted){
+                rangeEnd();
+                rangeStarted = false;
+            }
+            System.out.println("Here: 4");
+            updateConstants();
+            startSearch();
+        } else {
+            System.out.println("Range started");
+            if (!rangeStarted) {
+                rangeStart();
+                rangeStarted = true;
+            }
+            updateConstants();
+        }
     }
 }

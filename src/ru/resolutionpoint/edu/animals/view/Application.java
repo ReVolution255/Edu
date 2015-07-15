@@ -1,10 +1,6 @@
 package ru.resolutionpoint.edu.animals.view;
 
 import ru.resolutionpoint.edu.animals.model.*;
-import xmlstate.jaxb.Entities;
-import xmlstate.jaxb.Gray;
-import xmlstate.jaxb.ObjectFactory;
-import xmlstate.jaxb.Red;
 
 import javax.swing.*;
 import javax.xml.bind.JAXBException;
@@ -12,8 +8,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -56,7 +50,6 @@ public class Application {
 			}
 
 			StateWriter sw = new StateWriter("xmlstate.jaxb", "xmlstate/xmlstate.xml");
-
 			//Reading init-xml
 			Environment environment = sw.readFile();
 
@@ -65,8 +58,8 @@ public class Application {
 		else {
 			//JOptionPane.showMessageDialog(frame, "This function in develop, application will be closed.");
 			//Future method
-			SearchMode sm = new SearchMode(new Environment());
-			sm.search();
+			SearchMode sm = new SearchMode();
+			sm.startSearch();
 		}
 	}
 }

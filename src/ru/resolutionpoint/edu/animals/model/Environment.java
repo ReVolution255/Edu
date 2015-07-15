@@ -94,6 +94,7 @@ public class Environment extends Observable implements Runnable {
 					entities.removeAll(deletedEntities);
 					addedEntities.clear();
 					deletedEntities.clear();
+					change();
 				}
 			}
 			try {
