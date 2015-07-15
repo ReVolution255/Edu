@@ -32,7 +32,7 @@ public class SearchMode implements Observer {
     private boolean plt_param = true;
     private boolean nbas_param = true;
     private boolean nbps_param = true;
-    private boolean pst_paraam = true;
+    private boolean pst_param = true;
     private boolean pt_param = true;
 
     private final int interval = 10;
@@ -99,29 +99,43 @@ public class SearchMode implements Observer {
     }
 
     private void updateConstants(){
+        
+        if (alt_param && searchObject.getAnimalLifeTime() > 500) alt_param = false;
+        if (plt_param && searchObject.getPredatorLifeTime() > 500) plt_param = false;
+        if (nbas_param && searchObject.getNoBreedingAnimalSteps() > 500) nbas_param = false;
+        if (nbps_param && searchObject.getNoBreedingPredatorSteps() > 500) nbps_param = false;
+        if (pst_param && searchObject.getPredatorSatiationTime() > 500) pst_param = false;
+        if (pt_param && searchObject.getPredatorTime() > 500) pt_param = false;
+        if (alt_param)
         searchObject.setAnimalLifeTime(searchObject.getAnimalLifeTime() + interval);
+        if (plt_param)
         searchObject.setNoBreedingAnimalSteps(searchObject.getAnimalLifeTime() / 10);
+        if (nbas_param)
         searchObject.setPredatorLifeTime(searchObject.getPredatorLifeTime() + interval);
+        if (nbps_param)
         searchObject.setNoBreedingPredatorSteps(searchObject.getPredatorLifeTime() / 10);
+        if (pst_param)
         searchObject.setPredatorSatiationTime(searchObject.getPredatorSatiationTime() + interval);
+        if (pt_param)
         searchObject.setPredatorTime(searchObject.getPredatorTime() + interval);
     }
 
     @Override
     public void update(Observable o, Object arg) {
+        System.out.println("New data received");
         if (searchObject.check != 2) {
             if (rangeStarted){
                 rangeEnd();
                 rangeStarted = false;
+                System.out.println("Range ended");
             }
-            System.out.println("Here: 4");
             updateConstants();
             startSearch();
         } else {
-            System.out.println("Range started");
             if (!rangeStarted) {
                 rangeStart();
                 rangeStarted = true;
+                System.out.println("Range started");
             }
             updateConstants();
         }

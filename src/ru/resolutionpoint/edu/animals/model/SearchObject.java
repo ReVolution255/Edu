@@ -145,17 +145,17 @@ public class SearchObject extends Observable implements Observer {
         check = checkCondition();
         if (check == 0 && stepCounter <= 1000) {
             environment.stop();
-            System.out.println("Here: 1");
+            //System.out.println("Here: 1");
             change();
         }
         else if (check == 2 && stepCounter >= 1000) {
             environment.stop();
-            System.out.println("Here: 2");
+            //System.out.println("Here: 2");
             change();
         }
         else if (check == 1 && stepCounter >= 1000) {
             environment.stop();
-            System.out.println("Here: 3");
+            //System.out.println("Here: 3");
             change();
         }
     }
