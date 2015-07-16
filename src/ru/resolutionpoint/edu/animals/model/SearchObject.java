@@ -24,47 +24,36 @@ public class SearchObject extends Observable implements Observer {
     public int getAnimalLifeTime() {
         return animalLifeTime;
     }
-
     public void setAnimalLifeTime(int animalLifeTime) {
         this.animalLifeTime = animalLifeTime;
     }
-
     public int getPredatorLifeTime() {
         return predatorLifeTime;
     }
-
     public void setPredatorLifeTime(int predatorLifeTime) {
         this.predatorLifeTime = predatorLifeTime;
     }
-
     public int getNoBreedingAnimalSteps() {
         return noBreedingAnimalSteps;
     }
-
     public void setNoBreedingAnimalSteps(int noBreedingAnimalSteps) {
         this.noBreedingAnimalSteps = noBreedingAnimalSteps;
     }
-
     public int getNoBreedingPredatorSteps() {
         return noBreedingPredatorSteps;
     }
-
     public void setNoBreedingPredatorSteps(int noBreedingPredatorSteps) {
         this.noBreedingPredatorSteps = noBreedingPredatorSteps;
     }
-
     public int getPredatorSatiationTime() {
         return predatorSatiationTime;
     }
-
     public void setPredatorSatiationTime(int predatorSatiationTime) {
         this.predatorSatiationTime = predatorSatiationTime;
     }
-
     public int getPredatorTime() {
         return predatorTime;
     }
-
     public void setPredatorTime(int predatorTime) {
         this.predatorTime = predatorTime;
     }
@@ -108,6 +97,15 @@ public class SearchObject extends Observable implements Observer {
         environment.addObserver(this);
 
         environment.start();
+    }
+
+    public void stop() {
+        environment.deleteObserver(this);
+        environment.stop();
+        environment.thread.stop();
+        environment = null;
+        busyPoints = null;
+
     }
     //0: 0 reds, 0 grays; 1: <2 reds, <2 grays; 2: >2 reds, >2 grays;
     private int checkCondition(){

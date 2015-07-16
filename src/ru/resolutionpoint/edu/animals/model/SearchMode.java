@@ -7,8 +7,13 @@ import java.util.*;
 public class SearchMode implements Observer {
     public SearchMode(){
         Constants.setTimeDelay(TIME_DELAY);
+        try {
+            writer = new PrintWriter(logfile);
+        } catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
     }
-    private int TIME_DELAY = 10;
+    private int TIME_DELAY = 0;
 
     SearchObject searchObject = new SearchObject();
 
@@ -41,10 +46,17 @@ public class SearchMode implements Observer {
     File logfile = new File("search_log.txt");
     PrintWriter writer;
 
-
     public void startSearch(){
         searchObject.addObserver(this);
         searchObject.search();
+    }
+
+    public void stopSearch(){
+        if (rangeStarted) rangeEnd();
+        writer.close();
+        searchObject.deleteObserver(this);
+        searchObject.stop();
+        System.out.println("Search stopped");
     }
 
     public boolean rangeStarted = false;
@@ -59,11 +71,6 @@ public class SearchMode implements Observer {
     }
 
     public void rangeEnd(){
-        try {
-            writer = new PrintWriter(logfile);
-        } catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
         //Current range
         animalLifeTimeRange = searchObject.getAnimalLifeTime() - animalLifeTime;
         predatorLifeTimeRange = searchObject.getPredatorLifeTime() - predatorLifeTime;
@@ -76,44 +83,48 @@ public class SearchMode implements Observer {
             System.out.println("Animal lifetime range: " + (animalLifeTime + " - " + searchObject.getAnimalLifeTime()) + " ");
             writer.println("Animal lifetime range: " + (animalLifeTime + " - " + searchObject.getAnimalLifeTime()) + " ");
         }
-        if (predatorLifeTime > 100) {
+        if (predatorLifeTimeRange > 100) {
             System.out.println("Predator lifetime range: " + (predatorLifeTime + " - " + searchObject.getPredatorLifeTime()) + " ");
             writer.println("Predator lifetime range: " + (predatorLifeTime + " - " + searchObject.getPredatorLifeTime()) + " ");
         }
-        if (noBreedingAnimalSteps > 100) {
+        if (noBreedingAnimalStepsRange > 100) {
             System.out.println("No breeding animal steps range: " + (noBreedingAnimalSteps + " - " + searchObject.getNoBreedingAnimalSteps()) + " ");
             writer.println("No breeding animal steps range: " + (noBreedingAnimalSteps + " - " + searchObject.getNoBreedingAnimalSteps()) + " ");
         }
-        if (noBreedingPredatorSteps > 100) {
+        if (noBreedingPredatorStepsRange > 100) {
             System.out.println("No breeding predator steps range: " + (noBreedingPredatorSteps + " - " + searchObject.getNoBreedingPredatorSteps()) + " ");
             writer.println("No breeding predator steps range: " + (noBreedingPredatorSteps + " - " + searchObject.getNoBreedingPredatorSteps()) + " ");
         }
-        if (predatorSatiationTime > 100) {
+        if (predatorSatiationTimeRange > 100) {
             System.out.println("Predator satiation time range: " + (predatorSatiationTime + " - " + searchObject.getPredatorSatiationTime()) + " ");
             writer.println("Predator satiation time range: " + (predatorSatiationTime + " - " + searchObject.getPredatorSatiationTime()) + " ");
         }
-        if (predatorTime > 100) {
+        if (predatorTimeRange > 100) {
             System.out.println("Predator time range: " + (predatorTime + " - " + searchObject.getPredatorTime()) + " ");
             writer.println("Predator time range: " + (predatorTime + " - " + searchObject.getPredatorTime()) + " ");
         }
     }
 
     private void updateConstants(){
-        
-        if (alt_param && searchObject.getAnimalLifeTime() > 500) alt_param = false;
-        if (plt_param && searchObject.getPredatorLifeTime() > 500) plt_param = false;
-        if (nbas_param && searchObject.getNoBreedingAnimalSteps() > 500) nbas_param = false;
-        if (nbps_param && searchObject.getNoBreedingPredatorSteps() > 500) nbps_param = false;
-        if (pst_param && searchObject.getPredatorSatiationTime() > 500) pst_param = false;
-        if (pt_param && searchObject.getPredatorTime() > 500) pt_param = false;
+
+        if (searchObject.getAnimalLifeTime() > 500) alt_param = false;
+        if (searchObject.getPredatorLifeTime() > 500) plt_param = false;
+        if (searchObject.getNoBreedingAnimalSteps() > 500) nbas_param = false;
+        if (searchObject.getNoBreedingPredatorSteps() > 500) nbps_param = false;
+        if (searchObject.getPredatorSatiationTime() > 500) pst_param = false;
+        if (searchObject.getPredatorTime() > 500) pt_param = false;
+
+        if (!alt_param && !plt_param && !nbas_param && !nbps_param && !pst_param && !pt_param) stopSearch();
+        System.out.println(alt_param + " " + plt_param + " " + nbas_param + " " + nbps_param + " " + pst_param + " " + pt_param);
+
         if (alt_param)
         searchObject.setAnimalLifeTime(searchObject.getAnimalLifeTime() + interval);
-        if (plt_param)
-        searchObject.setNoBreedingAnimalSteps(searchObject.getAnimalLifeTime() / 10);
         if (nbas_param)
+        searchObject.setNoBreedingAnimalSteps(alt_param ? searchObject.getAnimalLifeTime() / 10 : searchObject.getNoBreedingAnimalSteps() + 10);
+        if (plt_param)
         searchObject.setPredatorLifeTime(searchObject.getPredatorLifeTime() + interval);
         if (nbps_param)
-        searchObject.setNoBreedingPredatorSteps(searchObject.getPredatorLifeTime() / 10);
+        searchObject.setNoBreedingPredatorSteps(plt_param ? searchObject.getPredatorLifeTime() / 10 : searchObject.getNoBreedingPredatorSteps() + 10);
         if (pst_param)
         searchObject.setPredatorSatiationTime(searchObject.getPredatorSatiationTime() + interval);
         if (pt_param)
@@ -122,13 +133,14 @@ public class SearchMode implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("New data received");
+        System.out.println("New data received " + System.currentTimeMillis());
         if (searchObject.check != 2) {
             if (rangeStarted){
                 rangeEnd();
                 rangeStarted = false;
                 System.out.println("Range ended");
             }
+            System.out.println("!= 2");
             updateConstants();
             startSearch();
         } else {
@@ -137,7 +149,9 @@ public class SearchMode implements Observer {
                 rangeStarted = true;
                 System.out.println("Range started");
             }
+            System.out.println("== 2");
             updateConstants();
+            startSearch();
         }
     }
 }
