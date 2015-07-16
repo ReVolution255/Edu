@@ -102,7 +102,6 @@ public class SearchObject extends Observable implements Observer {
     public void stop() {
         environment.deleteObserver(this);
         environment.stop();
-        environment.thread.stop();
         environment = null;
         busyPoints = null;
 
