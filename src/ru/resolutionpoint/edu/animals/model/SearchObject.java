@@ -12,9 +12,6 @@ public class SearchObject extends Observable implements Observer {
     private int redentities = 4;
     private int grayentities = 4;
 
-    //Condition flag
-    private boolean conditionFlag = false;
-
     private List<Point> busyPoints;
 
     private int stepCounter;
@@ -62,7 +59,6 @@ public class SearchObject extends Observable implements Observer {
     private int predatorLifeTime = 10;
     private int noBreedingAnimalSteps = 10;
     private int noBreedingPredatorSteps = 10;
-    //private int neighboringAnimalsLimit = 4;
     private int predatorSatiationTime = 100;
     private int predatorTime = 50;
 
@@ -81,7 +77,6 @@ public class SearchObject extends Observable implements Observer {
         resetConstants();
         environment = new Environment();
         stepCounter = 0;
-        conditionFlag = false;
 
         busyPoints = new ArrayList<>();
 
@@ -142,17 +137,14 @@ public class SearchObject extends Observable implements Observer {
         check = checkCondition();
         if (check == 0 && stepCounter <= 1000) {
             environment.stop();
-            //System.out.println("Here: 1");
             change();
         }
         else if (check == 2 && stepCounter >= 1000) {
             environment.stop();
-            //System.out.println("Here: 2");
             change();
         }
         else if (check == 1 && stepCounter >= 1000) {
             environment.stop();
-            //System.out.println("Here: 3");
             change();
         }
     }

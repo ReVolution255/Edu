@@ -26,7 +26,7 @@ public class Application {
 
 		JFrame frame = new JFrame("Run mode");
 
-		int mode = JOptionPane.showOptionDialog(frame, "Select run mode", "Run mode", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, modes, modes[0]);
+		int mode = JOptionPane.showOptionDialog(frame, "Select run mode", "Run mode", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, modes, -1);
 		//Mode: play
 		if (mode == 0){
 			Properties property = new Properties();
@@ -55,11 +55,11 @@ public class Application {
 
 			new MainFrame(environment);}
 		//Mode: search
-		else {
-			//JOptionPane.showMessageDialog(frame, "This function in develop, application will be closed.");
-			//Future method
+		else if (mode == 1) {
 			SearchMode sm = new SearchMode();
 			sm.startSearch();
+		} else if (mode == -1){
+			System.exit(0);
 		}
 	}
 }

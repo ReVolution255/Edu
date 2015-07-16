@@ -152,7 +152,6 @@ public class SearchMode implements Observer {
     private void updateConstants(){
         updateParameters();
 
-        //System.out.println(alt_param + " " + plt_param + " " + nbas_param + " " + nbps_param + " " + pst_param + " " + pt_param);
         if (!alt_param && !plt_param && !nbas_param && !nbps_param && !pst_param && !pt_param) stopSearch();
 
         if (alt_param)
@@ -171,7 +170,6 @@ public class SearchMode implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        //System.out.println("New data received " + System.currentTimeMillis());
         if (rangeStarted) updateRangeVars();
 
         if (searchObject.check != 2) {
@@ -180,19 +178,15 @@ public class SearchMode implements Observer {
                 checkRange();
                 rangeEnd();
                 rangeStarted = false;
-                System.out.println("Range ended");
             }
-            System.out.println("!= 2");
         } else {
             //Good result
             if (!rangeStarted) {
                 rangeStart();
                 rangeStarted = true;
-                System.out.println("Range started");
             } else {
                 checkRange();
             }
-            System.out.println("== 2");
         }
         updateConstants();
         startSearch();
